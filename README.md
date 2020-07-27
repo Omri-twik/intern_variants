@@ -32,3 +32,18 @@ Speech to Text - In progress
 Appends button to text input areas on page to allow dictation
 Author: Mitch
 
+Add to bag button - Waiting for approval to test
+Appends button to items to allow easily add products to a cart
+Author: Iren
+
+Smart button - Waiting for approval to test
+Appends button to items to allow easily add products to a cart and/or improve 'add to bag' button to button with option add and also remove a product
+Author: Iren
+
+Stiky header - Waiting for approval to test
+Finds a header and makes it stiky
+Author: Iren
+
+Speech to Text - In progress
+Appends button to text input areas on page to allow dictation
+Author: Iren
