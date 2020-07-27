@@ -1,7 +1,7 @@
 # variants
 
-Cart Expenses - Ready   return
-Generates discount popup if cart reaches a specified amount   return
+Cart Expenses - Ready\
+Generates discount popup if cart reaches a specified amount\
 Author: Mitch
 
 Hide Sold Out - Ready
