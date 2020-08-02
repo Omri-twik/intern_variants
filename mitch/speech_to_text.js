@@ -44,22 +44,27 @@ function append_buttons() {
 	for (let box of search_boxes) {
 		let container = box.parentElement;
 		let box_id = box.id.slice(box.id.lastIndexOf('_') + 1, box.id.length);
-		let btn = create_button();
-		btn.setAttribute("ID", "button_for_" + box_id);
-		btn.addEventListener('click', function() {
-			recognition.start();
-			sessionStorage.setItem("current_text_box", "search_target_" + box_id);
-			let mics = document.getElementsByClassName("fa-microphone");
-			for (let mic of mics) {
-				mic.style.color = '#8b0000'
-			}
-			container.addEventListener("click", function(event){
-				event.returnValue = false;
-			});
-		});
+		let check = document.getElementById("button_for_" + box_id);
+		if (!check) {
+            let btn = create_button();
+            btn.setAttribute("ID", "button_for_" + box_id);
+            btn.addEventListener('click', function() {
+                recognition.start();
+                sessionStorage.setItem("current_text_box", "search_target_" + box_id);
+                let mics = document.getElementsByClassName("fa-microphone");
+                for (let mic of mics) {
+                    mic.style.color = '#8b0000'
+                }
+                container.addEventListener("click", function(event){
+                    event.returnValue = false;
+                });
+            });
 
-		set_button_position(box, btn);
-		document.body.appendChild(btn);
+            set_button_position(box, btn);
+            if (!btn.style.left.includes("-") && !btn.style.right.includes("-") && !btn.style.top.includes("-") && !btn.style.bottom.includes("-")) {
+                document.body.appendChild(btn);
+            }
+        }
 	}
 	// find and remove extra buttons
 	// for (let box of search_boxes) {
@@ -168,7 +173,11 @@ function set_button_position(s_box, button) {
 function recalc_button_position() {
 	let buttons = document.getElementsByClassName("dictate_btn");
 	for (let button of buttons) {
-		button.remove();
+		button.parentNode.removeChild(button);
+	}
+	let search_boxes = document.getElementsByClassName("search_box_tw");
+	for (let box of search_boxes) {
+	    box.id = "";
 	}
 	var rtime;
 	var timeout = false;

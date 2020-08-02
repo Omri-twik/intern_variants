@@ -20,6 +20,10 @@ Scroll to Top - Ready\
 Button to scroll page back to top\
 Author: Mitch
 
+Dialect Swapper - Ready\
+Scans page and changes terminology to and from British vs. American English\
+Author: Mitch
+
 Featured Finder - Ready but still can be improved with additional testing\
 Finds and labels featured and new products on homepage to be used as selectors\
 Author: Mitch
