@@ -20,8 +20,12 @@ Scroll to Top - Ready\
 Button to scroll page back to top\
 Author: Mitch
 
-Dialect Swapper - Ready\
-Scans page and changes terminology to and from British vs. American English\
+Dialect US to UK - Ready\
+Scans page and changes page content from American to British English\
+Author: Mitch
+
+Dialect UK to US - Ready\
+Scans page and changes page content from British to American English\
 Author: Mitch
 
 Featured Finder - Ready but still can be improved with additional testing\
