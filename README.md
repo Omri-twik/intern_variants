@@ -1,14 +1,14 @@
 # variants
 
-Cart Expenses - Ready\
+Cart Expenses (Shopify) - Ready\
 Generates discount popup if cart reaches a specified amount\
 Author: Mitch
 
-Hide Sold Out - Ready\
+Hide Sold Out (Shopify) - Ready\
 Finds and hides sold out items on page\
 Author: Mitch
 
-Hover Cart - Ready\
+Hover Cart (Shopify) - Ready\
 Displays cart contents on hover\
 Author: Mitch
 
@@ -28,7 +28,7 @@ Dialect UK to US - Ready\
 Scans page and changes page content from British to American English\
 Author: Mitch
 
-Featured Finder - Ready but still can be improved with additional testing\
+Featured Finder (Shopify) - Ready but still can be improved with additional testing\
 Finds and labels featured and new products on homepage to be used as selectors\
 Author: Mitch
 
