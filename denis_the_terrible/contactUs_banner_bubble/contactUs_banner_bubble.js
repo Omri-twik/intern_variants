@@ -58,15 +58,15 @@ bottom: 120px;
 // START OF FUNCTIONALITY
 // =========================================================================================================
 
-$(document).ready(function ($) {
-  if (typeof jQuery === "undefined") {
-    let jQuerySrc =
-      "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js";
-    let jqueryScript = document.createElement("SCRIPT");
-    jqueryScript.src = jQuerySrc;
-    document.head.appendChild(jqueryScript);
-  }
+if (typeof jQuery === "undefined") {
+  let jQuerySrc =
+    "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js";
+  let jqueryScript = document.createElement("SCRIPT");
+  jqueryScript.src = jQuerySrc;
+  document.head.appendChild(jqueryScript);
+}
 
+$(document).ready(function ($) {
   preferred_font = window.getComputedStyle(document.body)["font-family"];
 
   $("head").append(
@@ -798,10 +798,8 @@ $(document).ready(function ($) {
                   `;
 
   if (beforeOrAfterSelector === "before") {
-    console.log("before");
     $(bannerHTML).insertBefore(footerSelector);
   } else if (beforeOrAfterSelector === "after") {
-    console.log("after");
     $(bannerHTML).insertAfter(footerSelector);
   }
   $("body").append(chatBubbleHTML);
@@ -997,7 +995,6 @@ $(document).ready(function ($) {
 
   // setting required
   for (field of document.querySelectorAll(".contactUsField")) {
-    console.log(field.name);
     if (required_fields.includes(field.name)) {
       field.setAttribute("required", "");
     }
