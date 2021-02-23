@@ -92,14 +92,13 @@ function SubForm (){
     fetch("https://api.apispreadsheets.com/data/8532/", {
         method: "POST",
         data: JSON.stringify({email:email}),
+
     }).then(res =>{
-        if (res.status === 201){
-            success: function(){
-                  alert("Form Data Submitted :)")
-        }
-        }
-        else{
-        error: function(){
-                  alert("There was an error :(")
-        }
-    }
+        success: function(){
+            alert("Form Data Submitted :)")
+          },
+          error: function(){
+            alert("There was an error :(")
+          }
+      });
+  }
