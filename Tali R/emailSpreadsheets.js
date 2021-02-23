@@ -7,19 +7,8 @@ if (window.jQuery) {
         "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js";
     script.type = "text/javascript";
     script.onload = function() {
-        var $ = window.jQuery; $('Header'), $('body')
-    };
-    document.getElementsByTagName("head")[0].appendChild(script);
-}
-
-
-
-
-
-
-
-
-$('Header').append( `
+        var $ = window.jQuery; 
+        $('head').append( `
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 body{
@@ -49,7 +38,7 @@ input:focus, textarea:focus{
   padding-bottom: 5vh; 
 };
 </style>
-`)
+`);
 
 $(body).append(
 `<div id="myModal" class="modal">
@@ -67,8 +56,13 @@ $(footer).append(`
 <a href="https://docs.google.com/spreadsheets/d/13vX6Qj9VpsSt_j4bCEEzX7voRSNMAu8XrH7F9O5QxDM/edit#gid=0"><h2>Data</h2></a>
 
 <button id="myBtn"><i class="fa fa-envelope" style="font-size:48px;color:rgb(255, 145, 0)"></i></button>
-</section> `)
+</section> `);
 
+};
+
+
+document.getElementsByTagName("head")[0].appendChild(script);
+}
 
 
 
