@@ -1,0 +1,47 @@
+#root {
+    display: flex;
+    align-items: center;
+}
+
+.newsletterButton {
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    font-size: 50px;
+    border-style: none;
+    color: white;
+    background-color: orange;
+}
+
+#toggleForm {
+    display: flex;
+    margin: 0 0 0 100px;
+    align-items: center;
+    /* height: 100px;
+    transition:             height 500ms ease;
+        -moz-transition:    height 500ms ease;
+        -ms-transition:     height 500ms ease;
+        -o-transition:      height 500ms ease;
+        -webkit-transition: height 500ms ease; */
+    opacity: 1;
+    transition: opacity 1s;
+}
+
+#toggleForm.hide {
+    opacity: 0;
+}
+
+.newsleterFormInput {
+    width: 300px;
+    height: 30px;
+}
+
+.newsleterFormButton {
+    margin: 0 0 0 20px;
+    height: 35px;
+    width: 80px;
+    border-radius: 10%;
+    border-style: none;
+    color: white;
+    background-color: orange;
+}
