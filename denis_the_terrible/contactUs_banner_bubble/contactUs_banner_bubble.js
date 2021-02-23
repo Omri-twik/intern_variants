@@ -11,7 +11,7 @@ let required_fields = ["Name", "Phone", "Email", "Message"];
 //
 // Choose your selector and where you want to add the banner ("before" or "after")
 let footerSelector = `body > footer`;
-let beforeOrAfterSelector = "after";
+let beforeOrAfterSelector = "before";
 //
 // Choose the email and the phone to be displayed in the banner
 let email = "genericEmail@mail.com";
@@ -19,10 +19,19 @@ let phoneNumberCallable = "01234567890";
 let phoneNumberToDisplay = "+012 (3) 456-7890";
 //
 // Choose the colors for the background and for text
-let bannerBackgroundColor = "darkgreen";
+let bubbleColor = "grey";
 let bubbleBackgroundColor = "white";
-let TextColor_banner = "white";
-let TextColor_bubble = "black";
+let bubbleFieldTextColor = "red";
+let bubbleHeaderTextColor = "purple";
+let bubbleSubmitButtonColor = "yellow";
+let bubbleSubmitButtonTextColor = "orange";
+let bubbleBorderColor = "green";
+let bannerLeftTextColor = "blue";
+let bannerBackgroundColor = "darkgreen";
+let bannerFieldTextColor = "lightblue";
+let bannerSubmitButtonColor = "darkblue";
+let thankYouMessageTextColor = "pink";
+let thankYouMessageBackgroundColor = "brown";
 //
 // Choose the maximum height (pixels) to which the message boxes may expand
 let bubbleMessageMaxHeight = 150;
@@ -49,9 +58,17 @@ bottom: 120px;
 // START OF FUNCTIONALITY
 // =========================================================================================================
 
-preferred_font = window.getComputedStyle(document.body)["font-family"];
+$(document).ready(function ($) {
+  if (typeof jQuery === "undefined") {
+    let jQuerySrc =
+      "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js";
+    let jqueryScript = document.createElement("SCRIPT");
+    jqueryScript.src = jQuerySrc;
+    document.head.appendChild(jqueryScript);
+  }
 
-jQuery(document).ready(function ($) {
+  preferred_font = window.getComputedStyle(document.body)["font-family"];
+
   $("head").append(
     `
   <style>
@@ -60,11 +77,10 @@ jQuery(document).ready(function ($) {
         background: white;
         bottom: 24px;
         right: 24px;
-        border: 1px solid #E2E2E2;
+        border: 1px solid ${bubbleBorderColor};
         border-radius: 6px;
         position:
             fixed;
-        padding: 15px;
         z-index: 11111;
         width: 300px;
         box-shadow: 0px 6px 12px rgb(0 0 0 / 18%);
@@ -99,7 +115,8 @@ jQuery(document).ready(function ($) {
         background: transparent;
         border: none;
         outline: none;
-        border-bottom: 1px solid hsl(0deg 0% 62% / 50%);
+        border-bottom: 1px solid ${bubbleFieldTextColor};
+        color: ${bubbleFieldTextColor};
         border-radius: 0;
         margin-bottom: 10px;
         padding: 0;
@@ -116,7 +133,8 @@ jQuery(document).ready(function ($) {
         background: transparent;
         border: none;
         outline: none;
-        border-bottom: 1px solid hsl(0deg 0% 62% / 50%);
+        border-bottom: 1px solid ${bubbleFieldTextColor};
+        color: ${bubbleFieldTextColor};
         border-radius: 0;
         padding: 0;
         font-size: inherit;
@@ -134,8 +152,8 @@ jQuery(document).ready(function ($) {
         height: 50px;
         border: none !important;
         outline: none;
-        background: ${bannerBackgroundColor};
-        color: #fff;
+        background: ${bubbleSubmitButtonColor};
+        color: ${bubbleSubmitButtonTextColor};
         cursor: pointer;
         font-family: ` +
       `${preferred_font}` +
@@ -191,7 +209,7 @@ jQuery(document).ready(function ($) {
 
 
     .chat-bubble {
-        background: ${bannerBackgroundColor};
+        background: ${bubbleColor};
         position: fixed;
         z-index: 2272;
         ${contactUsBubblePosition}
@@ -210,15 +228,20 @@ jQuery(document).ready(function ($) {
     .chatBubbleContact {
         margin-bottom: 15px;
         font-size: 15px !important;
+        color: ${bubbleFieldTextColor};
+    }
+
+    .chatBubbleContact::placeholder {
+      color: ${bubbleFieldTextColor};
     }
 
     input.chatBubbleContact:-webkit-autofill,
     input.chatBubbleContact:-webkit-autofill:hover,
     input.chatBubbleContact:-webkit-autofill:focus,
     input.chatBubbleContact:-webkit-autofill:active {
-        color: ${TextColor_bubble};
+        color: ${bubbleFieldTextColor};
         -webkit-box-shadow: 0 0 0 30px ${bubbleBackgroundColor} inset !important;
-        -webkit-text-fill-color: ${TextColor_bubble};
+        -webkit-text-fill-color: ${bubbleFieldTextColor};
     }
 
     .fieldAlert {
@@ -233,6 +256,7 @@ jQuery(document).ready(function ($) {
         font-family: ` +
       `${preferred_font}` +
       `;
+      color: ${bannerFieldTextColor};
     }
 
 
@@ -252,10 +276,14 @@ jQuery(document).ready(function ($) {
         align-items: center;
         padding: 15px;
     }
+
+    #contact-us-bubble-div {
+      margin: 15px;
+    }
     
     #contactFormContainer .contact-left h2 {
         margin-bottom: 18px !important;
-        color: ${TextColor_banner};
+        color: ${bannerLeftTextColor};
         text-align: left;
     }
 
@@ -283,7 +311,7 @@ jQuery(document).ready(function ($) {
 
     .genarel-inputs input, .genarel-inputs textarea {
         background: transparent;
-        color: white;
+        color: ${bannerFieldTextColor};
         height: 36px;
         border: none;
         padding: 0 10px;
@@ -291,7 +319,7 @@ jQuery(document).ready(function ($) {
         box-sizing: border-box;
         width: 100%;
         margin-bottom: 10px;
-        border-bottom: 1px solid #d6d6d6;
+        border-bottom: 1px solid ${bannerFieldTextColor};
         border-radius: 0;
         resize: none;
     }
@@ -305,7 +333,7 @@ jQuery(document).ready(function ($) {
     .genarel-inputs input::placeholder,
     .genarel-inputs textarea::placeholder,
     .genarel-inputs select::placeholder {
-        color: ${TextColor_banner};
+        color: ${bannerFieldTextColor};
     }
 
     #sdMessageBubbleDiv::-webkit-scrollbar {
@@ -324,7 +352,7 @@ jQuery(document).ready(function ($) {
     #sdMessageBubbleDiv::-webkit-scrollbar-thumb {
         border-radius: 10px;
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-        background-color: ${bannerBackgroundColor};
+        background-color: ${bubbleFieldTextColor};
     }
     
     #sdMessageBubbleDiv:hover::-webkit-scrollbar-thumb {
@@ -335,7 +363,7 @@ jQuery(document).ready(function ($) {
     #bannerMessageDiv::-webkit-scrollbar-thumb {
         border-radius: 10px;
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-        background-color: ${TextColor_banner};
+        background-color: ${bannerFieldTextColor};
     }
     
     #bannerMessageDiv:hover::-webkit-scrollbar-thumb {
@@ -353,7 +381,7 @@ jQuery(document).ready(function ($) {
 
     .genarel-inputs select {
         cursor: pointer;
-        color: #585858;
+        color: ${bubbleFieldTextColor};
     }
 
     .genarel-inputs select option {
@@ -373,8 +401,8 @@ jQuery(document).ready(function ($) {
     #form-submit-contact-us-button {
         width: 100%;
         background: transparent;
-        border: 1px solid ${TextColor_banner};
-        color: white;
+        border: 1px solid ${bannerSubmitButtonColor};
+        color: ${bannerSubmitButtonColor};
         font-size: 18px;
         border-radius: 4px;
         padding: 10px;
@@ -386,10 +414,6 @@ jQuery(document).ready(function ($) {
       `
     }
 
-    .contact-right input[type="submit"]::placeholder {
-        color: white;
-    }
-
     .contact-right .select-box::after {
         background: transparent;
     }
@@ -397,7 +421,7 @@ jQuery(document).ready(function ($) {
 
     .contact-left ul li a {
         text-decoration: none;
-        color: white;
+        color: ${bannerLeftTextColor};
         font-size: 17px;
         font-family: ` +
       `${preferred_font}` +
@@ -453,35 +477,6 @@ jQuery(document).ready(function ($) {
         z-index: 0;
     }
 
-    .newFooter {
-        background-color: #da1d53;
-        position: fixed;
-        bottom: 0;
-        margin-bottom: 0px;
-        width: 100%;
-        height: 150px;
-        text-align: center;
-        z-index: 3;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
-    }
-
-    .contactBtn {
-        background-color: white;
-        z-index: 3;
-        margin-top: 0;
-        margin-right: 12px;
-        box-shadow: 0px 4px 8px rgb(0 0 0 / 0.18);
-        padding: 8px 24px;
-        color: black;
-    }
-
-    .NewFooter a.btn {
-        margin-top: 0 !important;
-    }
-
     .button_container {
         display: flex;
         align-items: center;
@@ -490,10 +485,6 @@ jQuery(document).ready(function ($) {
     .contact-left .icon--sm {
         font-family: 'iconsmind' !important;
         font-size: 28px;
-    }
-
-    a.dismiss_text {
-        color: white;
     }
 
     .vc_row-full-width.vc_clearfix {
@@ -520,7 +511,7 @@ jQuery(document).ready(function ($) {
     input.footerContact:-webkit-autofill:hover,
     input.footerContact:-webkit-autofill:focus,
     input.footerContact:-webkit-autofill:active {
-        -webkit-text-fill-color: ${TextColor_banner};
+        -webkit-text-fill-color: ${bannerFieldTextColor};
         -webkit-box-shadow: 0 0 0 30px ${bannerBackgroundColor} inset !important;
     }
 
@@ -538,25 +529,25 @@ jQuery(document).ready(function ($) {
         width: 100%;
         height: 100%;
     }
-    #contact-contents .thank-you-div div {
-        color: ${TextColor_banner};
-        font-size: 60px;
+    #contactFormContainer .thank-you-div div {
+        color: ${thankYouMessageTextColor};
+    }
+
+    #formBox .thank-you-div div {
+        color: ${thankYouMessageTextColor};
+        font-size: 40px;
     }
 
     .thank-you-div h3 {
         text-align:center;
         font-size:26px !important;
     }
+
     .thank-you-div p {
         text-align: center;
         font-size:14px !important;
-        }
+      }
 
-
-    #contact-us-bubble-div .thank-you-div div {
-        color: ${TextColor_bubble};
-        font-size: 40px;
-    }
     .thank-you-div img {
         margin-top: 10px;
         margin-bottom: 10px;
@@ -571,12 +562,14 @@ jQuery(document).ready(function ($) {
 
     .bubble-header {
         margin-bottom: 12px;
+        color: ${bubbleFieldTextColor};
     }
 
     .bubble-header h3 {
         font-family: ` +
       `${preferred_font}` +
-      `
+      `;
+      color: ${bubbleHeaderTextColor};
     }
 
     .contactUsSubmit {
@@ -710,46 +703,45 @@ jQuery(document).ready(function ($) {
 
   let chatBubbleFormHTML = `
             <div class="cntct container-fluid">
-                <div class="container">
-                    <div class="formBoxContainer">
-                        <div class="formBox">
-                            <button id="exitButton" class="exitButton">
-                                <svg class="mi-close" id="mi-close" viewBox="0 0 25 25">
-                                    <path
-                                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z">
-                                    </path>
-                                </svg>
-                            </button>
-                            <div id="contact-us-bubble-div">
-                                <form name="contact-us-bubble-form" id="contact-us-bubble">
-                                    <div id="contact-us-bubble-inputs-box-container">
-                                        <div id="contact-us-bubble-inputs-box">
-                                            <div class="bubble-header">
-                                                <h3>Contact Us</h3>
-                                            </div>
-                                            <div class="inputBox">
-                                                <input type="text" class="contactUsField chatBubbleContact" name="Name"
-                                                    id="sdNameBubble" class="input" placeholder="Name">
-                                            </div>
-                                            <div class="inputBox">
-                                                <input type="text" class="contactUsField chatBubbleContact" name="Phone"
-                                                    id="sdTelBubble" class="input" placeholder="Phone">
-                                            </div>
-                                            <div class="inputBox">
-                                                <input type="email" class="contactUsField chatBubbleContact" name="Email"
-                                                    id="sdEmailBubble" class="input" placeholder="Email">
-                                            </div>
-                                            <div class="inputBox messageBoxDiv" id="sdMessageBubbleDiv">
-                                                <textarea class="contactUsField chatBubbleContact messageBox" name="Message"
-                                                    id="sdMessageBubble" placeholder="Message" rows="1"
-                                                    contenteditable></textarea>
-                                            </div>
-                                            <input id="formSubmit" type="submit" class="contactUsSubmit submitButtonBubble"
-                                                value="SUBMIT">
-                                        </div>
-                                </form>
+              <div class="container">
+                <div class="formBoxContainer">
+                  <div class="formBox" id="formBox">
+                    <button id="exitButton" class="exitButton">
+                      <svg class="mi-close" id="mi-close" viewBox="0 0 25 25">
+                        <path
+                          d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z">
+                        </path>
+                      </svg>
+                    </button>
+                    <div id="contact-us-bubble-div">
+                      <form name="contact-us-bubble-form" id="contact-us-bubble">
+                        <div id="contact-us-bubble-inputs-box-container">
+                          <div id="contact-us-bubble-inputs-box">
+                            <div class="bubble-header">
+                              <h3>Contact Us</h3>
                             </div>
-                        </div>
+                            <div class="inputBox">
+                              <input type="text" class="contactUsField chatBubbleContact" name="Name" id="sdNameBubble"
+                                class="input" placeholder="Name">
+                            </div>
+                            <div class="inputBox">
+                              <input type="text" class="contactUsField chatBubbleContact" name="Phone" id="sdTelBubble"
+                                class="input" placeholder="Phone">
+                            </div>
+                            <div class="inputBox">
+                              <input type="email" class="contactUsField chatBubbleContact" name="Email"
+                                id="sdEmailBubble" class="input" placeholder="Email">
+                            </div>
+                            <div class="inputBox messageBoxDiv" id="sdMessageBubbleDiv">
+                              <textarea class="contactUsField chatBubbleContact messageBox" name="Message"
+                                id="sdMessageBubble" placeholder="Message" rows="1" contenteditable></textarea>
+                            </div>
+                            <input id="bubbleFormSubmit" type="submit" class="contactUsSubmit submitButtonBubble"
+                              value="SUBMIT">
+                          </div>
+                      </form>
+                    </div>
+                  </div>
               `;
 
   let bannerHTML = `
@@ -815,11 +807,13 @@ jQuery(document).ready(function ($) {
   $("body").append(chatBubbleHTML);
   $("body").append(chatBubbleFormHTML);
 
-  $("#exitButton").on("click", function () {
+  function closeBubble() {
     sessionStorage.setItem("formSubmitted", "formSubmitted");
     $(".cntct").fadeOut();
     setTimeout(showBubble, 100);
-  });
+  }
+
+  $("#exitButton").on("click", closeBubble);
 
   function showBubble() {
     $(".chat-bubble").show();
@@ -865,7 +859,7 @@ jQuery(document).ready(function ($) {
         `;
     elemJQ.empty();
     elemJQ.append(thankYouHTML);
-    elem.style.backgroundColor = "white";
+    elem.style.backgroundColor = thankYouMessageBackgroundColor;
   }
 
   function hideThankYou(elem, children, originalElemStyle) {
@@ -889,6 +883,7 @@ jQuery(document).ready(function ($) {
         originalBubbleMessageBoxDivStyles,
         siblingInputElem
       );
+      $("#exitButton").on("click", closeBubble);
     } catch {}
 
     try {
@@ -966,7 +961,7 @@ jQuery(document).ready(function ($) {
         body: JSON.stringify({ data: formData }),
       }).then((res) => {
         if (closeElem) {
-          closeElem.trigger("click");
+          closeBubble();
         }
         if (res.status === 201) {
           // SUCCESS
@@ -976,7 +971,7 @@ jQuery(document).ready(function ($) {
               children,
               originalThankYouParentElemBackgroundColor
             );
-          }, 200);
+          }, 500);
         } else {
           // ERROR
           setTimeout(() => {
@@ -985,19 +980,18 @@ jQuery(document).ready(function ($) {
               children,
               originalThankYouParentElemBackgroundColor
             );
-          }, 200);
+          }, 500);
         }
       });
     });
   }
   contactUsSubmitFunctionality(
     document.getElementById("contact-us-bubble"),
-    document.getElementById("contact-us-bubble-div"),
+    document.querySelector("#formBox"),
     $("#exitButton")
   );
   contactUsSubmitFunctionality(
     document.getElementById("contact-us-form"),
-    // document.getElementsByClassName("contact-contents")[0]
     document.querySelector("#contactFormContainer")
   );
 
