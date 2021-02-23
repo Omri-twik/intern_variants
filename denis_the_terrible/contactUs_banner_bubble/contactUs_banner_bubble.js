@@ -58,15 +58,7 @@ bottom: 120px;
 // START OF FUNCTIONALITY
 // =========================================================================================================
 
-if (typeof jQuery === "undefined") {
-  let jQuerySrc =
-    "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js";
-  let jqueryScript = document.createElement("SCRIPT");
-  jqueryScript.src = jQuerySrc;
-  document.head.appendChild(jqueryScript);
-}
-
-$(document).ready(function ($) {
+function main_js() {
   preferred_font = window.getComputedStyle(document.body)["font-family"];
 
   $("head").append(
@@ -999,4 +991,21 @@ $(document).ready(function ($) {
       field.setAttribute("required", "");
     }
   }
-});
+}
+
+if (window.jQuery) {
+  $ = window.jQuery;
+  main_js();
+} else {
+  var script = document.createElement("SCRIPT");
+  script.src =
+    "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js";
+  script.type = "text/javascript";
+  // this is doc.ready
+  //-------------------
+  script.onload = function () {
+    var $ = window.jQuery;
+    main_js();
+  };
+  document.getElementsByTagName("head")[0].appendChild(script);
+}
