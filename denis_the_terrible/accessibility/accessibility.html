@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #accessibility-box {
+            background-color: lightgreen;
+            width: 350px;
+            height: 100vh;
+        }
+
+        #block-animations-div,
+        .row-accessibility,
+        .accessibility-header-div,
+        .link-access-page {
+            margin-bottom: 5px;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        #block-animations-div,
+        .link-access-page {
+            height: 50px;
+        }
+
+        #accessibility-disable-buttons-reset-all,
+        #accessibility-disable-animations-button {
+            height: 100%;
+        }
+
+        .row-accessibility {
+
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            height: 130px;
+        }
+
+        .row-accessibility-buttons-div {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-evenly;
+            height: 100%;
+        }
+
+        .row-accessibility-buttons {
+            height: 100%;
+        }
+
+        .row-accessibility-buttons-container {
+            margin: 5px;
+            height: 100%;
+        }
+
+        .button-accessibility-div {
+            width: 30%;
+            height: 100%;
+        }
+
+        .row-accessibility-button,
+        #accessibility-disable-animations-button,
+        #accessibility-disable-buttons-reset-all {
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            border: 1px solid black;
+        }
+
+        .accessibility-header-div {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+
+        .row-header-accessibility {
+            width: 100%;
+            font-size: 16px;
+        }
+
+        #accessibility-disable-buttons-reset-all {
+            width: 100%;
+        }
+
+        #accessibility-disable-animations-button {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="accessibility-box" class="accessibility-box opened-accessibility">
+        <div class="accessibility-box-header">
+            <button title="close" id="accessibility-box-close-button">close</button>
+        </div>
+
+        <div id="block-animations-div">
+            <button title="block animations" id="accessibility-disable-animations-button">
+                <span>block animations</span>
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAPFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQLyYwAAAAE3RSTlMABwoNDxAcIS84PkBBVGR7guj3cqQiVwAAAFxJREFUGNNlz9sOgCAMA9AiIioKav//Xx2XIGAfluwkSzpAoY963CCOo1xRjETn/SRFnEyuwAJ4VtkQfIEse2CFJDcbKFcNZGkhSQdRfO7xySTNZlOiD/7/soNYvHcOCRT6qv0LAAAAAElFTkSuQmCC"
+                    alt="block animations" />
+            </button>
+        </div>
+
+        <div class="row-accessibility">
+            <div id="contrast-block-accessibility-header-div" class="accessibility-header-div">
+                <span class="row-header-accessibility">color contrast</span>
+            </div>
+            <div id="accessibility-contrast-block" class="row-accessibility-buttons-container">
+                <div class="row-accessibility-buttons-div">
+                    <div class="contrast-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="uncolored display"
+                            id="accessibility-contrast-monochrome">
+                            <span><img alt="uncolored display"
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAOVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC8dlA9AAAAEnRSTlMAAQkLT1BRkpSVl5iam8zP7/E3Z1DDAAAAc0lEQVQokZWSSRaAIAxDG3FAEJXc/7BuVAbrlCX/vTRpEXkXrIX67kinEASSnErCSt8BTB9VICLNkgHkFk0kkec5LfojG3w51HDvY6s0IMnhDtgnq3p4lxZzF7csOKvNTbv+W+IFpGxBO6HXTyuCUf8MlTaTLhCpbG3L9gAAAABJRU5ErkJggg==" />
+                            </span><span>uncolored display</span>
+                        </button>
+                    </div>
+                    <div class="contrast-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="bright contrast"
+                            id="accessibility-contrast-soft">
+                            <span><img alt="bright contrast"
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAARVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADc6ur3AAAAFnRSTlMAAQgJCgtOT1BRkpSVl5iam8jMz+/x9WwUowAAAI1JREFUKJGNktsSwiAMRLNSehGrtdLz/5/qg2WwTBy7T4EzE5ZNzP5LKcm9n2F2iBaAx5HQ6BzYxijFaWvBGj5leH0BQQ7lEDZQ9TNUJ1PxpjsQK4js/0mH58wEcP0FUmnVOa1MC/QVjDUYQb44ds2A507C2kaS+84sDvl8iC4o3mDxRnj3R2umm78Mjd4oPA952m8bgAAAAABJRU5ErkJggg==" />
+                            </span><span>bright contrast</span>
+                        </button>
+                    </div>
+                    <div class="contrast-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="reverse contrast"
+                            id="accessibility-contrast-hard">
+                            <span><img alt="ניגודיות הפוכה"
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAV1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOl5NtAAAAHHRSTlMAAQUICQoLTk9QUXN0kpSVl5iam8jMz9re4O/xs7FJiwAAAKNJREFUKJGNktsOgzAMQ53Sles6GGNA8f9/5x4K6qgyDT9VPVLixAH+S7wX9b8ne4XISJLPM2Gma2CrnYhrthxMNj7t+wsIGSxMuyytgd1ISX4qmJkkZ4Pm8CYDSYcu9m3huM/jY7s1ggVCkvdfwB+lbkopyEiWqXmdFiNkKGC6de1OdgGSr2IfcMpXEsob4KpwfYkqSEGNWoSDHi0gD/0YMn0A2QIYmULugckAAAAASUVORK5CYII=" />
+                            </span><span>reverse contrast</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-accessibility">
+            <div id="font-sizing-block-accessibility-header-div" class="accessibility-header-div">
+                <span class="row-header-accessibility">text size</span>
+            </div>
+            <div class="row-accessibility-buttons-container" id="font-sizing-block-accessibility">
+                <div class="row-accessibility-buttons-div">
+
+                    <div class="font-sizing-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="increase text" id="accessibility-fonts-up">
+                            <span><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAUVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABcqRVCAAAAGnRSTlMAAQIEBwkKCxQgIyU2RlthYmN3mqbD3N75/ffAjZwAAABwSURBVBhXbc1XEoAgDATQxYJdsSLc/6AWigTJB7P7hgDgpuzxGy61SJiO9bEz0sdEJYlyU3movgSaii5MB/elsCa0llZH1MqZ1xVoBntvMVrOzHxgdu0LCA1Ev5xK6R3XWmKv7mAbsVtVd58Z6OS4AOceDZR02LMoAAAAAElFTkSuQmCC"
+                                    alt="increase text" /> </span><span>increase text</span>
+                            <span id="accessibility-fonts-up-enabled"></span>
+                        </button>
+                    </div>
+                    <div class="font-sizing-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="decrease text" id="accessibility-fonts-down">
+                            <span><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAUVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABcqRVCAAAAGnRSTlMAAQIEBwkKCxQgIyU3RlthYmN3mqbD3N75/WrPbOoAAABvSURBVBhXbcvZFoMgDEXRo610UpuO1Pz/h/oQoEThJefutQB6/DtA947BmSw3rqpORfUD4jSvWv/dqvafvCq7TEmfZsOj47yomJqFqC+OUbMm09mOAPdvMoEq2llZGc7SPHkz/W3MdGsQ4t5gGEuuW74NlKW6ljMAAAAASUVORK5CYII="
+                                    alt="decrease text" /> </span><span>decrease text</span>
+                        </button>
+                    </div>
+                    <div class="font-sizing-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="readable text" id="accessibility-fonts-simple">
+                            <span><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUBAMAAAB/pwA+AAAALVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADBoCg+AAAADnRSTlMABAYLDhAeKkBbZ5G32sGB+xIAAAA8SURBVAhbY2BgYDwDBscYGBiY3oHBc1QmEPC+g9DEM9cAjWyAMPcBzZmAwWTgewPXRlUmazADA0sokAEAvoY2e1eb61QAAAAASUVORK5CYII="
+                                    alt="readable text" /> </span><span>readable text</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-accessibility">
+            <div id="cursors-block-accessibility-header-div" class="accessibility-header-div">
+                <span class="row-header-accessibility">highlighting content</span>
+            </div>
+            <div class="row-accessibility-buttons-container" id="highlighting-block-accessibility">
+                <div class="row-accessibility-buttons-div">
+
+                    <div class="highlighting-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="underline links"
+                            id="accessibility-content-links">
+                            <span><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAA81BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYh4bhAAAAUHRSTlMAAQIDBAUHCAoLDA0ODxATFRgcJCUnKCorLDc4OjxBQ0ZLTE9XW2FjZ3V5foKIjJKVmJqbnZ6jq62yub7AxcjKzM/V2tze4ujp7e/z9fn7/dE+l70AAADFSURBVBgZ1cHpQgFhGIbhZ/SpsbQorUqJUhHttEiZKCT3+R9Nw1/v/Oe6NP+8s05QVBTvidCVItzSy+z9cSFTgf6qtAunsrTJKpRn7MvQZV0TNxzIcMlHXKqcP3AkgwtoOQWAL4vf4zVdhrrczv6yZqR+mKoOYJTXjJV6/2XrBGg+QkmmTaCkApRladDmSzqEYxm+SW6vScrRleGOqibSjGRI/VLzpHiLa1kyQ+6XEp+8O5k2BoTenCIknxlXYooW87QI/gGkVyJRaE/etAAAAABJRU5ErkJggg=="
+                                    alt="underline links" /> </span><span>underline links</span>
+                        </button>
+                    </div>
+                    <div class="highlighting-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="underline headers"
+                            id="accessibility-content-headers">
+                            <span><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcBAMAAACAI8KnAAAAIVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABt0UjBAAAACnRSTlMAARAeQEFSkZvvep8Y0AAAAElJREFUGJVjYKAmYHFxcVEAE2Au16pVqxzABDYug8QqAygBBqyrYATErFUwgiguGODkAp3kTp7JbKsEoARYMnNVqwKYIMaDVAIAmsgu7kDEZosAAAAASUVORK5CYII="
+                                    alt="underline headers" /> </span><span>underline headers</span>
+                        </button>
+                    </div>
+                    <div class="highlighting-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="images titles"
+                            id="accessibility-content-images">
+                            <span><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAAgVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABtFS1lAAAAKnRSTlMAAQMEBQgQHyIkJi9DRElbXmtscHN3e4WIiYuSl52go7C1usDo6evx9flG5RBaAAAAfUlEQVQoz93SSRKCQAxA0UTBWVFQnGVQUf79D+jKotvuXrjlr1J5VVlFpNdt3+1PlRrMKrYbMzJ52s16eKQyDPICmIV5GeLBOhIRPT0z7/Eb5Xfh4QTYBHkCwFz3V/Vw3ADACy4ua03X0eEdZnlkc4Hd2Wa3Pzh39K79fuEPdQoeE+qkypwAAAAASUVORK5CYII="
+                                    alt="images titles" /> </span><span>images titles</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-accessibility">
+            <div id="cursors-block-accessibility-header-div" class="accessibility-header-div">
+                <span class="row-header-accessibility">zoom in</span>
+            </div>
+            <div class="row-accessibility-buttons-container" id="cursors-block-accessibility">
+                <div class="row-accessibility-buttons-div">
+
+                    <div class="cursors-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="big white cursor"
+                            id="accessibility-cursor-big-white" class="cursors-button-accessibility">
+                            <span><img alt="big white cursor"
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAAS1BMVEW9w8e+xMi/xMi/xcnCx8vCyMvIzdHL0NPS1tnT19nd4OLe4ePf4uTg4+Xq7O3s7u/x8vPx8/P19vf4+fn6+/v8/f3+/v7+//////+Nje9qAAAAXklEQVQoz83SNwKAMBADwTPJ5GDS/v+lFFByomXbaVTI7P/lmvdOMnSapaMd7Wi/mV6z52hHO9of2lJKS3B5EMtHODOXYzig8TiatbC+8xzNrAAq85sgCi7rj1P9pwslQQsBoORDzQAAAABJRU5ErkJggg==" />
+                            </span><span>big white cursor</span>
+                        </button>
+                    </div>
+                    <div class="cursors-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="big black cursor"
+                            id="accessibility-cursor-big-black" class="cursors-button-accessibility">
+                            <span><img alt="big black cursor"
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAAWlBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACLSV5RAAAAHXRSTlMAAQMEBgcTFCw3OFBUe3+AgoOIrbfHytrk7fX7/WJfHrcAAABoSURBVChTzdK7FoIwFAXRy1MSEXxHhfn/37SIK43JoWXa3Y7Z/us0fybJIB3tALNm4WiPzFlzydGemIvmrP/oHUJ41kW+/kviG6xtkX2zwFhib3aCV5XlhzOzHhiyHLuDE3w4bky1n75vow1/sgwkQQAAAABJRU5ErkJggg==" />
+                            </span><span>big black cursor</span>
+                        </button>
+                    </div>
+                    <div class="cursors-button-accessibility-div button-accessibility-div">
+                        <button class="row-accessibility-button" title="zoom screen" id="accessibility-zoom-up"
+                            class="cursors-button-accessibility">
+                            <span><img alt="zoom screen"
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAA51BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACWqgEeAAAATHRSTlMAAQIEBwgJCgwQGBkaISkqKywwMTM0Nzg/QEFCRUdNTlZdXnFzdHV3eXuRlJeYmp6goqOoqq2vsLLFx8jKzNrc3uDi6Onr7fHz9ff5oUSo3wAAAOJJREFUGBnVwelCAVEAhuF35mSZooW2U2lPiTYlTgtCDfXd//U0+HWUC/A8LIJw964dv13l+VdhoKlWir+Opfh8a22/LvUjZhWkqmEs11PH4AsHqgLZyEDmS2V8VrEBnCywIxk89zoj4WSB4FvreDraJOvcj3quBs86xDPUKpEmHNzqBM+79jDW9nRti/CiAzwV1Uk4WWBJWsaTl1aAmisCZbWZ0dJHhqmS1Ajwpfv63A6AVEWJhwBf1JVGjZtXTT2G+MylJjoNjV0wy2wcnZZyBHUlhswTPElqMldYGTXTLLhf0gcqXp6DTJoAAAAASUVORK5CYII=" />
+                            </span><span>zoom screen</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="link-access-page">
+            <button title="reset settings" id="accessibility-disable-buttons-reset-all">
+                <span>reset settings</span>
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAMAAAAMCGV4AAAAmVBMVEUAAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAACLAAC9qi4cAAAAMnRSTlMAAQUGBwgNDg8QExUXGRojJiwvNTo7PFdYXF1hYmNnaGlwdHt+j5GSx9fZ2tzg8/X5+2glG4cAAAB3SURBVAgdbcHZAkJQAEXRLU0olUbSrNIkzv9/XNzrsbX4w788izzt0UpllHOMrarN0A0yaULNUxXSWOrjACclWHfNgIc8rEhHQOrQGJWqRbzlYUwlxXBWgrXSFfBVhVgLh9pB5XrQHd92tPYyij6tIHt989jlnx+BHA122Bbd9AAAAABJRU5ErkJggg=="
+                    alt="reset settings" />
+            </button>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
