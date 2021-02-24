@@ -1,0 +1,38 @@
+.CheckOutButtons {
+    display: flex;
+}
+
+.sticky {
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    width: 5%;
+    height: 70px;
+    margin-top: 25%;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    opacity: 1;
+    background-color: orangered;
+    z-index: 1;
+}
+
+.iconCart {
+    font-size: 30px;
+    color: white;
+}
+
+.expand {
+    width: 20%;
+    height: 70px;
+}
+
+.sticky.hide {
+    opacity: 0;
+}
+
+.
