@@ -1,29 +1,8 @@
-// PLAN
-
-// 1. Color
-//   a. Black-white
-//   b. Bright contrast
-//   c. Inverse
-// 2. Font sizing
-//   a. increase text
-//   b. decrease text
-//   c. back to normal
-
-// #############################################################################################
 // #############################################################################################
 // COLOR MANIPULATION
 // #############################################################################################
-// #############################################################################################
 
-// #############################################################################################
 // BACKGROUND OPACITY
-// #############################################################################################
-
-//
-//
-//
-//
-//
 
 function main_js_functionality() {
   function generateQuerySelector(element) {
@@ -38,11 +17,6 @@ function main_js_functionality() {
     }
     return generateQuerySelector(element.parentNode) + " > " + str;
   }
-
-  //
-  //
-  //
-  //
 
   function parseColor(color) {
     var m = color.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
@@ -104,8 +78,8 @@ function main_js_functionality() {
       } catch {}
     }
     let newStyleElemOpacity = `
-          <style id="new-opaqueness-styling">
-              ${opacityElements.join(" ")}
+          <style class="accessibility-styling" id="new-opaqueness-styling">
+              ${opacityElements.join("")}
           </style>
       `;
     return newStyleElemOpacity;
@@ -119,9 +93,7 @@ function main_js_functionality() {
     $("head").append(generateOpaquenessForDocument(desiredOpaqueness));
   }
 
-  // #############################################################################################
   // set font-color to black
-  // #############################################################################################
 
   function fontColorToBlack() {
     if (!!document.querySelector("#font-color-black-styling")) {
@@ -138,7 +110,7 @@ function main_js_functionality() {
         } catch {}
       }
       let newStyle = `
-      <style id="font-color-black-styling">
+      <style class="accessibility-styling" id="font-color-black-styling">
       ${stylingElementArray.join(" ")}
       </style>
               `;
@@ -219,41 +191,241 @@ function main_js_functionality() {
   }
 
   // #############################################################################################
-  // #############################################################################################
   // FONT SIZING
   // #############################################################################################
-  // #############################################################################################
-
-  function getFontSize(selectorWithAccessibilityClass) {
-    let size = window
-      .getComputedStyle(selectorWithAccessibilityClass, null)
-      .getPropertyValue("font-size");
-    return parseFloat(size);
-  }
 
   function changeFontSize(increase, normal) {
+    var storage = window.localStorage;
+
+    if (!storage.getItem("fontDifference")) {
+      storage.setItem("fontDifference", 0);
+    }
+
+    var elementsArray = [];
+
     for (element of document.body.getElementsByTagName("*")) {
       try {
+        let selector = generateQuerySelector(element);
         if (element.textContent.length > 0) {
-          let actualFontSize = 0;
+          let reg = /\d+/;
+          let currentFontSize_str = window.getComputedStyle(element)[
+            "fontSize"
+          ];
+          let currentFontSize = parseInt(currentFontSize_str.match(reg)[0]);
+
           if (normal) {
-            element.style.fontSize = "1em";
+            var newFontSize =
+              currentFontSize - parseInt(storage.getItem("fontDifference"));
+          } else if (increase) {
+            var newFontSize = currentFontSize + 1;
           } else {
-            if (increase) {
-              actualFontSize = getFontSize(element) + 1;
-            } else {
-              actualFontSize = getFontSize(element) - 1;
-            }
-            element.style.fontSize = actualFontSize.toString() + "px";
+            var newFontSize = currentFontSize - 1;
           }
+
+          let newStyle = `${selector} {
+            font-size: ${newFontSize}px !important;
+            }\n`;
+          elementsArray.push(newStyle);
         }
       } catch {}
     }
+
+    if (normal) {
+      storage.setItem("fontDifference", 0);
+    } else if (increase) {
+      let newFontDifference = parseInt(storage.getItem("fontDifference")) + 1;
+      storage.setItem("fontDifference", newFontDifference);
+    } else {
+      let newFontDifference = parseInt(storage.getItem("fontDifference")) - 1;
+      storage.setItem("fontDifference", newFontDifference);
+    }
+
+    if (!!document.querySelector("#font-size-accessibility-styling")) {
+      try {
+        $("#font-size-accessibility-styling").remove();
+      } catch {}
+    }
+
+    $("head").append(
+      `<style class="accessibility-styling" id="font-size-accessibility-styling">
+${elementsArray.join("")}
+</style>`
+    );
   }
 
-  changeFontSize();
-  console.log("got here");
-  changeFontSize(null, true);
+  // #############################################################################################
+  // Image Titles
+  // #############################################################################################
+
+  function toggleAnnotateImages() {
+    if (document.querySelector(".image-annotation-for-accessibility")) {
+      $(".image-annotation-for-accessibility").remove();
+    } else {
+      for (image of document.getElementsByTagName("img")) {
+        if (image.alt) var text = image.alt;
+        else var text = "No image title";
+        image.insertAdjacentHTML(
+          "beforeBegin",
+          `
+        <div class="image-annotation-for-accessibility" style="z-index:9999999999; background-color: #ffffe0 !important; border:1px solid black; padding:5px; font-size: 25px; color: black;">
+          ${text}
+        </div>
+        `
+        );
+      }
+    }
+  }
+
+  // #############################################################################################
+  // Underline headers
+  // #############################################################################################
+
+  function toggleUnderlineHeaders() {
+    if (document.querySelector("#underline-headers-styling-accessibility")) {
+      $("#underline-headers-styling-accessibility").remove();
+    } else {
+      let underlineElementArray = [];
+      for (header of document.querySelectorAll("h1, h2, h3, h4, h5, h6")) {
+        try {
+          let underlineElementStyle = `${generateQuerySelector(header)} {
+            text-decoration: underline;
+          }
+          `;
+          underlineElementArray.push(underlineElementStyle);
+        } catch {}
+      }
+      $("head").append(
+        `<style class="accessibility-styling" id="underline-headers-styling-accessibility">
+          ${underlineElementArray.join("")}
+        </style>
+        `
+      );
+    }
+  }
+
+  // #############################################################################################
+  // Underline links
+  // #############################################################################################
+
+  function toggleUnderlineLinks() {
+    if (document.querySelector("#underline-links-styling-accessibility")) {
+      $("#underline-links-styling-accessibility").remove();
+    } else {
+      let underlineElementArray = [];
+      for (link of document.querySelectorAll("a")) {
+        try {
+          let underlineElementStyle = `${generateQuerySelector(link)} {
+            text-decoration: underline;
+          }
+          `;
+          underlineElementArray.push(underlineElementStyle);
+        } catch {}
+      }
+      $("head").append(
+        `<style class="accessibility-styling" id="underline-links-styling-accessibility">
+          ${underlineElementArray.join("")}
+        </style>
+        `
+      );
+    }
+  }
+
+  // #############################################################################################
+  // CUSTOM LARGE POINTERS
+  // #############################################################################################
+
+  let white_default =
+    'cursor: url("https://raw.githubusercontent.com/mickidum/acc_toolbar/master/acctoolbar/cursors/w21.png"), url("https://raw.githubusercontent.com/mickidum/acc_toolbar/master/acctoolbar/cursors/w21.cur"), auto;';
+  let white_pointer = `cursor: url("https://raw.githubusercontent.com/mickidum/acc_toolbar/master/acctoolbar/cursors/hw21.png"), url("https://raw.githubusercontent.com/mickidum/acc_toolbar/master/acctoolbar/cursors/hw21.cur"), auto`;
+  let black_default =
+    'cursor: url("https://raw.githubusercontent.com/mickidum/acc_toolbar/master/acctoolbar/cursors/b2.png"), url("https://raw.githubusercontent.com/mickidum/acc_toolbar/master/acctoolbar/cursors/b2.cur"), auto;';
+  let black_pointer = `cursor: url("https://raw.githubusercontent.com/mickidum/acc_toolbar/master/acctoolbar/cursors/hb.png"), url("https://raw.githubusercontent.com/mickidum/acc_toolbar/master/acctoolbar/cursors/bh2.cur"), auto`;
+
+  function toggleBigCursor(css_default, css_pointer) {
+    if (document.querySelector(".big-cursor-styling-accessibility")) {
+      $(".big-cursor-styling-accessibility").remove();
+    } else {
+      $("head")
+        .append(`<style class="accessibility-styling big-cursor-styling-accessibility">
+      * {
+        ${css_default}
+        }
+        </style>`);
+      let pointersArray = [];
+      for (elem of document.querySelectorAll("*")) {
+        if (window.getComputedStyle(elem)["cursor"] === "pointer") {
+          pointersArray.push(
+            `${generateQuerySelector(elem)} {
+              ${css_pointer}
+              }`
+          );
+        }
+      }
+      $("head")
+        .append(`<style class="accessibility-styling big-cursor-styling-accessibility">
+      ${pointersArray.join("")}
+      </style>`);
+    }
+  }
+
+  // #############################################################################################
+  // ZOOM
+  // #############################################################################################
+
+  function toggleZoomAccessibility() {
+    if (document.querySelector("#zoom-accessibility")) {
+      $("#zoom-accessibility").remove();
+    } else {
+      $("head").append(`
+        <style id="zoom-accessibility" class="accessibility-styling">
+        * {
+          zoom: 1.05;
+          -moz-transform: scale(1.05);
+          -moz-transform-origin: 0 0;
+        }
+        </style>
+      `);
+    }
+  }
+
+  // #############################################################################################
+  // REMOVE ANIMATIONS
+  // #############################################################################################
+
+  function toggleAnimations() {
+    if (document.querySelector("#remove-animations-accessibility")) {
+      $("#remove-animations-accessibility").remove();
+    } else {
+      let animationStyles = [];
+      for (elem of document.querySelectorAll("*")) {
+        try {
+          animationStyles.push(
+            `${generateQuerySelector(elem)} {
+              -webkit-animation: none;
+              -moz-animation: none;
+              -ms-animation: none;
+              animation: none;
+            }`
+          );
+        } catch {}
+      }
+
+      $("body").append(
+        `<style id="remove-animations-accessibility" class="accessibility-styling">
+          ${animationStyles.join("")}
+        </style>
+        `
+      );
+    }
+  }
+
+  // #############################################################################################
+  // RESET EVERYTHING
+  // #############################################################################################
+
+  function resetAccessibilityStyling() {
+    $(".accessibility-styling").remove();
+  }
 }
 
 //
