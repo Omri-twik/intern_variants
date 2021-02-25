@@ -1,3 +1,13 @@
+// #########################################################
+// INSTRUCTIONS
+// #########################################################
+//
+// Customize the color settings down below and you are ready
+//
+// to apply an accessibility bar to your website
+//
+// #########################################################
+
 let accessibilityBackgroundColor = "brown";
 let accessibilityToggledOnBackgroundColor = "yellow";
 let borderColor = "black";
@@ -7,6 +17,10 @@ let accessibilityHeaderColor = "black";
 let accessibilityTextColor = "black";
 let increasedTextIndicatorColor = "green";
 let decreasedTextIndicatorColor = "red";
+
+// #########################################################
+// START OF FUNCTIONALITY
+// #########################################################
 
 let accessibilityCSS = `
 <style>
