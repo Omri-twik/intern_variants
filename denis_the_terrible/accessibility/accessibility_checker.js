@@ -1,88 +1,108 @@
-// // images having no alt
-// let images = document.querySelectorAll("img");
-// for (image of images) {
-//   try {
-//     let imgAlt = window.getComputedStyle(image)["alt"];
-//     if (typeof imgAlt === "undefined") {
-//       imgAlt.alt = "";
-//     }
-//   } catch {}
-// }
+// ############################################################################################################################
+// images having no alt
+// ############################################################################################################################
 
-// // forms having no labels
-// let forms = document.querySelectorAll("form");
-// for (form in forms) {
-//   try {
-//     if (!form.getElementsByTagName("label")) {
-//       let labelElement = document.createChild("label");
-//       labelElement.textContent = "";
-//       labelElement.style.display = "none";
-//       form.appendChild(labelElement);
-//     }
-//   } catch {}
-// }
+let images = document.querySelectorAll("img");
+for (image of images) {
+  try {
+    let imgAlt = window.getComputedStyle(image)["alt"];
+    if (typeof imgAlt === "undefined") {
+      imgAlt.alt = "";
+    }
+  } catch {}
+}
+// ############################################################################################################################
+// forms having no labels
+// ############################################################################################################################
 
-// // form labels being hidden
-
-// // page having no language specified
-// if (
-//   typeof document.documentElement.lang === "undefined" ||
-//   document.documentElement.lang.length === 0 ||
-//   (typeof document.documentElement.lang === "undefined" &&
-//     document.documentElement.lang.length === 0)
-// ) {
-//   document.documentElement.lang = "";
-// }
-
-// // dealing with missing title
-// if (
-//   typeof document.head.title === "undefined" ||
-//   document.head.title.length === 0
-// ) {
-//   document.head.title = "";
-// }
-
-// // empty table header
-// let tableHeaders = document.querySelectorAll("th");
-// for (header of tableHeaders) {
-//   if (header.textContent.length === 0) {
-//     header.style.fontSize = "0px";
-//     header.style.color = "transparent";
-//     header.insertAdjacentHTML(
-//       "beforeend",
-//       `<span style='width:"0px" !important; height:"0px" !important; font-size:"0px" !important; display:none !important;'>empty header</span>`
-//     );
-//   }
-// }
-
-// // empty button (no value)
-// let buttons = document.querySelectorAll("button");
-// for (button of buttons) {
-//   if (button.textContent.length === 0) {
-//     button.style.fontSize = "0px";
-//     button.style.color = "transparent";
-//     button.insertAdjacentHTML(
-//       "beforeend",
-//       `<span style='width:"0px" !important; height:"0px" !important; font-size:"0px" !important; display:none !important;'>empty button</span>`
-//     );
-//   }
-// }
-
-// // link contains no text (<a></a> - no text between tags)
-// let links = document.querySelectorAll("a");
-// for (link of links) {
-//   if (link.textContent.length === 0) {
-//     link.style.fontSize = "0px";
-//     link.style.color = "transparent";
-//     link.insertAdjacentHTML(
-//       "beforeend",
-//       `<span style='width:"0px" !important; height:"0px" !important; font-size:"0px" !important; display:none !important;'>empty link</span>`
-//     );
-//   }
-// }
+let forms = document.querySelectorAll("form");
+for (form in forms) {
+  try {
+    if (!form.getElementsByTagName("label")) {
+      let labelElement = document.createChild("label");
+      labelElement.textContent = "";
+      labelElement.style.display = "none";
+      form.appendChild(labelElement);
+    }
+  } catch {}
+}
 
 // ############################################################################################################################
+// form labels being hidden
+// ############################################################################################################################
+
+// ############################################################################################################################
+// page having no language specified
+// ############################################################################################################################
+
+if (
+  typeof document.documentElement.lang === "undefined" ||
+  document.documentElement.lang.length === 0 ||
+  (typeof document.documentElement.lang === "undefined" &&
+    document.documentElement.lang.length === 0)
+) {
+  document.documentElement.lang = "";
+}
+// ############################################################################################################################
+// dealing with missing title
+// ############################################################################################################################
+
+if (
+  typeof document.head.title === "undefined" ||
+  document.head.title.length === 0
+) {
+  document.head.title = "";
+}
+
+// ############################################################################################################################
+// empty table header
+// ############################################################################################################################
+
+let tableHeaders = document.querySelectorAll("th");
+for (header of tableHeaders) {
+  if (header.textContent.length === 0) {
+    header.style.fontSize = "0px";
+    header.style.color = "transparent";
+    header.insertAdjacentHTML(
+      "beforeend",
+      `<span style='width:"0px" !important; height:"0px" !important; font-size:"0px" !important; display:none !important;'>empty header</span>`
+    );
+  }
+}
+// ############################################################################################################################
+// empty button (no value)
+// ############################################################################################################################
+
+let buttons = document.querySelectorAll("button");
+for (button of buttons) {
+  if (button.textContent.length === 0) {
+    button.style.fontSize = "0px";
+    button.style.color = "transparent";
+    button.insertAdjacentHTML(
+      "beforeend",
+      `<span style='width:"0px" !important; height:"0px" !important; font-size:"0px" !important; display:none !important;'>empty button</span>`
+    );
+  }
+}
+// ############################################################################################################################
+// link contains no text (<a></a> - no text between tags)
+// ############################################################################################################################
+
+let links = document.querySelectorAll("a");
+for (link of links) {
+  if (link.textContent.length === 0) {
+    link.style.fontSize = "0px";
+    link.style.color = "transparent";
+    link.insertAdjacentHTML(
+      "beforeend",
+      `<span style='width:"0px" !important; height:"0px" !important; font-size:"0px" !important; display:none !important;'>empty link</span>`
+    );
+  }
+}
+// ############################################################################################################################
+// ############################################################################################################################
 // LOW CONTRAST
+// ############################################################################################################################
 // ############################################################################################################################
 
 function parseColor(color) {
@@ -109,15 +129,6 @@ function formatRGBA(arr, alpha = "") {
     }
   }
 }
-
-// function LightenDarkenColor(col, amt) {
-//   col = parseInt(col, 16);
-//   return (
-//     ((col & 0x0000ff) + amt) |
-//     ((((col >> 8) & 0x00ff) + amt) << 8) |
-//     (((col >> 16) + amt) << 16)
-//   ).toString(16);
-// }
 
 function LightenDarkenColor(col, amt) {
   var usePound = false;
@@ -257,23 +268,9 @@ function increaseDifference(brighterHex, darkerHex, desiredDifference) {
   return [new_brighterHex, new_darkerHex];
 }
 
-// First target the text, trying to make it
-
 function adjustContrast(desiredDifference) {
   let elements = document.body.querySelectorAll("*");
-  let ignoreList = [
-    "script",
-    "style",
-    // "a",
-    // "p",
-    // "h1",
-    // "h2",
-    // "h3",
-    // "h4",
-    // "h5",
-    // "h6",
-    // "span",
-  ];
+  let ignoreList = ["script", "style"];
   for (elem of elements) {
     if (ignoreList.includes(elem.tagName.toLowerCase())) {
       continue;
@@ -382,7 +379,6 @@ function adjustContrast(desiredDifference) {
       // if the new color is the same, do not touch the styling
       if (textHex !== new_text_hex) {
         elem.style.setProperty("color", new_text_rgba, "important");
-        // elem.style.color = new_text_rgba;
       }
       if (backgroundHex !== new_background_hex) {
         backgroundElem.style.setProperty(
@@ -390,7 +386,6 @@ function adjustContrast(desiredDifference) {
           new_background_rgba,
           "important"
         );
-        // backgroundElem.style.backgroundColor = new_background_rgba;
       }
 
       // done
