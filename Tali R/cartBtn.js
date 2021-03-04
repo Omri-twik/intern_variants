@@ -3,10 +3,9 @@ let selector = '#product-4457 > div.summary.entry-summary.has-no-bid-product.has
 let copyBtn = document.querySelector(selector);
 // Create a copy of it
 let cloneBtn = copyBtn.cloneNode(true);
-// Update the ID
-cloneBtn.id = 'copiedBtn';
 
 // append jquery link to head
+// // append jquery link to head
 
 if (window.jQuery) {
     $ = window.jQuery;
@@ -28,14 +27,16 @@ let stickyBtn = window.getComputedStyle(copyBtn);
   
 $('head').append(`<style>
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-#cloneBtn{
+#cloneBtnId{
   left: 0px;
-  top: 45%;
+  top: 50%;
   z-index: 999;
-  width: 30vh
   transition:all 300ms linear;
   margin-top: 50%;
   position:fixed;
+
+  width:${stickyBtn['width']};
+  display: block;
 }
 
 #stickyBtn{
@@ -55,15 +56,16 @@ $('head').append(`<style>
     top: 50%;
     position: fixed;
     border-radius: 3px;
-    transition:${stickyBtn['transition']};
+
     background:${stickyBtn['background']};
     font-family:${stickyBtn['font-family']};
     z-index: 9999;
 }
 
-#stickyBtn .toggle-btn span{
-  cursor:pointer;
+#stickyBlock:hover{ 
+    cursor: pointer;
 }
+
 #copyBtn{
   display: none;
   margin-top: 50%;
@@ -78,12 +80,16 @@ $('head').append(`<style>
 // // Create new div for stickyButton
 $('body').append(
     `<div  id="stickyBlock">
-        <div id="stickyBtn"> <i class="fas fa-shopping-basket"></i>
-        </div>
-    </div>`);
+     <i class="fas fa-shopping-basket"  id="stickyBtn"></i>
+    </div>
+    <div id='cloneBtnId'> </div>`);
 
-let stickyButton = document.getElementById('stickyButton');
+    
+let purchaseBtn = document.getElementById("cloneBtnId");
+purchaseBtn.innerHTML += cloneBtn ;
 
+
+// Visibility Function
 $.fn.inView = function(){
     if(!this.length) 
         return false;
@@ -129,19 +135,15 @@ $(window).on('scroll',function(){
 });
 
 
-// toggle sticky Btn function
-$('#stickyBtn').click(function () {
-  if($('stickyButton').is(':visible')){
-  $('stickyButton').fadeOut(function () {
-      $('#copyBtn').toggle('slide', {
-          direction: 'left'
-      }, 1000);
-  });
-  }
-  else{
-      $('#copyBtn').toggle('slide', {
-          direction: 'left'
-      }, 1000, function(){ $('stickyBtn').fadeIn();});
-  }
+$(document).ready(function () {
+    $('#cloneBtnId').hide();
+    var el = '#stickyBlock';
+    $('#stickyBlock').hover(function () {
+        $(el).stop(true, true).fadeOut("slow", function () {
+            el = el == '#stickyBlock' ? '#cloneBtnId' : '#stickyBlock';
+            $(el).stop(true, true).fadeIn();
+        });
+    });
 });
 
+let test = document.querySelector("#stickyBlock")
