@@ -1,7 +1,7 @@
 /* This script creates a sticky button on the side of the screen that corresponds to 
 the selected button of your choice. The sticky button will have similar styling 
 to your original button and will act exactly the same as your original button. 
-The sticky button will only appear when when the selected button is 
+The sticky button will only appear when the selected button is 
 scrolled out of view. */
 
 
