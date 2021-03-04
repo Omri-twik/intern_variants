@@ -4,7 +4,6 @@ let copyBtn = document.querySelector(selector);
 // Create a copy of it
 let cloneBtn = copyBtn.cloneNode(true);
 
-// append jquery link to head
 // // append jquery link to head
 
 if (window.jQuery) {
