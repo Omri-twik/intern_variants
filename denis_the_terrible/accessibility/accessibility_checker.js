@@ -1,35 +1,130 @@
+function generateQuerySelector(element) {
+  if (element.tagName.toLowerCase() == "html") return "HTML";
+  let str = element.tagName;
+  str += element.id != "" ? "#" + element.id : "";
+  if (element.className) {
+    let classes = element.className.split(/\s/);
+    for (let i = 0; i < classes.length; i++) {
+      str += "." + classes[i];
+    }
+  }
+  return generateQuerySelector(element.parentNode) + " > " + str;
+}
+
 // ############################################################################################################################
-// images having no alt
+// images having no alt and svg have no title
 // ############################################################################################################################
 
 let images = document.querySelectorAll("img");
-for (image of images) {
+for (let image of images) {
   try {
-    let imgAlt = window.getComputedStyle(image)["alt"];
-    if (typeof imgAlt === "undefined") {
-      imgAlt.alt = "";
+    if (typeof image.alt === "undefined" || image.alt.length === 0) {
+      image.alt = "image";
+      console.log("added alt");
     }
   } catch {}
 }
+
+let svgs = document.querySelectorAll("svg");
+for (let svg of svgs) {
+  try {
+    if (svg.querySelector("title").length === 0) {
+      svg.insertAdjacentHTML(
+        "afterbegin",
+        `
+        <title style="font-size:0px !important; color:rgba(0,0,0,0) !important;">svg title</title>
+        `
+      );
+      console.log("added svg title");
+    }
+  } catch {}
+}
+
 // ############################################################################################################################
 // forms having no labels
+// form labels being hidden
 // ############################################################################################################################
 
 let forms = document.querySelectorAll("form");
-for (form in forms) {
+for (let form of forms) {
+  // adding one label if none were present
   try {
-    if (!form.getElementsByTagName("label")) {
-      let labelElement = document.createChild("label");
-      labelElement.textContent = "";
-      labelElement.style.display = "none";
+    if (form.querySelectorAll("label").length === 0) {
+      let labelElement = document.createElement("label");
+      labelElement.innerHTML = "label";
+      labelElement.style.fontSize = "0px";
+      labelElement.style.height = "0px";
+      labelElement.style.width = "0px";
       form.appendChild(labelElement);
+      console.log("added label");
     }
   } catch {}
+  let labels = form.getElementsByTagName("label");
+  for (let label of labels) {
+    //removing hidden attributes from labels
+    if (label.hasAttribute("hidden")) {
+      try {
+        console.log("had attribute hidden");
+        label.removeAttribute("hidden");
+        label.style.fontSize = "0px";
+        label.style.height = "0px";
+        label.style.width = "0px";
+      } catch {}
+    }
+    // removing visibility hidden from labels
+    if (window.getComputedStyle(label)["visibility"] === "hidden") {
+      console.log("had visibility hidden");
+      label.style.visibility = "visible";
+      label.style.fontSize = "0px";
+      label.style.height = "0px";
+      label.style.width = "0px";
+    }
+  }
 }
 
 // ############################################################################################################################
-// form labels being hidden
+// adding placeholders
 // ############################################################################################################################
+
+let inputs = document.querySelectorAll("input");
+document.head.insertAdjacentHTML(
+  "beforeend",
+  `
+<style>
+    .invisible-placeholder::-webkit-input-placeholder {
+        font-size: 0px;
+        color: rgba(0,0,0,0);
+    }
+</style>`
+);
+for (let input of inputs) {
+  if (input.placeholder.length !== 0) {
+    let newLabel = document.createElement("label");
+    newLabel.innerHTML = input.getAttribute("placeholder");
+    newLabel.style.setProperty("font-size", "0px", "important");
+    newLabel.style.setProperty("color", "rgba(0,0,0,0)", "important");
+    newLabel.style.setProperty("width", "0px", "important");
+    newLabel.style.setProperty("height", "0px", "important");
+    newLabel.style.setProperty("margin", "0px", "important");
+    newLabel.style.setProperty("padding", "0px", "important");
+    input.parentNode.insertBefore(newLabel, input);
+  }
+
+  if (
+    typeof input.placeholder === "undefined" ||
+    input.placeholder.length === 0
+  ) {
+    try {
+      input.placeholder = "placeholder";
+      input.classList.add("invisible-placeholder");
+    } catch {}
+  }
+  if (typeof input.title === "undefined" || input.title.length === 0) {
+    try {
+      input.title = "input title";
+    } catch {}
+  }
+}
 
 // ############################################################################################################################
 // page having no language specified
@@ -41,17 +136,17 @@ if (
   (typeof document.documentElement.lang === "undefined" &&
     document.documentElement.lang.length === 0)
 ) {
-  document.documentElement.lang = "";
+  document.documentElement.lang = "en-US";
+  console.log("added language");
 }
+
 // ############################################################################################################################
 // dealing with missing title
 // ############################################################################################################################
 
-if (
-  typeof document.head.title === "undefined" ||
-  document.head.title.length === 0
-) {
-  document.head.title = "";
+if (typeof document.title === "undefined" || document.title.length === 0) {
+  document.title = "Website title";
+  console.log("added title");
 }
 
 // ############################################################################################################################
@@ -59,7 +154,7 @@ if (
 // ############################################################################################################################
 
 let tableHeaders = document.querySelectorAll("th");
-for (header of tableHeaders) {
+for (let header of tableHeaders) {
   if (header.textContent.length === 0) {
     header.style.fontSize = "0px";
     header.style.color = "transparent";
@@ -67,14 +162,29 @@ for (header of tableHeaders) {
       "beforeend",
       `<span style='width:"0px" !important; height:"0px" !important; font-size:"0px" !important; display:none !important;'>empty header</span>`
     );
+    console.log("added header");
   }
 }
+
+// ############################################################################################################################
+// ensuring iframes have titles
+// ############################################################################################################################
+let iframes = document.querySelectorAll("iframe");
+for (let iframe of iframes) {
+  try {
+    if (typeof iframe.title === "undefined" || iframe.title.length === 0) {
+      iframe.title = "iframe title";
+      console.log("added title to iframe");
+    }
+  } catch {}
+}
+
 // ############################################################################################################################
 // empty button (no value)
 // ############################################################################################################################
 
 let buttons = document.querySelectorAll("button");
-for (button of buttons) {
+for (let button of buttons) {
   if (button.textContent.length === 0) {
     button.style.fontSize = "0px";
     button.style.color = "transparent";
@@ -82,23 +192,33 @@ for (button of buttons) {
       "beforeend",
       `<span style='width:"0px" !important; height:"0px" !important; font-size:"0px" !important; display:none !important;'>empty button</span>`
     );
+    console.log("added button text");
   }
 }
+
 // ############################################################################################################################
 // link contains no text (<a></a> - no text between tags)
 // ############################################################################################################################
 
 let links = document.querySelectorAll("a");
-for (link of links) {
+for (let link of links) {
   if (link.textContent.length === 0) {
     link.style.fontSize = "0px";
     link.style.color = "transparent";
-    link.insertAdjacentHTML(
-      "beforeend",
-      `<span style='width:"0px" !important; height:"0px" !important; font-size:"0px" !important; display:none !important;'>empty link</span>`
-    );
+    let span = document.createElement("span");
+    span.style.setProperty("display", "none", "important");
+    span.style.setProperty("color", "rgba(0,0,0,0)", "important");
+    span.style.setProperty("width", "0px", "important");
+    span.style.setProperty("height", "0px", "important");
+    span.style.setProperty("font-size", "0px", "important");
+    span.innerHTML = "empty link";
+    link.appendChild(span);
+    var styles = window.getComputedStyle(link, ":after");
+    var content = styles["content"];
+    console.log("added link text");
   }
 }
+
 // ############################################################################################################################
 // ############################################################################################################################
 // LOW CONTRAST
@@ -197,11 +317,6 @@ function rgbToHex(r, g, b) {
   return `${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}`;
 }
 
-// const rgbToHex = (r, g, b) => '#' + [r, g, b].map(x => {
-//     const hex = x.toString(16)
-//     return hex.length === 1 ? '0' + hex : hex
-//   }).join('')
-
 function hexToRgb(hex) {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
@@ -271,11 +386,14 @@ function increaseDifference(brighterHex, darkerHex, desiredDifference) {
 function adjustContrast(desiredDifference) {
   let elements = document.body.querySelectorAll("*");
   let ignoreList = ["script", "style"];
-  for (elem of elements) {
+  for (let elem of elements) {
     if (ignoreList.includes(elem.tagName.toLowerCase())) {
       continue;
     }
-    if (elem.textContent.length === 0) {
+    if (
+      elem.textContent.length === 0 &&
+      elem.tagName.toLowerCase() !== "input"
+    ) {
       continue;
     }
 
@@ -378,8 +496,36 @@ function adjustContrast(desiredDifference) {
 
       // if the new color is the same, do not touch the styling
       if (textHex !== new_text_hex) {
+        // if text color was adjusted but new alpha is 0, make it 1 (fixes issues with ::before and ::after icons)
+        if (alpha_text == 0) {
+          new_text_rgba = formatRGBA(new_text_rgb_array, "1");
+        }
+
+        // dealing with element text color
         elem.style.setProperty("color", new_text_rgba, "important");
       }
+
+      // dealing with placeholder color
+      try {
+        if (elem.placeholder.length > 0) {
+          // if text color was adjusted but new alpha is 0, make it 1 (fixes issues with ::before and ::after icons)
+          if (alpha_text == 0) {
+            new_text_rgba = formatRGBA(new_text_rgb_array, "1");
+          }
+          document.head.insertAdjacentHTML(
+            "beforeend",
+            `
+                  <style>
+                      ${generateQuerySelector(
+                        elem
+                      )}::-webkit-input-placeholder {
+                          color: ${new_text_rgba} !important;
+                      }
+                  </style>
+                  `
+          );
+        }
+      } catch {}
       if (backgroundHex !== new_background_hex) {
         backgroundElem.style.setProperty(
           "background-color",
@@ -394,7 +540,7 @@ function adjustContrast(desiredDifference) {
   console.log("DONE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 }
 
-adjustContrast(1300);
+adjustContrast(1000);
 
 // broken ARIA menu (An ARIA menu does not contain required menu items.)
 // An element with role="menu" does not contain at least one element with role="menuitem", role="menuitemcheckbox", or role="menuitemradio".
