@@ -41,8 +41,173 @@ for (let svg of svgs) {
 }
 
 // ############################################################################################################################
+// broken ARIA menu (An ARIA menu does not contain required menu items.)
+// An element with role="menu" does not contain at least one element with role="menuitem", role="menuitemcheckbox", or role="menuitemradio".
+// ############################################################################################################################
+let roleMenuElements = document.querySelectorAll('[role="menu"]');
+if (roleMenuElements.length > 0) {
+  for (let menu of roleMenuElements) {
+    let menuItems = menu.querySelectorAll(
+      '[role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"]'
+    );
+    if (menuItems.length === 0) {
+      menu.insertAdjacentHTML(
+        "beforeend",
+        `
+            <div role="menuitem" style="font-size:0px !important; color:rgba(0,0,0,0) !important; width: 0px !important; height: 0px !important;">
+                menuitem
+            </div>
+            `
+      );
+      console.log("fixed ARIA menu");
+    }
+  }
+}
+
+// ############################################################################################################################
+// replacing i tags with em tags
+// ############################################################################################################################
+function cloneAttributes(target, source) {
+  [...source.attributes].forEach((attr) => {
+    target.setAttribute(attr.nodeName, attr.nodeValue);
+  });
+}
+
+let iTags = document.querySelectorAll("i");
+for (let i of iTags) {
+  let new_em_tag = document.createElement("em");
+  new_em_tag.innerHTML - i.innerHTML;
+  cloneAttributes(new_em_tag, i);
+
+  i.parentNode.replaceChild(new_em_tag, i);
+}
+
+// ############################################################################################################################
+// adding placeholders and labels to inputs
+// ############################################################################################################################
+
+let inputs = document.querySelectorAll("input, textarea");
+document.head.insertAdjacentHTML(
+  "beforeend",
+  `
+<style>
+    .invisible-placeholder::-webkit-input-placeholder {
+        font-size: 0px;
+        color: rgba(0,0,0,0);
+    }
+</style>`
+);
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+for (let input of inputs) {
+  try {
+    var newLabel = document.createElement("label");
+    newLabel.style.setProperty("font-size", "0px", "important");
+    newLabel.style.setProperty("color", "rgba(0,0,0,0)", "important");
+    newLabel.style.setProperty("width", "0px", "important");
+    newLabel.style.setProperty("height", "0px", "important");
+    newLabel.style.setProperty("margin", "0px", "important");
+    newLabel.style.setProperty("padding", "0px", "important");
+
+    let randomTenDigitSequence = (() => {
+      let randomTenDigitNumber_array = [];
+      for (let i = 0; i < 10; i++) {
+        randomTenDigitNumber_array.push(getRandomInt(0, 9));
+      }
+      let randomTenDiginNumber_string = randomTenDigitNumber_array.join("");
+      return randomTenDiginNumber_string;
+    })();
+
+    // if input has no name and no placeholder - generate and use for both label.placeholder and label.htmlFor
+    if (
+      (typeof input.name === "undefined" || input.name.length === 0) &&
+      (typeof input.placeholder === "undefined" ||
+        input.placeholder.length === 0)
+    ) {
+      if (typeof input.id === "undefined" || input.id.length === 0) {
+        input.id = randomTenDigitSequence;
+      }
+
+      newLabel.htmlFor = input.id;
+      input.name = randomTenDigitSequence;
+      input.placeholder = randomTenDigitSequence;
+
+      newLabel.innerHTML = randomTenDigitSequence;
+
+      input.classList.add("invisible-placeholder");
+    }
+
+    // if input has both name and placeholder - apply name to label.htmlFor
+    else if (input.name.length > 0 && input.placeholder.length > 0) {
+      if (typeof input.id === "undefined" || input.id.length === 0) {
+        input.id = randomTenDigitSequence;
+      }
+
+      newLabel.htmlFor = input.id;
+      newLabel.innerHTML = input.name;
+    }
+
+    // if input has name but no placeholder - use name as invisible placeholder and label.htmlFor
+    else if (
+      (typeof input.placeholder === "undefined" ||
+        input.placeholder.length === 0) &&
+      input.name.length > 0
+    ) {
+      if (typeof input.id === "undefined" || input.id.length === 0) {
+        input.id = randomTenDigitSequence;
+      }
+
+      newLabel.htmlFor = input.id;
+      input.placeholder = input.name;
+      newLabel.innerHTML = input.name;
+
+      input.classList.add("invisible-placeholder");
+    }
+
+    // if input has placeholder but no name - use placeholder as invisible placeholder and label.htmlFor
+    else if (
+      (typeof input.name === "undefined" || input.name.length === 0) &&
+      input.placeholder.length > 0
+    ) {
+      if (typeof input.id === "undefined" || input.id.length === 0) {
+        input.id = randomTenDigitSequence;
+      }
+      newLabel.htmlFor = input.id;
+
+      input.name = input.placeholder;
+      newLabel.innerHTML = input.name;
+    }
+
+    if (typeof input.title === "undefined" || input.title.length === 0) {
+      try {
+        input.title = "input title";
+      } catch {}
+    }
+
+    // label cannot be inside of another label element
+    var inputParent = input;
+    while (inputParent) {
+      inputParent = inputParent.parentElement;
+      if (inputParent.tagName.toLowerCase() === "label") {
+        break;
+      } else if (inputParent == null) {
+        input.parentElement.insertBefore(newLabel, input);
+        break;
+      }
+    }
+  } catch {}
+  console.log("added label to input field");
+}
+
+// ############################################################################################################################
 // forms having no labels
 // form labels being hidden
+// labels having no textContent
 // ############################################################################################################################
 
 let forms = document.querySelectorAll("form");
@@ -59,73 +224,35 @@ for (let form of forms) {
       console.log("added label");
     }
   } catch {}
-  let labels = form.getElementsByTagName("label");
-  for (let label of labels) {
-    //removing hidden attributes from labels
-    if (label.hasAttribute("hidden")) {
-      try {
-        console.log("had attribute hidden");
-        label.removeAttribute("hidden");
-        label.style.fontSize = "0px";
-        label.style.height = "0px";
-        label.style.width = "0px";
-      } catch {}
-    }
-    // removing visibility hidden from labels
-    if (window.getComputedStyle(label)["visibility"] === "hidden") {
-      console.log("had visibility hidden");
-      label.style.visibility = "visible";
+}
+
+let labels = document.querySelectorAll("label");
+for (let label of labels) {
+  //removing hidden attributes from labels
+  if (label.hasAttribute("hidden")) {
+    try {
+      console.log("had attribute hidden");
+      label.removeAttribute("hidden");
       label.style.fontSize = "0px";
       label.style.height = "0px";
       label.style.width = "0px";
-    }
-  }
-}
-
-// ############################################################################################################################
-// adding placeholders
-// ############################################################################################################################
-
-let inputs = document.querySelectorAll("input");
-document.head.insertAdjacentHTML(
-  "beforeend",
-  `
-<style>
-    .invisible-placeholder::-webkit-input-placeholder {
-        font-size: 0px;
-        color: rgba(0,0,0,0);
-    }
-</style>`
-);
-for (let input of inputs) {
-  if (input.placeholder.length !== 0) {
-    let newLabel = document.createElement("label");
-    newLabel.innerHTML = input.getAttribute("placeholder");
-    newLabel.style.setProperty("font-size", "0px", "important");
-    newLabel.style.setProperty("color", "rgba(0,0,0,0)", "important");
-    newLabel.style.setProperty("width", "0px", "important");
-    newLabel.style.setProperty("height", "0px", "important");
-    newLabel.style.setProperty("margin", "0px", "important");
-    newLabel.style.setProperty("padding", "0px", "important");
-    input.parentNode.insertBefore(newLabel, input);
-  }
-
-  if (
-    typeof input.placeholder === "undefined" ||
-    input.placeholder.length === 0
-  ) {
-    try {
-      input.placeholder = "placeholder";
-      input.classList.add("invisible-placeholder");
     } catch {}
   }
-  if (typeof input.title === "undefined" || input.title.length === 0) {
-    try {
-      input.title = "input title";
-    } catch {}
+  // removing visibility hidden from labels
+  if (window.getComputedStyle(label)["visibility"] === "hidden") {
+    console.log("had visibility hidden");
+    label.style.visibility = "visible";
+    label.style.fontSize = "0px";
+    label.style.height = "0px";
+    label.style.width = "0px";
+  }
+  // adding text if label is empty
+  let spacelessString = label.textContent.replace(/\s/g, "");
+  if (spacelessString.length === 0) {
+    let labelSpan = `<span style='width:"0px" !important; height:"0px" !important; font-size:"0px" !important; display:none !important;'>empty label</span>`;
+    label.insertAdjacentHTML("beforeend", labelSpan);
   }
 }
-
 // ############################################################################################################################
 // page having no language specified
 // ############################################################################################################################
@@ -155,7 +282,8 @@ if (typeof document.title === "undefined" || document.title.length === 0) {
 
 let tableHeaders = document.querySelectorAll("th");
 for (let header of tableHeaders) {
-  if (header.textContent.length === 0) {
+  let spacelessString = header.textContent.replace(/\s/g, "");
+  if (spacelessString.length === 0) {
     header.style.fontSize = "0px";
     header.style.color = "transparent";
     header.insertAdjacentHTML(
@@ -185,12 +313,13 @@ for (let iframe of iframes) {
 
 let buttons = document.querySelectorAll("button");
 for (let button of buttons) {
-  if (button.textContent.length === 0) {
+  let spacelessString = button.textContent.replace(/\s/g, "");
+  if (spacelessString.length === 0) {
     button.style.fontSize = "0px";
     button.style.color = "transparent";
     button.insertAdjacentHTML(
       "beforeend",
-      `<span style='width:"0px" !important; height:"0px" !important; font-size:"0px" !important; display:none !important;'>empty button</span>`
+      `<span style='width:0px !important; height:0px !important; font-size:0px !important; display:none !important;'>empty button</span>`
     );
     console.log("added button text");
   }
@@ -202,7 +331,8 @@ for (let button of buttons) {
 
 let links = document.querySelectorAll("a");
 for (let link of links) {
-  if (link.textContent.length === 0) {
+  let spacelessString = link.textContent.replace(/\s/g, "");
+  if (spacelessString.length === 0) {
     link.style.fontSize = "0px";
     link.style.color = "transparent";
     let span = document.createElement("span");
@@ -540,7 +670,4 @@ function adjustContrast(desiredDifference) {
   console.log("DONE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 }
 
-adjustContrast(1000);
-
-// broken ARIA menu (An ARIA menu does not contain required menu items.)
-// An element with role="menu" does not contain at least one element with role="menuitem", role="menuitemcheckbox", or role="menuitemradio".
+adjustContrast(1200);
