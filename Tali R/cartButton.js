@@ -1,95 +1,104 @@
-let selector = "enter your selector here";
+let selector = '#product-4457 > div.summary.entry-summary.has-no-bid-product.has_no_sale_price > form > button'
 
-let targetElement = document.querySelector(selector);
-targetElement.innerHTML = document.createElement("div");
+// Get the element------------------------------
+let selectedElem = document.querySelector(selector);
 
-$("head").append(
-  `<style><link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-  #cartBtn{
-    height: 8vh;
-    display: block;
-    background: orange;  
-    width: 8vh;
-    display: none;
-    transition:all 300ms linear;
-  }
-  
-  
-  #cartBtn .toggle-btn span{
-    cursor:pointer;
-    height: 8vh;
-    display: block;
-    background: orange;  
-    width: 20vh;
-    display: none;
-    ursor:pointer;
-  }
-  
- .pay{
-    height: 8vh;
-    display: block;
-    background: orange;  
-    width: 20vh;
-    
-  } </style>`
+// get element's style---------------------------
+let selectedElemStyle = window.getComputedStyle(selectedElem);
+
+// Clone element-------------------------------
+let cloneBtn = selectedElem.cloneNode(true);
+
+// append jquery link to head/----------------
+if (window.jQuery) {
+    $ = window.jQuery;
+} else {
+    var script = document.createElement("SCRIPT");
+    script.src =
+        "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js";
+    script.type = "text/javascript";
+    script.onload = function() {
+        var $ = window.jQuery;
+    };
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
+
+// STYLE---------------------------------------------------
+$('head').append(`<style>
+#newBlock{
+  background-color: ${selectedElemStyle['background-color']};
+  color:  ${selectedElemStyle['color']};
+  padding: 20px;
+  left: 0px;
+  top: 50%;
+  position: fixed;
+  border-radius: 3px;
+  background:${selectedElemStyle['background']};
+  font-family:${selectedElemStyle['font-family']};
+  z-index: 9999;
+}
+#newBlock:hover{ 
+  cursor: pointer;
+}
+#btnClone{
+  margin: auto;
+  font-size: 30px !important;
+  display: none;
+}
+#blockIcon{
+  font-size: 25px;
+  font-style: normal !important;
+  margin: auto;
+}
+</style>`);
+
+// Create new div with Id to append cloneBtn--------------
+$('body').append(
+    `<div  id="newBlock">
+        <button id="blockIcon" class="${[...selectedElem.classList].join(' ')}" ></button>
+        <div id='btnClone'> </div>
+    </div>`
 );
 
-$("body").append
-(`<button id="cartBtn" class="fas fa-shopping-basket" onclick="cartBtnToggle(this)">
-<div class="pay"> ${payBtn}</div>
-</button>`);
+//append cloneBtn to id-----------------------
+let buttonClone = $(selector).clone(true);
+buttonClone.appendTo("#btnClone");
 
+//append events to cloneBtn id-----------------------
+$(document).on('click', '#btnClone', function() {
+  $(selector).click();
+});
 
-let cartBtn = document.getElementById("cartBtn");
-let stuck = false;
-let rootElement = document.documentElement;
-let scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
-let payBtn = appendChild.getElementsByName("add-to-cart")
+// Purchase Btn Visibility Function -------------------------
+$.fn.inView = function(){
+    if(!this.length) 
+        return false;
+    var rect = this.get(0).getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+    );
+};
 
-window.onscroll = function(e) {
-  let rootElement = document.documentElement;
-  let scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
-  if ((rootElement.scrollTop / scrollTotal ) > 0.1) {
-    cartBtn.style.marginTop= '50%';
-    cartBtn.style.position = 'fixed';
-    cartBtn.style.display = "block";
-    stuck = true;
-  } else {
-    cartBtn.style.display = 'none'; 
-  }
-}
+//window scroll display Function ------------------------------
+$(window).on('scroll',function(){
 
+    if($(selectedElem).inView() ) {
+        newBlock.style.display = 'none';
+        stuck = true;
+    } else {
+        newBlock.style.display = 'block'; 
+    }
+});
 
-
-// function mOver(obj) {
-//   cartBtn.innerHTML = "expand"
-// }
-
-// function mOut(obj) {
-//   cartBtn.innerHTML = "Mouse Over Me"
-// }
-
-// cartBtn.onclick = function() {clicked()};
-
-// function clicked() {
-//   cartBtn.innerHTML = "expand cart";
-// }
-
-
-// function cartBtnToggle(ref){
-//   cartBtn.classList.toggle('active');
-// }
-
-// cartBtn.onclick = function() {clicked()};
-
-// function clicked() {
-//   cartBtn.innerHTML = "expand cart";
-// }
-
-function cartBtnToggle(ref){
-  cartBtn.classList.toggle('active');
-  if(cartBtn.classList.toggle('active'))
-  return payClick
-}
-
-
+//mouse hover ------------------------------------------
+$("#newBlock").on({
+    mouseenter: function () {
+        $("#blockIcon").css("display", "none");
+        $("#btnClone").css("display", "block");
+    },
+    mouseleave: function () {
+        $("#blockIcon").css("display", "block");
+        $("#btnClone").css("display", "none");
+    }
+});
