@@ -671,3 +671,5 @@ function adjustContrast(desiredDifference) {
 }
 
 adjustContrast(1200);
+
+// fix my stuff with replacing "i" with "em", because "i" is an icon tag, not italics
