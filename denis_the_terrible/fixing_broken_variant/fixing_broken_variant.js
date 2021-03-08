@@ -1,19 +1,48 @@
-// Promise
-
-// Cookies
-
-// Intellisense
-
-var maxCookieSuggestions = 3;
-var maxGoogleSuggestions = 5;
+var maxSuggestions = 5;
 var suggestionsHistoryCookieName = "searchHistory";
 var cookieExpirationInDays = 1;
 
+let suggestionListBackgroundColor = "white";
+
 var url = "https://suggestqueries.google.com/complete/search?client=firefox&q=";
 
-var searchBoxSelector =
-  "body > div.row.fixed-top > div > div > nav > div:nth-child(3)";
 var searchInputSelector = "#searchCard";
+var inputElement = document.querySelector(searchInputSelector);
+
+var inputElementIsFixed = false;
+var inputElementParent = inputElement;
+while (inputElementParent) {
+  if (inputElementParent.parentNode !== document) {
+    inputElementParent = inputElementParent.parentNode;
+    let position = window.getComputedStyle(inputElementParent)["position"];
+    if (position === "fixed") {
+      inputElementIsFixed = true;
+      break;
+    }
+  } else {
+    break;
+  }
+}
+
+if (inputElementIsFixed === true) {
+  var suggestionList_zIndex =
+    window.getComputedStyle(inputElementParent)["zIndex"] + 1;
+} else {
+  var suggestionList_zIndex;
+  var inputElementParent = inputElement;
+  while (inputElementParent) {
+    if (inputElementParent.parentNode !== document) {
+      inputElementParent = inputElementParent.parentNode;
+      let zIndex = window.getComputedStyle(inputElementParent)["zIndex"];
+      if (zIndex !== "auto") {
+        suggestionList_zIndex = zIndex + 1;
+        break;
+      }
+    } else {
+      break;
+    }
+  }
+}
 
 document.head.insertAdjacentHTML(
   "beforeend",
@@ -21,13 +50,27 @@ document.head.insertAdjacentHTML(
   <style>
 
     #suggestions-list-intellisense {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
       display: none; 
-      position: fixed;
-      background-color: green;
+      z-index: ${suggestionList_zIndex};
+      flex-direction: column !important;
+      flex-wrap: nowrap !important;
+      background-color: ${suggestionListBackgroundColor};
     }
 
     .intellisenseSuggestionsRow {
-      background-color: red;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .intellisenseHistorySuggestion {
+      font-weight: bold;
+    }
+
+    .intellisenseGoogleSuggestion {
+      font-weight: normal;
     }
 
   </style>
@@ -42,9 +85,7 @@ document.body.insertAdjacentHTML(
 `
 );
 
-var searchBox = document.querySelector(searchBoxSelector);
-var inputElement = document.querySelector(searchInputSelector);
-var suggestionsList = document.querySelector("#suggestions-list-intellisense");
+var suggestionsUl = document.querySelector("#suggestions-list-intellisense");
 
 function getCookies() {
   var decodedCookie = decodeURIComponent(document.cookie);
@@ -57,63 +98,90 @@ function getCookies() {
   return cookiesObject;
 }
 
-function appendRowToSuggestionsList(value) {
-  let suggestionsUl = document.querySelector("#suggestions-list-intellisense");
+function appendRowToSuggestionsUl(value, classes = []) {
   let newRow = document.createElement("li");
   newRow.classList.add("intellisenseSuggestionsRow");
   newRow.innerHTML = value;
+  for (let cls of classes) {
+    newRow.classList.add(cls);
+  }
   suggestionsUl.appendChild(newRow);
 }
 
-function clearSuggestionsList() {
-  let suggestionsUl = document.querySelector("#suggestions-list-intellisense");
+function clearSuggestionsUl() {
   suggestionsUl.innerHTML = "";
 }
 
-function unhideSuggestionsList() {
+function unhideSuggestionsUl() {
   if (!document.querySelector("#intellisenseSuggestionsList_style")) {
-    document.head.insertAdjacentHTML(
-      "beforeend",
+    // if position is fixed
+    if (inputElementIsFixed) {
+      document.head.insertAdjacentHTML(
+        "beforeend",
+        `
+      <style id="intellisenseSuggestionsList_style">
+        #suggestions-list-intellisense {
+          position: fixed;
+          display: flex;
+        }
+      </style>
       `
-    <style id="intellisenseSuggestionsList_style">
-      #suggestions-list-intellisense {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-      }
-    </style>
-    `
-    );
+      );
+    }
+    // if position is not fixed
+    else {
+      document.head.insertAdjacentHTML(
+        "beforeend",
+        `
+      <style id="intellisenseSuggestionsList_style">
+        #suggestions-list-intellisense {
+          position: absolute;
+          display: flex;
+        }
+      </style>
+      `
+      );
+    }
   }
 }
 
-function hideSuggestionsList() {
+function hideSuggestionsUl() {
   if (document.querySelector("#intellisenseSuggestionsList_style")) {
     document.querySelector("#intellisenseSuggestionsList_style").remove();
   }
 }
 
-function resizeSuggestionsList() {
-  if (
-    suggestionsUl.style.top !==
-    window.scrollY + inputElement.getBoundingClientRect().bottom + "px"
-  ) {
-    suggestionsUl.style.top =
-      window.scrollY + inputElement.getBoundingClientRect().bottom + "px";
-  }
+function resizeSuggestionsUl() {
+  let elRect = inputElement.getBoundingClientRect();
 
-  if (
-    suggestionsUl.style.left !==
-    window.scrollX + inputElement.getBoundingClientRect().left + "px"
-  ) {
-    suggestionsUl.style.left =
-      window.scrollX + inputElement.getBoundingClientRect().left + "px";
-  }
+  if (inputElementIsFixed) {
+    if (suggestionsUl.style.top !== elRect.bottom + "px") {
+      suggestionsUl.style.top = elRect.bottom + "px";
+    }
 
-  if (
-    suggestionsUl.style.width !== window.getComputedStyle(inputElement).width
-  ) {
-    suggestionsUl.style.width = window.getComputedStyle(inputElement).width;
+    if (suggestionsUl.style.left !== elRect.left + "px") {
+      suggestionsUl.style.left = elRect.left + "px";
+    }
+
+    if (
+      suggestionsUl.style.width !== window.getComputedStyle(inputElement).width
+    ) {
+      suggestionsUl.style.width = window.getComputedStyle(inputElement).width;
+    }
+  } else {
+    if (suggestionsUl.style.top !== window.scrollY + elRect.bottom + "px") {
+      suggestionsUl.style.top = window.scrollY + elRect.bottom + "px";
+    }
+
+    if (suggestionsUl.style.left !== window.scrollX + elRect.left + "px") {
+      suggestionsUl.style.left = window.scrollX + elRect.left + "px";
+    }
+
+    if (
+      suggestionsUl.style.width !== window.getComputedStyle(inputElement).width
+    ) {
+      suggestionsUl.style.width = window.getComputedStyle(inputElement).width;
+    }
   }
 }
 
@@ -122,20 +190,30 @@ function setSuggestionRowsEventListeners() {
   for (let row of suggestionRows) {
     row.addEventListener("click", (e) => {
       e.preventDefault();
+
+      let cookies = getCookies();
+
       let selectionValue = e.target.textContent;
 
       // insert selection into search field and clear suggestions
       inputElement.value = selectionValue;
-      clearSuggestionsList();
-      hideSuggestionsList();
+      clearSuggestionsUl();
+      hideSuggestionsUl();
 
       // add selection to cookie
-      let suggestionsHistory_string = cookies[suggestionsHistoryCookieName];
-      let suggestionsHistory_array = JSON.parse(suggestionsHistory_string);
-      suggestionsHistory_array.push(selectionValue);
-      let newSuggestionsHistory_string = JSON.stringify(
-        suggestionsHistory_array
-      );
+      if (Object.keys(cookies)[0] === "") {
+        newSuggestionsHistory_string = JSON.stringify([inputElement.value]);
+      } else {
+        let suggestionsHistory_string = cookies[suggestionsHistoryCookieName];
+        let suggestionsHistory_array = JSON.parse(suggestionsHistory_string);
+        if (!suggestionsHistory_array.includes(inputElement.value)) {
+          suggestionsHistory_array.push(selectionValue);
+        }
+        var newSuggestionsHistory_string = JSON.stringify(
+          suggestionsHistory_array
+        );
+      }
+
       setCookie(
         suggestionsHistoryCookieName,
         newSuggestionsHistory_string,
@@ -170,21 +248,19 @@ function jsonp(uri) {
   });
 }
 
-function getSuggestions() {
-  var cookies = getCookies();
+function getHistorySuggestions() {
+  let cookies = getCookies();
 
-  // Create list of suggestions based on google results and search history.
-  let suggestionsHistory_string = cookies[suggestionsHistoryCookieName];
-  let suggestionsHistory_array = JSON.parse(suggestionsHistory_string);
+  try {
+    // Create list of suggestions based on google results and search history.
+    let suggestionsHistory_string = cookies[suggestionsHistoryCookieName];
+    let suggestionsHistory_array = JSON.parse(suggestionsHistory_string);
 
-  var suggestions = suggestionsHistory_array.filter((value) =>
-    value.includes(e.target.value)
-  );
-  suggestions = suggestions.concat(
-    res.filter((value) => !suggestions.includes(value))
-  );
-
-  return suggestions;
+    var suggestions = suggestionsHistory_array.filter((value) =>
+      value.includes(inputElement.value)
+    );
+    return suggestions;
+  } catch {}
 }
 
 // Sets cookie and cookie's expiration date.
@@ -202,36 +278,61 @@ function setCookie(name, value, expireIn) {
     window.location.hostname;
 }
 
-for (var i = 0; i < maxGoogleSuggestions; i++) {
-  let suggestion = cookies[i];
-  let suggestionLi = document.createElement("li");
-  suggestionLi.innerHTML = suggestion;
-  suggestionsUl.appendChild(suggestionLi);
-}
-
 // Get google autocomplete results.
-searchInputSelector.addEventListener("keydown", (e) => {
-  jsonp(url + e.target.value)
-    .then((res) => res[1])
-    .then((res) => {
-      // SUCCESS
+inputElement.addEventListener("keyup", (e) => {
+  if (e.target.value.length > 0) {
+    jsonp(url + e.target.value)
+      .then((googleSuggestions) => googleSuggestions[1])
+      .then((googleSuggestions) => {
+        // SUCCESS
 
-      // Clear and unhide list.
-      clearSuggestionsList();
-      unhideSuggestionsList();
+        if (googleSuggestions.length === 0) {
+          clearSuggestionsUl();
+          hideSuggestionsUl();
+        }
 
-      let suggestions = getSuggestions();
+        clearSuggestionsUl();
+        unhideSuggestionsUl();
 
-      for (let suggestion of suggestions) {
-        appendRowToSuggestionsList(suggestion);
-      }
+        // add history and google suggestions
+        // addHistorySuggestionsToUl();
+        let historySuggestions = getHistorySuggestions();
 
-      resizeSuggestionsList();
-      setSuggestionRowsEventListeners();
-    })
-    .catch(() => {
-      // ERROR
-      clearSuggestionsList();
-      hideSuggestionsList();
-    });
+        let historySuggestionsArray = [];
+        let googleSuggestionsArray = [];
+        for (let i = 0; i < maxSuggestions; i++) {
+          if (historySuggestions.includes(googleSuggestions[i])) {
+            historySuggestionsArray.push(googleSuggestions[i]);
+          } else {
+            googleSuggestionsArray.push(googleSuggestions[i]);
+          }
+        }
+        for (let hist of historySuggestionsArray) {
+          if (typeof hist !== "undefined") {
+            appendRowToSuggestionsUl(hist, ["intellisenseHistorySuggestion"]);
+          }
+        }
+        for (let goog of googleSuggestionsArray) {
+          if (typeof goog !== "undefined") {
+            appendRowToSuggestionsUl(goog, ["intellisenseGoogleSuggestion"]);
+          }
+        }
+
+        resizeSuggestionsUl();
+        setSuggestionRowsEventListeners();
+      })
+      .catch(() => {
+        // ERROR
+        clearSuggestionsUl();
+        hideSuggestionsUl();
+      });
+  } else {
+    clearSuggestionsUl();
+    hideSuggestionsUl();
+  }
+});
+
+window.addEventListener("resize", () => {
+  resizeSuggestionsUl();
+  console.log("resize");
 });

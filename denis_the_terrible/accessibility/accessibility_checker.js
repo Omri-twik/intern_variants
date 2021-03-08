@@ -75,11 +75,13 @@ function cloneAttributes(target, source) {
 
 let iTags = document.querySelectorAll("i");
 for (let i of iTags) {
-  let new_em_tag = document.createElement("em");
-  new_em_tag.innerHTML - i.innerHTML;
-  cloneAttributes(new_em_tag, i);
+  if (i.textContent > 0) {
+    let new_em_tag = document.createElement("em");
+    new_em_tag.innerHTML - i.innerHTML;
+    cloneAttributes(new_em_tag, i);
 
-  i.parentNode.replaceChild(new_em_tag, i);
+    i.parentNode.replaceChild(new_em_tag, i);
+  }
 }
 
 // ############################################################################################################################
@@ -120,7 +122,7 @@ for (let input of inputs) {
         randomTenDigitNumber_array.push(getRandomInt(0, 9));
       }
       let randomTenDiginNumber_string = randomTenDigitNumber_array.join("");
-      return randomTenDiginNumber_string;
+      return "_" + randomTenDiginNumber_string;
     })();
 
     // if input has no name and no placeholder - generate and use for both label.placeholder and label.htmlFor
@@ -195,13 +197,13 @@ for (let input of inputs) {
       inputParent = inputParent.parentElement;
       if (inputParent.tagName.toLowerCase() === "label") {
         break;
-      } else if (inputParent == null) {
+      } else if (inputParent.tagName.toLowerCase() === "html") {
         input.parentElement.insertBefore(newLabel, input);
+        console.log("inserted label");
         break;
       }
     }
   } catch {}
-  console.log("added label to input field");
 }
 
 // ############################################################################################################################
@@ -673,3 +675,5 @@ function adjustContrast(desiredDifference) {
 adjustContrast(1200);
 
 // fix my stuff with replacing "i" with "em", because "i" is an icon tag, not italics
+
+// Broken ARIA reference - aria is linked to a hidden item
