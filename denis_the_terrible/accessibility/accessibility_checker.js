@@ -674,6 +674,4 @@ function adjustContrast(desiredDifference) {
 
 adjustContrast(1200);
 
-// fix my stuff with replacing "i" with "em", because "i" is an icon tag, not italics
-
 // Broken ARIA reference - aria is linked to a hidden item

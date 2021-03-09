@@ -6,86 +6,38 @@ let suggestionListBackgroundColor = "white";
 
 var url = "https://suggestqueries.google.com/complete/search?client=firefox&q=";
 
-var searchInputSelector = "#searchCard";
-var inputElement = document.querySelector(searchInputSelector);
-
-var inputElementIsFixed = false;
-var inputElementParent = inputElement;
-while (inputElementParent) {
-  if (inputElementParent.parentNode !== document) {
-    inputElementParent = inputElementParent.parentNode;
-    let position = window.getComputedStyle(inputElementParent)["position"];
-    if (position === "fixed") {
-      inputElementIsFixed = true;
-      break;
-    }
-  } else {
-    break;
-  }
-}
-
-if (inputElementIsFixed === true) {
-  var suggestionList_zIndex =
-    window.getComputedStyle(inputElementParent)["zIndex"] + 1;
-} else {
-  var suggestionList_zIndex;
-  var inputElementParent = inputElement;
-  while (inputElementParent) {
-    if (inputElementParent.parentNode !== document) {
-      inputElementParent = inputElementParent.parentNode;
-      let zIndex = window.getComputedStyle(inputElementParent)["zIndex"];
-      if (zIndex !== "auto") {
-        suggestionList_zIndex = zIndex + 1;
-        break;
-      }
-    } else {
-      break;
-    }
-  }
-}
-
 document.head.insertAdjacentHTML(
   "beforeend",
   `
   <style>
-
-    #suggestions-list-intellisense {
+    .suggestions-list-intellisense {
       list-style-type: none;
       padding: 0;
       margin: 0;
       display: none; 
-      z-index: ${suggestionList_zIndex};
       flex-direction: column !important;
       flex-wrap: nowrap !important;
       background-color: ${suggestionListBackgroundColor};
     }
-
     .intellisenseSuggestionsRow {
       width: 100%;
       cursor: pointer;
     }
-
     .intellisenseHistorySuggestion {
       font-weight: bold;
     }
-
     .intellisenseGoogleSuggestion {
       font-weight: normal;
     }
-
   </style>
 `
 );
 
-document.body.insertAdjacentHTML(
-  "beforeend",
-  `
-    <ul id="suggestions-list-intellisense">
-    </ul>
-`
-);
-
-var suggestionsUl = document.querySelector("#suggestions-list-intellisense");
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function getCookies() {
   var decodedCookie = decodeURIComponent(document.cookie);
@@ -98,29 +50,35 @@ function getCookies() {
   return cookiesObject;
 }
 
-function appendRowToSuggestionsUl(value, classes = []) {
+function appendRowToSuggestionsUl(value, classes = [], ul) {
   let newRow = document.createElement("li");
   newRow.classList.add("intellisenseSuggestionsRow");
   newRow.innerHTML = value;
   for (let cls of classes) {
     newRow.classList.add(cls);
   }
-  suggestionsUl.appendChild(newRow);
+  ul.appendChild(newRow);
 }
 
-function clearSuggestionsUl() {
-  suggestionsUl.innerHTML = "";
+function clearSuggestionsUl(ul) {
+  ul.innerHTML = "";
 }
 
-function unhideSuggestionsUl() {
-  if (!document.querySelector("#intellisenseSuggestionsList_style")) {
+function hideSuggestionsUl(ul) {
+  if (document.querySelector(`#${ul.id}_style`)) {
+    document.querySelector(`#${ul.id}_style`).remove();
+  }
+}
+
+function unhideSuggestionsUl(ul, elFixed) {
+  if (!document.querySelector(`#${ul.id}_style`)) {
     // if position is fixed
-    if (inputElementIsFixed) {
+    if (elFixed) {
       document.head.insertAdjacentHTML(
         "beforeend",
         `
-      <style id="intellisenseSuggestionsList_style">
-        #suggestions-list-intellisense {
+      <style id="${ul.id}_style">
+        #${ul.id} {
           position: fixed;
           display: flex;
         }
@@ -133,8 +91,8 @@ function unhideSuggestionsUl() {
       document.head.insertAdjacentHTML(
         "beforeend",
         `
-      <style id="intellisenseSuggestionsList_style">
-        #suggestions-list-intellisense {
+      <style id="${ul.id}_style">
+        #${ul.id} {
           position: absolute;
           display: flex;
         }
@@ -145,48 +103,43 @@ function unhideSuggestionsUl() {
   }
 }
 
-function hideSuggestionsUl() {
-  if (document.querySelector("#intellisenseSuggestionsList_style")) {
-    document.querySelector("#intellisenseSuggestionsList_style").remove();
-  }
-}
-
-function resizeSuggestionsUl() {
+function resizeSuggestionsUl(ul, inputElement, inputElementIsFixed) {
   let elRect = inputElement.getBoundingClientRect();
 
   if (inputElementIsFixed) {
-    if (suggestionsUl.style.top !== elRect.bottom + "px") {
-      suggestionsUl.style.top = elRect.bottom + "px";
+    if (ul.style.top !== elRect.bottom + "px") {
+      ul.style.top = elRect.bottom + "px";
     }
 
-    if (suggestionsUl.style.left !== elRect.left + "px") {
-      suggestionsUl.style.left = elRect.left + "px";
+    if (ul.style.left !== elRect.left + "px") {
+      ul.style.left = elRect.left + "px";
     }
 
-    if (
-      suggestionsUl.style.width !== window.getComputedStyle(inputElement).width
-    ) {
-      suggestionsUl.style.width = window.getComputedStyle(inputElement).width;
+    if (ul.style.width !== window.getComputedStyle(inputElement).width) {
+      ul.style.width = window.getComputedStyle(inputElement).width;
     }
   } else {
-    if (suggestionsUl.style.top !== window.scrollY + elRect.bottom + "px") {
-      suggestionsUl.style.top = window.scrollY + elRect.bottom + "px";
+    if (ul.style.top !== window.scrollY + elRect.bottom + "px") {
+      ul.style.top = window.scrollY + elRect.bottom + "px";
     }
 
-    if (suggestionsUl.style.left !== window.scrollX + elRect.left + "px") {
-      suggestionsUl.style.left = window.scrollX + elRect.left + "px";
+    if (ul.style.left !== window.scrollX + elRect.left + "px") {
+      ul.style.left = window.scrollX + elRect.left + "px";
     }
 
-    if (
-      suggestionsUl.style.width !== window.getComputedStyle(inputElement).width
-    ) {
-      suggestionsUl.style.width = window.getComputedStyle(inputElement).width;
+    if (ul.style.width !== window.getComputedStyle(inputElement).width) {
+      ul.style.width = window.getComputedStyle(inputElement).width;
     }
   }
 }
 
-function setSuggestionRowsEventListeners() {
-  let suggestionRows = document.querySelectorAll(".intellisenseSuggestionsRow");
+function setSuggestionRowsEventListeners(ul) {
+  let suggestionRows = document.querySelectorAll(
+    `#${ul.id} .intellisenseSuggestionsRow`
+  );
+
+  let inputElement = document.querySelector(`.${ul.id}`);
+
   for (let row of suggestionRows) {
     row.addEventListener("click", (e) => {
       e.preventDefault();
@@ -197,8 +150,8 @@ function setSuggestionRowsEventListeners() {
 
       // insert selection into search field and clear suggestions
       inputElement.value = selectionValue;
-      clearSuggestionsUl();
-      hideSuggestionsUl();
+      clearSuggestionsUl(ul);
+      hideSuggestionsUl(ul);
 
       // add selection to cookie
       if (Object.keys(cookies)[0] === "") {
@@ -219,6 +172,15 @@ function setSuggestionRowsEventListeners() {
         newSuggestionsHistory_string,
         cookieExpirationInDays
       );
+    });
+    row.parentNode.addEventListener("click", (e) => {
+      try {
+        e.stopEventPropagation();
+      } catch {}
+    });
+    window.addEventListener("click", () => {
+      clearSuggestionsUl(ul);
+      hideSuggestionsUl(ul);
     });
   }
 }
@@ -248,10 +210,12 @@ function jsonp(uri) {
   });
 }
 
-function getHistorySuggestions() {
-  let cookies = getCookies();
-
+function getHistorySuggestions(ul) {
   try {
+    let cookies = getCookies();
+
+    let inputElement = document.querySelector(`.${ul.id}`);
+
     // Create list of suggestions based on google results and search history.
     let suggestionsHistory_string = cookies[suggestionsHistoryCookieName];
     let suggestionsHistory_array = JSON.parse(suggestionsHistory_string);
@@ -260,7 +224,9 @@ function getHistorySuggestions() {
       value.includes(inputElement.value)
     );
     return suggestions;
-  } catch {}
+  } catch {
+    return [];
+  }
 }
 
 // Sets cookie and cookie's expiration date.
@@ -278,61 +244,198 @@ function setCookie(name, value, expireIn) {
     window.location.hostname;
 }
 
-// Get google autocomplete results.
-inputElement.addEventListener("keyup", (e) => {
-  if (e.target.value.length > 0) {
-    jsonp(url + e.target.value)
-      .then((googleSuggestions) => googleSuggestions[1])
-      .then((googleSuggestions) => {
-        // SUCCESS
+function applyIntellisenseToInputElement(inputElem) {
+  // check if input element is fixed or not
+  let inputElementIsFixed = false;
+  let inputElementParent = inputElem;
+  while (inputElementParent) {
+    if (inputElementParent.parentNode !== document) {
+      inputElementParent = inputElementParent.parentNode;
+      let position = window.getComputedStyle(inputElementParent)["position"];
+      if (position === "fixed") {
+        inputElementIsFixed = true;
+        break;
+      }
+    } else {
+      break;
+    }
+  }
 
-        if (googleSuggestions.length === 0) {
-          clearSuggestionsUl();
-          hideSuggestionsUl();
-        }
-
-        clearSuggestionsUl();
-        unhideSuggestionsUl();
-
-        // add history and google suggestions
-        // addHistorySuggestionsToUl();
-        let historySuggestions = getHistorySuggestions();
-
-        let historySuggestionsArray = [];
-        let googleSuggestionsArray = [];
-        for (let i = 0; i < maxSuggestions; i++) {
-          if (historySuggestions.includes(googleSuggestions[i])) {
-            historySuggestionsArray.push(googleSuggestions[i]);
-          } else {
-            googleSuggestionsArray.push(googleSuggestions[i]);
-          }
-        }
-        for (let hist of historySuggestionsArray) {
-          if (typeof hist !== "undefined") {
-            appendRowToSuggestionsUl(hist, ["intellisenseHistorySuggestion"]);
-          }
-        }
-        for (let goog of googleSuggestionsArray) {
-          if (typeof goog !== "undefined") {
-            appendRowToSuggestionsUl(goog, ["intellisenseGoogleSuggestion"]);
-          }
-        }
-
-        resizeSuggestionsUl();
-        setSuggestionRowsEventListeners();
-      })
-      .catch(() => {
-        // ERROR
-        clearSuggestionsUl();
-        hideSuggestionsUl();
-      });
+  // make ul fixed if input is fixed, absolute if input is not fixed
+  if (inputElementIsFixed === true) {
+    var suggestionList_zIndex =
+      window.getComputedStyle(inputElementParent)["zIndex"] + 1;
   } else {
-    clearSuggestionsUl();
-    hideSuggestionsUl();
+    var suggestionList_zIndex;
+    let inputElementParent = inputElem;
+    while (inputElementParent) {
+      if (inputElementParent.parentNode !== document) {
+        inputElementParent = inputElementParent.parentNode;
+        let zIndex = window.getComputedStyle(inputElementParent)["zIndex"];
+        if (zIndex !== "auto") {
+          suggestionList_zIndex = zIndex + 1;
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+  }
+
+  // assign an identifier to both inputElement and ul
+  let randomTenDigitSequence = (() => {
+    let randomTenDigitNumber_array = [];
+    for (let i = 0; i < 10; i++) {
+      randomTenDigitNumber_array.push(getRandomInt(0, 9));
+    }
+    let randomTenDiginNumber_string = randomTenDigitNumber_array.join("");
+    return "_" + randomTenDiginNumber_string;
+  })();
+
+  let boxId = `intellisenseBox${randomTenDigitSequence}`;
+  inputElem.classList.add(`intellisenseBox${randomTenDigitSequence}`);
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `
+      <ul class="suggestions-list-intellisense" id="${boxId}">
+      </ul>
+  `
+  );
+
+  let suggestionsUl = document.querySelector(`#${boxId}`);
+
+  if (inputElementIsFixed) {
+    suggestionsUl.classList.add("ulFixed");
+  } else {
+    suggestionsUl.classList.add("ulNotFixed");
+  }
+
+  // apply z-index+1 on the ul
+  document.head.insertAdjacentHTML(
+    "beforeend",
+    `
+  <style>
+    #${boxId} {
+      z-index: ${suggestionList_zIndex};
+    }
+  </style>
+  `
+  );
+
+  // carry over some style of the input field
+  document.head.insertAdjacentHTML(
+    "beforeend",
+    `
+      <style>
+      #${boxId} .intellisenseSuggestionsRow {
+          font-size: ${window.getComputedStyle(inputElem)["fontSize"]};
+          font-family: ${window.getComputedStyle(inputElem)["fontFamily"]};
+          color: ${window.getComputedStyle(inputElem)["color"]};
+          line-height: ${window.getComputedStyle(inputElem)["lineHeight"]};
+        }
+      </style>
+      `
+  );
+
+  // Get google autocomplete results.
+  inputElem.addEventListener("input", (e) => {
+    if (e.target.value.length > 0) {
+      jsonp(url + e.target.value)
+        .then((googleSuggestions) => googleSuggestions[1])
+        .then((googleSuggestions) => {
+          // SUCCESS
+
+          if (googleSuggestions.length === 0) {
+            clearSuggestionsUl(suggestionsUl);
+            hideSuggestionsUl(suggestionsUl);
+          }
+
+          clearSuggestionsUl(suggestionsUl);
+          unhideSuggestionsUl(suggestionsUl, inputElementIsFixed);
+
+          // add history and google suggestions
+          // addHistorySuggestionsToUl();
+          let historySuggestions = [];
+          try {
+            historySuggestions = getHistorySuggestions(suggestionsUl);
+          } catch {}
+
+          let historySuggestionsArray = [];
+          let googleSuggestionsArray = [];
+          for (let i = 0; i < maxSuggestions; i++) {
+            if (historySuggestions.includes(googleSuggestions[i])) {
+              historySuggestionsArray.push(googleSuggestions[i]);
+            } else {
+              googleSuggestionsArray.push(googleSuggestions[i]);
+            }
+          }
+
+          for (let hist of historySuggestionsArray) {
+            if (typeof hist !== "undefined") {
+              appendRowToSuggestionsUl(
+                hist,
+                ["intellisenseHistorySuggestion"],
+                suggestionsUl
+              );
+            }
+          }
+          for (let goog of googleSuggestionsArray) {
+            if (typeof goog !== "undefined") {
+              appendRowToSuggestionsUl(
+                goog,
+                ["intellisenseGoogleSuggestion"],
+                suggestionsUl
+              );
+            }
+          }
+
+          resizeSuggestionsUl(suggestionsUl, inputElem, inputElementIsFixed);
+          setSuggestionRowsEventListeners(suggestionsUl);
+        })
+        .catch(() => {
+          // ERROR
+          clearSuggestionsUl(suggestionsUl);
+          hideSuggestionsUl(suggestionsUl);
+        });
+    } else {
+      clearSuggestionsUl(suggestionsUl);
+      hideSuggestionsUl(suggestionsUl);
+    }
+  });
+  console.log("added functionality to field");
+}
+
+window.addEventListener("resize", () => {
+  let suggestionsUls = document.querySelectorAll(
+    ".suggestions-list-intellisense"
+  );
+  for (let ul of suggestionsUls) {
+    var inpElem = document.querySelector(`.${ul.id}`);
+
+    let fixed = false;
+    if (ul.classList.contains("ulFixed")) {
+      fixed = true;
+    }
+
+    if (window.getComputedStyle(ul)["display"] !== "none") {
+      resizeSuggestionsUl(ul, inpElem, fixed);
+    }
   }
 });
 
-window.addEventListener("resize", () => {
-  resizeSuggestionsUl();
-  console.log("resize");
+let fixedInput = document.querySelector("#searchCard");
+let staticInput = document.querySelector(
+  "body > form:nth-child(7) > input[type=text]:nth-child(4)"
+);
+
+let inputsForIntellisense = [];
+document.querySelectorAll("input").forEach((i) => {
+  if (["text", "search"].includes(i.type)) {
+    inputsForIntellisense.push(i);
+  }
+});
+
+inputsForIntellisense.forEach((el) => {
+  applyIntellisenseToInputElement(el);
 });
