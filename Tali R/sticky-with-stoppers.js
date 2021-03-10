@@ -1,5 +1,4 @@
 let selector =  'body > div.content > div > div.sidebar > div.sidebar__content';
-
 // Get the element------------------------------
 let selectedElem = document.querySelector(selector);
 
@@ -57,14 +56,7 @@ $(document).scroll(function() {
 
 
 
-
-
-
-
-
-
-
-// //Closest Element
+// //Closest Element Function
 // scrollObj= document.getElementsByClassName("float-attribute");
 // let scrollDisplay = $(selector).closest(Element);
 
