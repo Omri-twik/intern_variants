@@ -142,16 +142,16 @@ function mainJS() {
         }
     });
 
-    $(clonedSelector).click(function () {
-        $(targetElement).click()
-    })
-
+    
     customStickyDiv.addEventListener('mouseenter', event => {
         customStickyDiv.classList.add('expand');
         setTimeout(function () {
             document.querySelector('.expand').style.width = `${rect.width + 20}px`;
             document.querySelector('.expand').style.height = `${rect.height + 20}px`;
             $(customStickyDiv).append(clonedSelector)
+            clonedSelector.click(function () {
+                $(targetElement).click()
+            })
         }, 400);
         iconCart.style.visibility = 'hidden';
     })
