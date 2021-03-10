@@ -39,6 +39,11 @@ $("head").append(`<style>
 }
 </style>`);
 
+// ####################################################################
+// message from Denis:
+// I am pretty sure this will remove all other classes on the element,
+// which is not what you want. Better use jQuery's methods "addClass" and "removeClass"
+// ####################################################################
 //Append class to selector
 $(selector).attr("class", "float-attribute");
 
