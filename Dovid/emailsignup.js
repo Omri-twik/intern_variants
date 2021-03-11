@@ -1,29 +1,31 @@
+/* This script adds an email signup form to your webpage. It attaches a floating button 
+in the position of your choice that slides up the signup form from the bottom of the page
+when clicked. The script uses the apispreadsheets.com api to automatically add the email 
+address entered to the google sheet of your choice. You must first configure the connection 
+to your google sheet at apispreadsheets.com in order to use this script. */
+
+/* Enter the four-digit file id from apispreadsheets.com for the google sheet that you would 
+like to save the email addresses to: */
+let apiSpreadsheetsFileId = 'ENTER FOUR DIGIT FILE ID IN THESE QUOTES'; //Example: '8534'
+
+
+//Choose your coloring and position options below:
+let backColor = 'ENTER A BACKGROUND COLOR FOR YOUR EMAIL BUTTON AND FORM HERE'; //Example: 'navy'
+let textColor = 'ENTER A COLOR FOR TEXT AND ICONS'; //Example: 'whitesmoke'
+
+//Choose which side of the screen you would like your floating button to appear on:
+let buttonSide = 'left'; //you can switch 'left' to 'right' if you would prefer
+
+//Choose how far down the screen you would like your button to appear, 0% would be the top of the screen and 100% would hide it below the bottom
+let buttonVerticalPostion = '80%'; // you can replace 80% with the percentage of your choice
+
+
+//--------------------------------------------------------------------------------------------------------------
+
 let mailButton;
 
-
-let backColor = 'navy';
-let buttonSide = 'left';
-let buttonVerticalPostion = '80%';
-
-
-if (window.jQuery) {
-    $ = window.jQuery;
-    main();
-} else {
-    var script = document.createElement("SCRIPT");
-    script.src =
-        "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js";
-    script.type = "text/javascript";
-    script.onload = function() {
-        var $ = window.jQuery;
-        main();
-    };
-    document.getElementsByTagName("head")[0].appendChild(script);
-};
-
-
 function main(){
-    addFont();
+    loadIcons();
     addStyle();
     addMailButton();
 };
@@ -37,25 +39,23 @@ function addMailButton(){
     mailButton.addEventListener('click', addSignupField); 
 };
 
+
 function addSignupField(){
     mailButton.remove();
     signupField = document.createElement('div');
     signupField.classList.add('sign-up');
     document.body.append(signupField);
     signupField.innerHTML=`
-        <div style='text-align: center'>
-        <button id='closeSignup1'><i style="font-size: 1.5rem;" class="fas fa-times"></i></button>
-        <h1 style='color: whitesmoke;' >Newsletter Signup</h1> 
+        <button class='xout' onclick='closeSignup()'><i style="font-size: 1.5rem;" class="fas fa-times"></i></button>
+        <h1 style='color: ${textColor};' >Newsletter Signup</h1> 
         <form id='signupForm'>
             <input type='email' style='background-color: whitesmoke;' id = 'email' placeholder='Email Address' name='email_address'>
-            <button type='submit'  id ='signup'><i style='color: whitesmoke; font-size: 1.5rem;' class="fas fa-paper-plane"></i></button>
-        </form>
-        </div>`;
+            <button type='submit'  id ='signup'><i style='color: ${textColor}; font-size: 1.5rem;' class="fas fa-paper-plane"></i></button>
+        </form>`;
 
     document.querySelector("#signup").addEventListener("click", signUp);
-    document.querySelector('#closeSignup1').addEventListener('click', closeSignup);
-        
 };
+
 
 function closeSignup(){
     signupField.remove();
@@ -64,11 +64,13 @@ function closeSignup(){
 
 
 var timeNow = Date.now();
+
+
 function signUp(e){
     e.preventDefault();
     let email = document.getElementById('email').value;
     if(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email) == true){
-        fetch("https://api.apispreadsheets.com/data/8534/", {
+        fetch(`https://api.apispreadsheets.com/data/${apiSpreadsheetsFileId}/`, {
             method: "POST",
             body: JSON.stringify(
                 {"data": {
@@ -80,15 +82,11 @@ function signUp(e){
         }).then(res =>{
             if (res.status === 201){
                 signupField.innerHTML=`
-                    <div style='text-align: center'>
-                    <button id='closeSignup2'><i style="font-size: 1.5rem;" class="fas fa-times"></i></button>
-                    <h1 style='color: whitesmoke;'> <b> Thank You </b> </h1> 
-                    <h4>You have been successfully added to our mailing list</h4> 
-                    <h5 style='color: whitesmoke;'>Signed up by accident? <a style='text-decoration: underline;' id='unsubscribe'>Unsubscribe</a> </h5>
-                    </div>`;
-                    document.querySelector('#closeSignup2').addEventListener('click', closeSignup);
+                    <button class='xout' onclick='closeSignup()'><i style="font-size: 1.5rem;" class="fas fa-times"></i></button>
+                    <h3 style='color: ${textColor};'> <b> Thank You </b> </h3> 
+                    <h4>You have been successfully added to our mailing list</h4>
+                    <h5 style='color: ${textColor};'>Signed up by accident? <a style='text-decoration: underline;' id='unsubscribe'>Unsubscribe</a> </h5>`;
                     document.querySelector('#unsubscribe').addEventListener('click', unsubscribe);
-
             }
             else{
                 alert('something went wrong, try again')
@@ -99,29 +97,23 @@ function signUp(e){
     }
 };
 
-function unsubscribe(){
 
-    fetch(`https://api.apispreadsheets.com/data/8534/?query=deletefrom8534whereTimestamp='${timeNow}'`).then(res=>{
+function unsubscribe(){
+    fetch(`https://api.apispreadsheets.com/data/${apiSpreadsheetsFileId}/?query=deletefrom${apiSpreadsheetsFileId}whereTimestamp='${timeNow}'`).then(res=>{
         console.log(res);
         if (res.status === 200){
-            console.log('unsubscribed');
             signupField.innerHTML=`
-                    <div style='text-align: center'>
-                    <button id='closeSignup3'><i style="font-size: 1.5rem;" class="fas fa-times"></i></button>
-                    <h3 style='margin-top: 30px;' >You have successfully unsubscribed</h3>
-                    </div>`;
-                    document.querySelector('#closeSignup3').addEventListener('click', closeSignup);
-
+                    <button class='xout' onclick='closeSignup()'><i style="font-size: 1.5rem;" class="fas fa-times"></i></button>
+                    <h3>You have successfully unsubscribed</h3>`;
         }
         else{
             alert('There was an issue... unsubscribe failed');
         }
     })
-
 };
 
 
-function addFont(){
+function loadIcons(){
     var cssId = 'myCss'; 
     if (!document.getElementById(cssId)){
         var head  = document.getElementsByTagName('head')[0];
@@ -136,7 +128,6 @@ function addFont(){
 };
 
 
-
 function addStyle(){
     var style = document.createElement('style');
     style.innerHTML = `
@@ -147,7 +138,7 @@ function addStyle(){
 
     .mailButton {
         background-color: ${backColor};
-        color: whitesmoke;
+        color: ${textColor};
         font-weight: bold;
         position: fixed; 
         z-index: 999;
@@ -161,6 +152,11 @@ function addStyle(){
     }  
 
     .sign-up { 
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        flex-direction: column;
         height: 0%;
         animation-name: slide;
         animation-duration: 0.5s;
@@ -170,9 +166,8 @@ function addStyle(){
         bottom: 0px;
         left: 0px;
         width: 100%;
-        padding-top: 20px;
         background-color: ${backColor};
-        color: whitesmoke !important;
+        color: ${textColor} !important;
         font-family: sans-serif;
         box-shadow: 0px -5px 8px #888888; 
     }
@@ -183,19 +178,21 @@ function addStyle(){
         padding: 5px;'
     }
 
-    #closeSignup1, #closeSignup2, #closeSignup3 {
+    .xout {
         position: absolute; 
         left: 5px; 
         top: 5px; 
         border: none; 
         background: none; 
-        color: whitesmoke;
+        color: ${textColor};
     }
 
     #signup {
         background: none; 
         border: none;
-    }
-    ` 
+    }` 
     document.getElementsByTagName("head")[0].appendChild(style);
 };
+
+
+main();

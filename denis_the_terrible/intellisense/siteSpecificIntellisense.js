@@ -4,6 +4,9 @@ var cookieExpirationInDays = 1;
 
 let suggestionListBackgroundColor = "white";
 
+let apiKey = "AIzaSyA16SPRHCyW6_2NoKPtAV6cwtR8n8s-Kgw";
+let cx = "6b2ceadb15bfde761";
+
 var url = "https://suggestqueries.google.com/complete/search?client=firefox&q=";
 
 document.head.insertAdjacentHTML(
@@ -23,6 +26,7 @@ document.head.insertAdjacentHTML(
       width: 100%;
       cursor: pointer;
       padding: 2px;
+      border: 1px solid black;
     }
     .intellisenseHistorySuggestion {
       font-weight: bold;
@@ -44,7 +48,7 @@ function getCookies() {
   var decodedCookie = decodeURIComponent(document.cookie);
   var cookies = decodedCookie.split(";");
   let cookiesObject = {};
-  for (cookie of cookies) {
+  for (let cookie of cookies) {
     var [name, value] = cookie.split("=");
     name = name.replace(/\s/g, "");
     cookiesObject[name] = value;
@@ -184,7 +188,6 @@ function setSuggestionRowsEventListeners(ul) {
       } catch {}
     });
     window.addEventListener("click", () => {
-      clearSuggestionsUl(ul);
       hideSuggestionsUl(ul);
     });
   }
@@ -219,15 +222,10 @@ function getHistorySuggestions(ul) {
   try {
     let cookies = getCookies();
 
-    let inputElement = document.querySelector(`.${ul.id}`);
-
     // Create list of suggestions based on google results and search history.
     let suggestionsHistory_string = cookies[suggestionsHistoryCookieName];
-    let suggestionsHistory_array = JSON.parse(suggestionsHistory_string);
+    let suggestions = JSON.parse(suggestionsHistory_string);
 
-    var suggestions = suggestionsHistory_array.filter((value) =>
-      value.includes(inputElement.value)
-    );
     return suggestions;
   } catch {
     return [];
@@ -248,10 +246,104 @@ function setCookie(name, value, expireIn) {
     window.location.hostname;
 }
 
-function applyIntellisenseToInputElement(inputElem) {
+function displaySuggestionsOnInputElement(inputElem) {
+  let suggestionsUl;
+  for (let cls of inputElem.classList) {
+    suggestionsUl = document.querySelector(`#${cls}`);
+    if (suggestionsUl && suggestionsUl.tagName.toLowerCase() === "ul") {
+      break;
+    }
+  }
+
+  if (inputElem.value.length > 0) {
+    fetch(
+      `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${inputElem.value}`
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        // SUCCESS
+        let googleSuggestionsRaw = [];
+        data.items.forEach((i) => {
+          googleSuggestionsRaw.push(i.title);
+        });
+        let googleSuggestions = [];
+        googleSuggestionsRaw.forEach((i) => {
+          googleSuggestions.push(i.split(" – ")[0]);
+        });
+
+        if (googleSuggestions.length === 0) {
+          clearSuggestionsUl(suggestionsUl);
+          hideSuggestionsUl(suggestionsUl);
+        }
+
+        clearSuggestionsUl(suggestionsUl);
+        unhideSuggestionsUl(
+          suggestionsUl,
+          suggestionsUl.classList.contains("ulFixed")
+        );
+
+        // leaving only unique suggestions
+        googleSuggestions = [...new Set(googleSuggestions)];
+
+        // add history and google suggestions
+        let historySuggestions = [];
+        try {
+          historySuggestions = getHistorySuggestions(suggestionsUl);
+        } catch {}
+
+        let historySuggestionsArray = [];
+        let googleSuggestionsArray = [];
+        for (let i = 0; i < maxSuggestions; i++) {
+          if (historySuggestions.includes(googleSuggestions[i])) {
+            historySuggestionsArray.push(googleSuggestions[i]);
+          } else {
+            googleSuggestionsArray.push(googleSuggestions[i]);
+          }
+        }
+
+        for (let hist of historySuggestionsArray) {
+          if (typeof hist !== "undefined") {
+            appendRowToSuggestionsUl(
+              hist,
+              ["intellisenseHistorySuggestion"],
+              suggestionsUl
+            );
+          }
+        }
+        for (let goog of googleSuggestionsArray) {
+          if (typeof goog !== "undefined") {
+            appendRowToSuggestionsUl(
+              goog,
+              ["intellisenseGoogleSuggestion"],
+              suggestionsUl
+            );
+          }
+        }
+
+        resizeSuggestionsUl(
+          suggestionsUl,
+          inputElem,
+          suggestionsUl.classList.contains("ulFixed")
+        );
+        setSuggestionRowsEventListeners(suggestionsUl);
+      })
+      .catch(() => {
+        // ERROR
+        clearSuggestionsUl(suggestionsUl);
+        hideSuggestionsUl(suggestionsUl);
+      });
+  } else {
+    clearSuggestionsUl(suggestionsUl);
+    hideSuggestionsUl(suggestionsUl);
+  }
+}
+
+function applySiteIntellisenseToInputElement(inputElem) {
   // check if input element is fixed or not
-  let inputElementIsFixed = false;
-  let inputElementParent = inputElem;
+  var inputElementIsFixed = false;
+  var inputElementParent = inputElem;
   while (inputElementParent) {
     if (inputElementParent.parentNode !== document) {
       inputElementParent = inputElementParent.parentNode;
@@ -302,9 +394,9 @@ function applyIntellisenseToInputElement(inputElem) {
   document.body.insertAdjacentHTML(
     "beforeend",
     `
-      <ul class="suggestions-list-intellisense" id="${boxId}">
-      </ul>
-  `
+        <ul class="suggestions-list-intellisense" id="${boxId}">
+        </ul>
+    `
   );
 
   let suggestionsUl = document.querySelector(`#${boxId}`);
@@ -319,95 +411,45 @@ function applyIntellisenseToInputElement(inputElem) {
   document.head.insertAdjacentHTML(
     "beforeend",
     `
-  <style>
-    #${boxId} {
-      z-index: ${suggestionList_zIndex};
-    }
-  </style>
-  `
+    <style>
+      #${boxId} {
+        z-index: ${suggestionList_zIndex};
+      }
+    </style>
+    `
   );
 
   // carry over some style of the input field
   document.head.insertAdjacentHTML(
     "beforeend",
     `
-      <style>
-      #${boxId} .intellisenseSuggestionsRow {
-          font-size: ${window.getComputedStyle(inputElem)["fontSize"]};
-          font-family: ${window.getComputedStyle(inputElem)["fontFamily"]};
-          color: ${window.getComputedStyle(inputElem)["color"]};
-          line-height: ${window.getComputedStyle(inputElem)["lineHeight"]};
-        }
-      </style>
-      `
+        <style>
+        #${boxId} .intellisenseSuggestionsRow {
+            font-size: ${window.getComputedStyle(inputElem)["fontSize"]};
+            font-family: ${window.getComputedStyle(inputElem)["fontFamily"]};
+            color: ${window.getComputedStyle(inputElem)["color"]};
+            line-height: ${window.getComputedStyle(inputElem)["lineHeight"]};
+          }
+        </style>
+        `
   );
 
-  // Get google autocomplete results.
-  inputElem.addEventListener("input", (e) => {
-    if (e.target.value.length > 0) {
-      jsonp(url + e.target.value)
-        .then((googleSuggestions) => googleSuggestions[1])
-        .then((googleSuggestions) => {
-          // SUCCESS
+  //setup before functions
+  var typingTimer; //timer identifier
+  var doneTypingInterval = 1000;
 
-          if (googleSuggestions.length === 0) {
-            clearSuggestionsUl(suggestionsUl);
-            hideSuggestionsUl(suggestionsUl);
-          }
-
-          clearSuggestionsUl(suggestionsUl);
-          unhideSuggestionsUl(suggestionsUl, inputElementIsFixed);
-
-          // add history and google suggestions
-          // addHistorySuggestionsToUl();
-          let historySuggestions = [];
-          try {
-            historySuggestions = getHistorySuggestions(suggestionsUl);
-          } catch {}
-
-          let historySuggestionsArray = [];
-          let googleSuggestionsArray = [];
-          for (let i = 0; i < maxSuggestions; i++) {
-            if (historySuggestions.includes(googleSuggestions[i])) {
-              historySuggestionsArray.push(googleSuggestions[i]);
-            } else {
-              googleSuggestionsArray.push(googleSuggestions[i]);
-            }
-          }
-
-          for (let hist of historySuggestionsArray) {
-            if (typeof hist !== "undefined") {
-              appendRowToSuggestionsUl(
-                hist,
-                ["intellisenseHistorySuggestion"],
-                suggestionsUl
-              );
-            }
-          }
-          for (let goog of googleSuggestionsArray) {
-            if (typeof goog !== "undefined") {
-              appendRowToSuggestionsUl(
-                goog,
-                ["intellisenseGoogleSuggestion"],
-                suggestionsUl
-              );
-            }
-          }
-
-          resizeSuggestionsUl(suggestionsUl, inputElem, inputElementIsFixed);
-          setSuggestionRowsEventListeners(suggestionsUl);
-        })
-        .catch(() => {
-          // ERROR
-          clearSuggestionsUl(suggestionsUl);
-          hideSuggestionsUl(suggestionsUl);
-        });
-    } else {
-      clearSuggestionsUl(suggestionsUl);
-      hideSuggestionsUl(suggestionsUl);
-    }
+  //on keyup, start the countdown
+  inputElem.addEventListener("keyup", function () {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => {
+      displaySuggestionsOnInputElement(inputElem);
+    }, doneTypingInterval);
   });
-  console.log("added functionality to field");
+
+  //on keydown, clear the countdown
+  inputElem.addEventListener("keydown", function () {
+    clearTimeout(typingTimer);
+  });
 }
 
 window.addEventListener("resize", () => {
@@ -428,11 +470,6 @@ window.addEventListener("resize", () => {
   }
 });
 
-let fixedInput = document.querySelector("#searchCard");
-let staticInput = document.querySelector(
-  "body > form:nth-child(7) > input[type=text]:nth-child(4)"
-);
-
 let inputsForIntellisense = [];
 document.querySelectorAll("input").forEach((i) => {
   if (["text", "search"].includes(i.type)) {
@@ -441,5 +478,19 @@ document.querySelectorAll("input").forEach((i) => {
 });
 
 inputsForIntellisense.forEach((el) => {
-  applyIntellisenseToInputElement(el);
+  applySiteIntellisenseToInputElement(el);
+  el.addEventListener("click", (e) => {
+    e.stopPropagation();
+    let suggestionsUl;
+    for (let cls of el.classList) {
+      suggestionsUl = document.querySelector(`#${cls}`);
+      if (suggestionsUl && suggestionsUl.tagName.toLowerCase() === "ul") {
+        break;
+      }
+    }
+    unhideSuggestionsUl(
+      suggestionsUl,
+      suggestionsUl.classList.contains("ulFixed")
+    );
+  });
 });
