@@ -1,4 +1,3 @@
-
 // stripe css
 let css_string = `.shopify-stripe {
     display: -webkit-box;
@@ -91,20 +90,19 @@ let css_string = `.shopify-stripe {
     .shopify-button {
       margin-left: 0px;
     }
-  }`
+  }`;
 
 let newStyleElem = document.createElement("STYLE");
 newStyleElem.innerHTML = css_string;
 newStyleElem.rel = "stylesheet";
-newStyleElem.type="text/css";
+newStyleElem.type = "text/css";
 
 let head = document.getElementsByTagName("head")[0];
 head.appendChild(newStyleElem);
-
 
 // stripe html
 let html_string = `<div class="shopify-stripe"><div class="shopify-container"><img src="https://i.imgur.com/TONFU1x.png" alt="Shopify logo" class="shopify-logo"><div class="shopify-text"><div class="shopify-text-title">Twik is now available on the Shopify app marketplace</div><div>Start your free 30-day trial now</div></div><a href="#" class="shopify-button w-button">Get the app</a></div></div>`;
 
 let body = document.getElementsByTagName("body")[0];
 
-body.insertAdjacentHTML("beforeend", html_string)
+body.insertAdjacentHTML("beforeend", html_string);
