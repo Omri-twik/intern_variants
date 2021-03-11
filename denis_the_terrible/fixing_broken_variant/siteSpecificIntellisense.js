@@ -4,6 +4,9 @@ var cookieExpirationInDays = 1;
 
 let suggestionListBackgroundColor = "white";
 
+let apiKey = "AIzaSyA16SPRHCyW6_2NoKPtAV6cwtR8n8s-Kgw";
+let cx = "6b2ceadb15bfde761";
+
 var url = "https://suggestqueries.google.com/complete/search?client=firefox&q=";
 
 document.head.insertAdjacentHTML(
@@ -236,6 +239,9 @@ function getHistorySuggestions(ul) {
 
 // Sets cookie and cookie's expiration date.
 function setCookie(name, value, expireIn) {
+  console.log("name", name);
+  console.log("value", value);
+
   var d = new Date();
   d.setTime(d.getTime() + expireIn * 24 * 60 * 60 * 1000);
   document.cookie =
@@ -248,7 +254,7 @@ function setCookie(name, value, expireIn) {
     window.location.hostname;
 }
 
-function applyIntellisenseToInputElement(inputElem) {
+function applySiteIntellisenseToInputElement(inputElem) {
   // check if input element is fixed or not
   let inputElementIsFixed = false;
   let inputElementParent = inputElem;
@@ -302,9 +308,9 @@ function applyIntellisenseToInputElement(inputElem) {
   document.body.insertAdjacentHTML(
     "beforeend",
     `
-      <ul class="suggestions-list-intellisense" id="${boxId}">
-      </ul>
-  `
+        <ul class="suggestions-list-intellisense" id="${boxId}">
+        </ul>
+    `
   );
 
   let suggestionsUl = document.querySelector(`#${boxId}`);
@@ -319,37 +325,49 @@ function applyIntellisenseToInputElement(inputElem) {
   document.head.insertAdjacentHTML(
     "beforeend",
     `
-  <style>
-    #${boxId} {
-      z-index: ${suggestionList_zIndex};
-    }
-  </style>
-  `
+    <style>
+      #${boxId} {
+        z-index: ${suggestionList_zIndex};
+      }
+    </style>
+    `
   );
 
   // carry over some style of the input field
   document.head.insertAdjacentHTML(
     "beforeend",
     `
-      <style>
-      #${boxId} .intellisenseSuggestionsRow {
-          font-size: ${window.getComputedStyle(inputElem)["fontSize"]};
-          font-family: ${window.getComputedStyle(inputElem)["fontFamily"]};
-          color: ${window.getComputedStyle(inputElem)["color"]};
-          line-height: ${window.getComputedStyle(inputElem)["lineHeight"]};
-        }
-      </style>
-      `
+        <style>
+        #${boxId} .intellisenseSuggestionsRow {
+            font-size: ${window.getComputedStyle(inputElem)["fontSize"]};
+            font-family: ${window.getComputedStyle(inputElem)["fontFamily"]};
+            color: ${window.getComputedStyle(inputElem)["color"]};
+            line-height: ${window.getComputedStyle(inputElem)["lineHeight"]};
+          }
+        </style>
+        `
   );
 
   // Get google autocomplete results.
   inputElem.addEventListener("input", (e) => {
     if (e.target.value.length > 0) {
-      jsonp(url + e.target.value)
-        .then((googleSuggestions) => googleSuggestions[1])
-        .then((googleSuggestions) => {
-          // SUCCESS
+      fetch(
+        `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${e.target.value}`
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          let googleSuggestionsRaw = [];
+          data.items.forEach((i) => {
+            googleSuggestionsRaw.push(i.title);
+          });
+          let googleSuggestions = [];
+          googleSuggestionsRaw.forEach((i) => {
+            googleSuggestions.push(i.split(" – ")[0]);
+          });
 
+          // SUCCESS
           if (googleSuggestions.length === 0) {
             clearSuggestionsUl(suggestionsUl);
             hideSuggestionsUl(suggestionsUl);
@@ -359,7 +377,7 @@ function applyIntellisenseToInputElement(inputElem) {
           unhideSuggestionsUl(suggestionsUl, inputElementIsFixed);
 
           // add history and google suggestions
-          // addHistorySuggestionsToUl();
+          addHistorySuggestionsToUl();
           let historySuggestions = [];
           try {
             historySuggestions = getHistorySuggestions(suggestionsUl);
@@ -441,5 +459,5 @@ document.querySelectorAll("input").forEach((i) => {
 });
 
 inputsForIntellisense.forEach((el) => {
-  applyIntellisenseToInputElement(el);
+  applySiteIntellisenseToInputElement(el);
 });
