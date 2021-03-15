@@ -81,7 +81,7 @@ for (let item of document.getElementsByTagName("input")) {
       ) {
         item.autocomplete = "cc-name";
       } else if (
-        itemName.indexOf("card") != -1 &&
+        itemName.indexOf("cc") != -1 &&
         itemName.indexOf("number") != -1
       ) {
         item.autocomplete = "cc-number";
