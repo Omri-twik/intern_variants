@@ -1,4 +1,4 @@
-let selector ="body > div.content > div > div.sidebar > div.sidebar__content";
+let selector ="#product-4457 > div.summary.entry-summary.has-no-bid-product.has_no_sale_price > form > button";
 
 // Get the element------------------------------
 let selectedElem = document.querySelector(selector);
@@ -6,11 +6,7 @@ let selectedElem = document.querySelector(selector);
 // get element's style---------------------------
 let selectedElemStyle = window.getComputedStyle(selectedElem);
 
-// Clone element-------------------------------
-let cloneBtn = selectedElem.cloneNode(true);
-
 // append jquery link to head/----------------
-
 function mainJS(){
 // STYLE---------------------------------------------------
     $('head').append(`<style>
