@@ -23,6 +23,7 @@ document.head.insertAdjacentHTML(
       width: 100%;
       cursor: pointer;
       padding: 2px;
+      border: 1px solid black;
     }
     .intellisenseHistorySuggestion {
       font-weight: bold;
