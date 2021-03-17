@@ -11,11 +11,9 @@ function showPopup() {
   alert("popup");
 }
 
-function scrollTracking(e) {
-  // Get the new Value
+function scrollTracking() {
   newValue = window.pageYOffset;
 
-  //Subtract the two and conclude
   if (oldValue - newValue > 0) {
     console.log("UP");
     distanceScrolledUp = distanceScrolledUp + (oldValue - newValue);
@@ -28,7 +26,6 @@ function scrollTracking(e) {
     distanceScrolledUp = 0;
   }
 
-  // Update the old value
   oldValue = newValue;
 }
 
