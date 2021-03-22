@@ -1,0 +1,617 @@
+function generateQuerySelector(element) {
+  if (element.tagName.toLowerCase() == "html") return "HTML";
+  let str = element.tagName;
+  str += element.id != "" ? "#" + element.id : "";
+  if (element.className) {
+    let classes = element.className.split(/\s/);
+    for (let i = 0; i < classes.length; i++) {
+      str += "." + classes[i];
+    }
+  }
+  return generateQuerySelector(element.parentNode) + " > " + str;
+}
+
+document.head.insertAdjacentHTML(
+  "beforeend",
+  `
+<style>
+    table, tr, th, td {
+        border-collapse: collapse;
+    }
+    body > div.main-container > section:nth-child(5) > div > div > div > div > div > div:nth-child(3) > div > table > tbody.contents-tbody {
+        overflow: hidden;
+        max-height: 0px;
+        transition: max-height 0.6s;
+        border-collapse: collapse
+    }
+</style>
+`
+);
+
+let tab = `
+<table>
+<tbody class="section-header-tbody">
+<div>
+<tr class="section-header">
+    <td><b>Widgets&nbsp;</b></td>
+    <td colspan="2"><b>Drag and Drop Widgets – Add Any Combination of Widgets To The Screens Layout</b></td>
+</tr>
+</div>
+</tbody>
+<tbody class="contents-tbody">
+    <tr>
+        <td><b>Application&nbsp;</b></td>
+        <td><b>Description&nbsp;</b></td>
+        <td><b>Included</b></td>
+    </tr>
+    <tr>
+        <td><b>Table&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Import CSV to create organized and clean tables&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Calendar&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Create a real-time event and meetings board that sync with O365 or
+                XML&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>HTML&nbsp;</b></td>
+        <td><span style="font-weight: 400;">HTML: embed HTML into your content&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Ads&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Connect your Vistar or Adomni account with the content&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Charts&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Display via XML or API, pie charts, column charts, line charts and
+                progress reports&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>RSS Feeds&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Emergency, CNN, ESPN, Reuters, BBC, Stock, Health Facts, Weather Alerts,
+                and more&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>YouTube&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Play a specific video or entire playlist of videos&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Ustream&nbsp;</b></td>
+        <td><span style="font-weight: 400;">In real-time stream any Ustream live channel or prerecorded
+                video&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Web Page&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Incorporate any website, Google Calendars, or any other URL&nbsp;</span>
+        </td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Web Image&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Add any image to content by using its image URL&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>HD Photos&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Edit, resize or rotate any image, logo, or background&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Slideshow&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Create a slideshow of videos, slides, images or text, adjust play order
+                and set playtime&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Videos&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Upload and play clips, commercials, or any other MP4 video&nbsp;</span>
+        </td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>FTP&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Pull media from any FTP site&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Scrolling Ticker&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Add announcements, sales, notifications, welcome messages, and any other
+                message&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Text&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Customize font styles, adjust size, change color, bold, italic, add an
+                underline and more&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Shapes&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Arrows, circles, oval, square, triangle, or line with the option to add
+                color&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Weather&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Current and future local and global weather with conditions, humidity,
+                and visibility&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Clock&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Live time with the ability to choose the display format&nbsp;</span>
+        </td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Games&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Tic Tac Toe, Sudoku, NoviRace, 4 In A Row, and SAY&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Polls&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Create polls and dynamically display the results on the
+                screen&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Countdown&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Real-time countdown or up ticker – great for sales, events, and holiday
+                countdowns&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Queue&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Virtual line management widget that is easy to set-up&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Touch&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Create interactive zones that when touched dynamically
+                change&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Facebook&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Spotlight any gallery with an option for description and time
+                posted&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Yammer&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Incorporate a social stream of your internal communications&nbsp;</span>
+        </td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Instagram&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Pulls and display your Instagram account posts or any selected
+                user&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Twitter&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Stream any account or a specific #Hashtag, user or user
+                mention&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+</tbody>
+<tbody class="section-header-tbody">
+<tr class="section-header">
+    <td><b>Online Editor&nbsp;</b></td>
+    <td colspan="2"><b>Easily Design &amp; Edit Your Digital Signage Content From Any Computer</b></td>
+</tr>
+</tbody>
+<tbody class="contents-tbody">
+    <tr>
+        <td><b>Application&nbsp;</b></td>
+        <td><b>Description&nbsp;</b></td>
+        <td><b>Included</b></td>
+    </tr>
+    <tr>
+        <td><b>Cloud-Based&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Access from anywhere, at any time, to make edits and manage your
+                content&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Customizable Templates&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Full library of templates; education, corporate communications, digital
+                menus and more&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Free Form Canvas&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Create content from scratch. Adjust, reposition, and resize layer
+                components or widgets&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Custom Color Picker&nbsp;</b></td>
+        <td><span style="font-weight: 400;">RGB HEX Editor for easy color matching&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Adjust Opacity&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Set color opacity&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Visual Layers&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Bring forward or back any layer&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Customize Font&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Customize style, sizes, orientation and color&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Background&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Add background color “fill” with exact color code, and picker or set
+                fading color gradient&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Aspect Ratio&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Set the content ratio to your preferred setting&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Resize&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Click and adjust any widget, image, or text blocks size&nbsp;</span>
+        </td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Design Shortcuts&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Cut, copy, paste, or delete any component plus redo and undo
+                changes&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Frame&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Add a border around any widget and custom set border color and
+                thickness&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>No Coding&nbsp;</b></td>
+        <td><span style="font-weight: 400;">No programming or HTML needed for adding or setting up
+                widgets&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Multi-Admin&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Assign admin right to review and edit any zone or widget&nbsp;</span>
+        </td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Drag and Drop Widgets&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Choose from over 20+ widgets; news, weathers, images, slides, videos and
+                more!&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Media Cloud Library&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Upload from your desktop images, videos, slides, and other
+                media&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Preview&nbsp;</b></td>
+        <td><span style="font-weight: 400;">View a live example of the content that your making&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Full File Support&nbsp;</b></td>
+        <td><span style="font-weight: 400;">PPT, PPTX, PPS, PPSX, XLS, XLSX, MP4, FLV, SWF, M4A, DOC, PDF, JPG,
+                JPEG, PNG, and GIF&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+</tbody>
+<tbody class="section-header-tbody">
+<tr class="section-header">
+    <td><b>Scheduling&nbsp;</b></td>
+    <td colspan="2"><b>Simple To Make Playlists</b></td>
+</tr>
+</tbody>
+<tbody class="contents-tbody">
+    <tr>
+        <td><b>Application&nbsp;</b></td>
+        <td><b>Description&nbsp;</b></td>
+        <td><b>Included</b></td>
+    </tr>
+    <tr>
+        <td><b>Playlist Order&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Drag and drop your playlists sequence to create the perfect play order
+                of content&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Name &amp; Description&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Keep your playlists organized by giving all playlists a name and
+                description&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Advanced Schedules&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Preschedule content to instantly play on exact dates, time, and
+                days&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Copy&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Make a duplicate copy of a playlist that you have created
+                already&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Recurring&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Pre-define specific playlists to repeat play on a defined day and
+                time&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Play Duration&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Set the playlists playtime by seconds or minutes&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Expiration&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Pre-assign a specific playlist to play once then expire&nbsp;</span>
+        </td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Preview&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Preview the entire playlist of your content before sending it to your
+                display(s)&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Play Forever&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Set a series of playlists always to play and never expire&nbsp;</span>
+        </td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Single Update&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Send playlist to a single player&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Group Update&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Send the same playlist to multiple players all at once&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Local Cache&nbsp;</b></td>
+        <td><span style="font-weight: 400;">All media and text content store locally onto the player&nbsp;</span>
+        </td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Immediate Updates&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Players are updated within 2 minutes of updating a playlist&nbsp;</span>
+        </td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+</tbody>
+<tbody class="section-header-tbody">
+<tr class="section-header">
+    <td><b>Reporting&nbsp;</b></td>
+    <td colspan="2"><b>A Complete Dashboard For Analytics and Player Status</b></td>
+</tr>
+</tbody>
+<tbody class="contents-tbody">
+    <tr>
+        <td><b>Application&nbsp;</b></td>
+        <td><b>Description&nbsp;</b></td>
+        <td><b>Included</b></td>
+    </tr>
+    <tr>
+        <td><b>Proof of Play&nbsp;</b></td>
+        <td><span style="font-weight: 400;">View by defined dates total number of media play, total play time, and
+                media type play&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Media Statistics&nbsp;</b></td>
+        <td><span style="font-weight: 400;">The report that lists media type, number of exposures, play time, and a
+                total of the device is played&nbsp; on&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Screen Availability&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Overview of all devices you have deployed, playlist time and current
+                playlist playtime&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>User Audit&nbsp;</b></td>
+        <td><span style="font-weight: 400;">View all users and what playlist they uploaded at what time to what
+                screen/device&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Player Status&nbsp;</b></td>
+        <td><span style="font-weight: 400;">See connectivity, time of recent update, device name, operating system,
+                and player OS version&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Sanitizer Reports&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Track dispenser usage and triggers refill reports&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+</tbody>
+<tbody class="section-header-tbody">
+<tr class="section-header">
+    <td><b>Support&nbsp;</b></td>
+    <td colspan="2"><b>Total Training</b></td>
+</tr>
+</tbody>
+<tbody class="contents-tbody">
+    <tr>
+        <td><b>Application&nbsp;</b></td>
+        <td><b>Description&nbsp;</b></td>
+        <td><b>Included</b></td>
+    </tr>
+    <tr>
+        <td><b>Quick Start Guide&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Step by step online training videos with written instructions.
+            </span><span style="font-weight: 400;">View&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>User Manual&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Downloadable user guide with detailed instructions and images.
+            </span><span style="font-weight: 400;">View&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Online FAQ&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Online questions and answers guide with one click answers. </span><span
+                style="font-weight: 400;">View&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Phone Support&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Monday through Friday, 8:00 AM – 5:00 PM Phone Support:
+                646-893-7770&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Email Support&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Virtual support Monday through Sunday with ticket system: </span><span
+                style="font-weight: 400;">Support@NoviSign.com&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+</tbody>
+<tbody class="section-header-tbody">
+<tr class="section-header">
+    <td><b>Licensing Details&nbsp;</b></td>
+    <td colspan="2"><b>All the perks you get with licenses</b></td>
+</tr>
+</tbody>
+<tbody class="contents-tbody">
+    <tr>
+        <td><b>Application&nbsp;</b></td>
+        <td><b>Description&nbsp;</b></td>
+        <td><b>Included</b></td>
+    </tr>
+    <tr>
+        <td><b>Conversions&nbsp;</b></td>
+        <td><span style="font-weight: 400;">10 file conversion a month (from pdf/word/excel/ppt to png), the
+                conversion pool together ex: 5&nbsp; licenses=50 conversion&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>File Upload Size&nbsp;</b></td>
+        <td><span style="font-weight: 400;">100 MB file size- per license, the upload size pools together, ex: 5
+                licenses=500 MB&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Storage&nbsp;</b></td>
+        <td><span style="font-weight: 400;">500 MB total storage- per license (5 licenses=2.5 GB
+                storage).&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+    <tr>
+        <td><b>Management Console&nbsp;</b></td>
+        <td><span style="font-weight: 400;">Create and manage your user accounts, storage, and permissions (more
+                then 20 licenses)&nbsp;</span></td>
+        <td><span style="font-weight: 400;">Yes</span></td>
+    </tr>
+</tbody>
+</table>
+`;
+
+if (window.jQuery) {
+  $ = window.jQuery;
+  mainJS();
+} else {
+  var script = document.createElement("SCRIPT");
+  script.src =
+    "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js";
+  script.type = "text/javascript";
+  // this is doc.ready
+  //-------------------
+  script.onload = function () {
+    var $ = window.jQuery;
+    mainJS();
+  };
+  document.getElementsByTagName("head")[0].appendChild(script);
+}
+
+function splitIntoChunks(arr, chunk) {
+  let resultArr = [];
+  for (i = 0; i < arr.length; i += chunk) {
+    let tempArray;
+    tempArray = arr.slice(i, i + chunk);
+    resultArr.push(tempArray);
+  }
+  return resultArr;
+}
+
+function mainJS() {
+  let $tableWrapper = $(
+    "body > div.main-container > section:nth-child(5) > div > div > div > div > div > div:nth-child(3) > div"
+  );
+  $tableWrapper.html(tab);
+
+  let tbodies = document.querySelectorAll(
+    "body > div.main-container > section:nth-child(5) > div > div > div > div > div > div:nth-child(3) > div > table > tbody"
+  );
+
+  let subTables = splitIntoChunks(Array.from(tbodies), 2);
+
+  for (let subTable of subTables) {
+    let [header, body] = subTable;
+    let $thead = $(header);
+    let $tbody = $(body);
+    document.head.insertAdjacentHTML(
+      "beforeend",
+      `
+    <style>
+        ${generateQuerySelector($tbody[0])}.tableOpen {
+            max-height: ${body.scrollHeight}px;
+            transition: max-height 0.6s;
+        }
+    </style>`
+    );
+    $thead.on("click", () => {
+      toggleTable($thead, $tbody);
+    });
+  }
+
+  function toggleTable($thead, $tbody) {
+    if ($tbody.hasClass("tableOpen")) {
+      console.log("off");
+      $tbody.removeClass("tableOpen");
+      //   $tbody.animate({
+      //     maxHeight: "0px",
+      //   });
+      //   $tbody.slideUp("slow");
+
+      //   $tbody.css({ display: "none" });
+    } else {
+      console.log("on");
+      $tbody.addClass("tableOpen");
+      //   $tbody.animate({ maxHeight: $tbody[0].scrollHeight });
+      //   $tbody.slideDown("slow");
+      //   $tbody.css({ display: "block" });
+    }
+  }
+}
