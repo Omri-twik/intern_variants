@@ -1,3 +1,94 @@
+/* The sidebar menu */
+.overlay {
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+        color: #292b2c;
+        text-align: right;
+        display: none;
+        font-size: 18px;
+        box-sizing: border-box;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        content: "";
+        z-index: 99999998;
+        cursor: pointer;
+        animation-iteration-count: 1;
+        animation-timing-function: ease;
+        animation-fill-mode: both;
+        animation-direction: normal;
+        backface-visibility: hidden;
+        transform-style: preserve-3d;
+        background: rgba(0, 0, 0, 0.8);
+}
+
+.sidebar {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 99999999; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+  }
+  
+  /* The sidebar links */
+  .sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #c7002e;
+    display: block;
+    transition: 0.3s;
+  }
+
+
+  .search-field-div {
+      position: fixed;
+      z-index: 1100;
+      top: 20px;
+      right: 20px;
+  }
+  
+  /* When you mouse over the navigation links, change their color */
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+  
+  /* Position and style the close button (top right corner) */
+  .sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  
+  /* The button used to open the sidebar */
+  .openbtn {
+    cursor: pointer;
+    color: white;
+    border: none;
+    background: transparent;
+    margin: 0px;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    font-size: 40px;
+}
+
+  /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+  @media screen and (max-height: 450px) {
+    .sidebar {padding-top: 15px;}
+    .sidebar a {font-size: 18px;}
+  }
+
 body {
     background-color: red;
 }
@@ -7,10 +98,33 @@ body {
     top: 0px;
     left: 0px;
     width: 100%;
-    height: 100px;
-    background-color: yellow;
+    background-color: #ff0c44;
     text-align: center;
     padding: 15px;
+}
+
+.footer {
+    color: white;
+}
+
+.footer-column>div>h6 {
+    font-weight: bold;
+}
+
+.footer-menu-ul {
+    margin: 0; /* To remove default bottom margin */ 
+    padding: 0; /* To remove default left padding */
+}
+
+.footer-menu-ul>li {
+    list-style-type: none;
+    
+}
+
+.footer-menu-ul>li>a {
+    color: white;
+    text-decoration: none;
+
 }
 
 .navbar-container {
@@ -18,12 +132,17 @@ body {
     width: 100%;
 }
 
-.navbar-header {
-    margin: 0px;
+.logo-wrapper {
+    height: 150px;
+    width: 150px;
+}
+
+.genericStoreLogo {
+    width: 100%;
+    height: 100%;
 }
 
 .product-list {
-    padding-top: 100px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -34,23 +153,37 @@ body {
     display: flex;
     align-items: center;
     padding: 5px;
-    background: green;
+    background: #da0d3c;
     margin: 5px;
     display: flex;
     flex-direction: column;
 }
 
+.navbar-list-item-a {
+    color: white;
+    text-decoration: none;
+}
+
+.product-description {
+    width: 100%;
+    color: white;
+}
+
+.product-name {
+    font-weight: 900;
+}
+
 .product-image {
     height: 200px;
     width: 200px;
-    background: lightgreen;
+    background: #fdb9c9;
 }
 
 .footer {
-    background: lightyellow;
+    background: #ff0c44;
     border: 1px solid orange;
 }
 
-.footer-column {
-    background: yellow;
+.list-group-item {
+    border: none !important;
 }
