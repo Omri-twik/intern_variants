@@ -56,7 +56,13 @@ let bannerStyle_desktop = `
     }
 
     .topbuttons LI:last-child {
-        top: -7px !important;
+        top: -7px;
+    }
+    
+    @media only screen and (max-width: 996px) {
+      .topbuttons LI:last-child {
+        top: 3px !important;
+      }
     }
   
       @media only screen and (max-width: 800px) {
@@ -127,7 +133,13 @@ let bannerStyle_mobile = `
     }
 
     .topbuttons LI:last-child {
-      top: -7px !important;
+      top: -7px;
+    }
+
+    @media only screen and (max-width: 996px) {
+      .topbuttons LI:last-child {
+        top: 3px !important;
+      }
     }
 
     @media only screen and (max-width: 580px) {
