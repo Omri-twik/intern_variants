@@ -31,7 +31,7 @@
     z-index: 99999999; /* Stay on top */
     top: 0;
     left: 0;
-    background-color: #111; /* Black*/
+    background-color: #005471; /* Black*/
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
@@ -42,7 +42,7 @@
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
-    color: #c7002e;
+    color: #ffc243;
     display: block;
     transition: 0.3s;
   }
@@ -89,18 +89,19 @@
     .sidebar a {font-size: 18px;}
   }
 
-body {
-    background-color: red;
-}
-
 .navbar {
     position: fixed;
     top: 0px;
     left: 0px;
     width: 100%;
-    background-color: #ff0c44;
+    background-color: #ffc243;
     text-align: center;
     padding: 15px;
+}
+
+.navbar-menu-list {
+    margin: 0px;
+    padding: 0px;
 }
 
 .footer {
@@ -135,11 +136,13 @@ body {
 .logo-wrapper {
     height: 150px;
     width: 150px;
+    border-radius: 50%;
 }
 
-.genericStoreLogo {
+.storeLogo {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
 }
 
 .product-list {
@@ -152,35 +155,69 @@ body {
     text-align: center;
     display: flex;
     align-items: center;
-    padding: 5px;
-    background: #da0d3c;
-    margin: 5px;
+    padding: 4px;
     display: flex;
     flex-direction: column;
+    max-width: 200px;
+}
+
+.product-item-a {
+    margin: 5px;
+    margin-bottom: 45px;
+    text-decoration: none;
 }
 
 .navbar-list-item-a {
-    color: white;
+    color: #005471;
     text-decoration: none;
+}
+
+.dropdown-menu-button {
+    display: block;
+    color: #005471;
+    cursor: pointer;
+    width: 90%;
+    border: 1px dashed #005471;
+}
+
+.dropdown-menu-button.active {
+    border: 2px dashed #005471;
+}
+
+.dropdown-menu-button:after {
+    content: "\25BE";
+    display: block;
+    font-size: 16px;
+    color: #005471;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
 }
 
 .product-description {
     width: 100%;
-    color: white;
+    color: #005471;
+    align-items: bottom;
 }
 
 .product-name {
     font-weight: 900;
+    min-height: 50px;
+
 }
 
 .product-image {
     height: 200px;
-    width: 200px;
-    background: #fdb9c9;
+    background: #fff0d1;
+}
+
+.product-image>img {
+    height: 100%;
+    width: 100%;
 }
 
 .footer {
-    background: #ff0c44;
+    background: #005471;
     border: 1px solid orange;
 }
 
