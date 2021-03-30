@@ -88,7 +88,7 @@
                     <h5 class="product-detail-price w-100">Product price</h5>
                 </div>
                 <div class="add-to-cart">
-                    <button class="btn btn-primary w-100">Add To Cart</button>
+                    <button class="btn btn-warning w-100">Add To Cart</button>
                 </div>
             </div>
         </div>
@@ -359,12 +359,26 @@
     </script>
     <script>
         function resizeContentPadding() {
+            console.log("resizeContentPadding")
             let main_content = document.querySelector(".main-content");
             let navbar = document.querySelector(".navbar");
             if (main_content.style.height !== window.getComputedStyle(navbar)['height']) {
                 main_content.style.setProperty("padding-top", window.getComputedStyle(navbar)['height'], "important")
             }
         }
+
+        function loop_resizeContentPadding() {
+            resizeContentPadding();
+            window.removeEventListener("resize", loop_resizeContentPadding);
+            setTimeout(() => {
+                activateEventListener_resizeContentPadding();
+            }, 200);
+        }
+
+        function activateEventListener_resizeContentPadding() {
+            window.addEventListener("resize", loop_resizeContentPadding);
+        }
+
 
         function jqueryFunctions() {
             /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
@@ -389,8 +403,8 @@
 
             function resizeDropDownMenu() {
                 let elRect = $navbar_menu_button[0].getBoundingClientRect();
-                if ($navbar_menu_list[0].style.top !== elRect.bottom + "px") {
-                    $navbar_menu_list[0].style.top = elRect.bottom + "px";
+                if ($navbar_menu_list[0].style.top !== elRect.bottom + 8 + "px") {
+                    $navbar_menu_list[0].style.top = elRect.bottom + 8 + "px";
                 }
                 if ($navbar_menu_list[0].style.left !== elRect.left + "px") {
                     $navbar_menu_list[0].style.left = elRect.left + "px";
@@ -430,9 +444,10 @@
                 $navbar_menu_list.removeClass("bg-transparent")
                 $navbar_menu_list.css({
                     position: "fixed",
-                    background: "white",
+                    background: "#005471",
                     opacity: 0.95
                 })
+                $navbar_menu_list[0].style.setProperty("color", "white", "important")
                 resizeDropDownMenu();
                 $navbar_menu_button[0].addEventListener("click", navbar_menu_button_functionality)
             }
@@ -455,6 +470,7 @@
                     left: "",
                     width: ""
                 })
+                $navbar_menu_list[0].style.setProperty("color", "#005471", "important")
                 $navbar_menu_button[0].removeEventListener("click", navbar_menu_button_functionality)
                 window.removeEventListener("resize", resizeDropDownMenu)
             }
@@ -464,9 +480,8 @@
             } else {
                 console.log("desktop")
             }
-            resizeContentPadding();
+            activateEventListener_resizeContentPadding();
             window.addEventListener("resize", () => {
-                resizeContentPadding();
                 // add or remove menu dropdown depending on screen size
                 if ($(window).width() < 600) {
                     if (!$navbar_menu_button.hasClass("d-block")) {
@@ -526,16 +541,14 @@
                     imageClone.width = 300;
                     imageClone.height = 300;
                     let productDetailElement = document.querySelector(".product-detail");
-
                     productDetailElement.querySelector(".product-detail-image").innerHTML = "";
                     productDetailElement.querySelector(".product-detail-image").appendChild(imageClone)
-
-                    productDetailElement.querySelector(".product-detail-header").innerText = element.querySelector(".product-name").textContent;
-
-                    productDetailElement.querySelector(".product-detail-price").innerText = element.querySelector(".product-price").textContent;
-
-                    productDetailElement.querySelector(".product-detail-description").innerText = infoObject[elemImage.alt];
-
+                    productDetailElement.querySelector(".product-detail-header").innerText = element
+                        .querySelector(".product-name").textContent;
+                    productDetailElement.querySelector(".product-detail-price").innerText = element
+                        .querySelector(".product-price").textContent;
+                    productDetailElement.querySelector(".product-detail-description").innerText = infoObject[
+                        elemImage.alt];
                     $(".overlay").fadeIn("fast");
                     $(".product-detail").fadeIn("fast");
                 })
