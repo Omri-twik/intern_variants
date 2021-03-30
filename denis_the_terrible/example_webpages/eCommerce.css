@@ -46,14 +46,6 @@
     display: block;
     transition: 0.3s;
   }
-
-
-  .search-field-div {
-      position: fixed;
-      z-index: 1100;
-      top: 20px;
-      right: 20px;
-  }
   
   /* When you mouse over the navigation links, change their color */
   .sidebar a:hover {
@@ -72,7 +64,7 @@
   /* The button used to open the sidebar */
   .openbtn {
     cursor: pointer;
-    color: white;
+    color: #005471;
     border: none;
     background: transparent;
     margin: 0px;
@@ -87,6 +79,14 @@
   @media screen and (max-height: 450px) {
     .sidebar {padding-top: 15px;}
     .sidebar a {font-size: 18px;}
+  }
+
+  @media screen and (max-width: 980px) {
+
+    .footer-menu-ul {
+        max-height: 100px !important;
+        height: 100px !important;
+    }
   }
 
 .navbar {
@@ -139,6 +139,14 @@
     border-radius: 50%;
 }
 
+@media screen and (min-width: 980px) {
+
+    .footer-menu-ul {
+        max-height: 100px !important;
+        height: 100px !important;
+    }
+  }
+
 .storeLogo {
     width: 100%;
     height: 100%;
@@ -149,6 +157,10 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+}
+
+.product-list-header {
+    color: #005471;
 }
 
 .product-item {
@@ -223,4 +235,40 @@
 
 .list-group-item {
     border: none !important;
+}
+
+.product-detail {
+    position: fixed;
+    margin: auto;
+    z-index: 9999999999999;
+    background: white;
+    box-shadow: 0px 0px 20px 4px black;
+    padding: 5px;
+    display: none;
+}
+
+.product-detail-image {
+    background: yellow;
+    margin-bottom: 5px;
+    max-width:600px;
+    max-height:600px;
+    min-width:300px;
+    min-height:300px;
+    width: 100%;
+}
+
+.product-detail-image>img{
+    width: 100%;
+    height: auto;
+display: block;
+}
+
+.product-detail-details {
+    height: 100%;
+    width: 100%;
+}
+
+
+.product-detail-price {
+    text-align: right;
 }

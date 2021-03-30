@@ -56,7 +56,7 @@
                                         <a href="#" class="navbar-list-item-a">ABOUT</a>
                                     </li>
                                 </ul>
-                                <div class="dropdown-menu-button d-none">
+                                <div class="dropdown-menu-button mt-2 d-none">
                                     MENU
                                 </div>
                             </div>
@@ -68,12 +68,31 @@
     </header>
 
     <button class="openbtn">&#9776;</button>
-    <div class="search-field-div">
-        <input type="text" class="search-field">
-        <input type="submit">
-    </div>
 
     <div class="overlay"></div>
+    <div class="product-detail position-fixed top-50 start-50 translate-middle">
+        <div class="d-flex flex-row flex-wrap justify-content-center align-items-center">
+            <div class="product-detail-image-wrapper col-12 col-xl-8 d-flex align-items-center justify-content-center">
+                <div class="product-detail-image">
+                    Product image
+                </div>
+            </div>
+            <div class="product-detail-details mb-2 p-3 col-12 col-xl-4">
+                <div class="product-detail-header-wrapper mb-4">
+                    <h5 class="product-detail-header text-center">Product header</h5>
+                </div>
+                <div class="product-detail-description container mb-2 d-flex flex-column">
+                    Product description
+                </div>
+                <div class="product-detail-price-wrapper mb-2">
+                    <h5 class="product-detail-price w-100">Product price</h5>
+                </div>
+                <div class="add-to-cart">
+                    <button class="btn btn-primary w-100">Add To Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="main-content container">
         <div id="mySidebar" class="sidebar">
@@ -85,7 +104,7 @@
         </div>
 
         <div class="product-list container mt-5">
-            <div class="product-list-header w-100 d-flex justify-content-center">
+            <div class="product-list-header w-100 mb-5 d-flex justify-content-center">
                 <h2>Surfboards</h2>
             </div>
             <div class="d-flex flex-wrap justify-content-center align-items-end mt-2">
@@ -285,9 +304,9 @@
         <div class="container w-100">
             <div class="row d-flex flex-wrap justify-content-around">
                 <div class="col col-xl-3 col-lg-3 col-md-8 col-sm-9 col-12 container">
-                    <div class="footer-column">
+                    <div class="footer-column mb-5">
                         <div class="footer-about">
-                            <h6>About</h6>
+                            <h6 class="mb-3">About</h6>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque porta.</p>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et lorem non ligula
                                 viverra tincidunt interdum sit amet turpis. In vehicula volutpat eleifend. Vestibulum
@@ -296,9 +315,9 @@
                     </div>
                 </div>
                 <div class="col col-xl-4 col-lg-4 col-md-8 col-sm-9 col-12 container">
-                    <div class="footer-column">
+                    <div class="footer-column mb-5">
                         <div class="footer-newsletter">
-                            <h6>Newsletter</h6>
+                            <h6 class="mb-3">Newsletter</h6>
                             <p>In vehicula volutpat eleifend. Vestibulum ante ipsum primis in faucibus orci.</p>
                             <form action="" class="newsletter-form">
                                 <div class="d-flex flex-wrap">
@@ -314,18 +333,18 @@
                     </div>
                 </div>
                 <div class="col col-xl-3 col-lg-3 col-md-8 col-sm-9 col-12 container">
-                    <div class="footer-column">
+                    <div class="footer-column mb-5">
                         <div class="footer-menu">
-                            <h6>Menu</h6>
-                            <ul class="footer-menu-ul">
-                                <li><a href="#">Shipping Policy</a></li>
-                                <li><a href="#">Rewards</a></li>
-                                <li><a href="#">Refer a Friend</a></li>
-                                <li><a href="#">Stocklist</a></li>
-                                <li><a href="#">Discounts</a></li>
-                                <li><a href="#">Wholesale</a></li>
-                                <li><a href="#">FAQ</a></li>
-                                <li><a href="#">Terms & Conditions</a></li>
+                            <h6 class="mb-3">Menu</h6>
+                            <ul class="footer-menu-ul d-flex flex-column flex-wrap">
+                                <li class="w-50"><a href="#">Shipping Policy</a></li>
+                                <li class="w-50"><a href="#">Rewards</a></li>
+                                <li class="w-50"><a href="#">Refer a Friend</a></li>
+                                <li class="w-50"><a href="#">Stocklist</a></li>
+                                <li class="w-50"><a href="#">Discounts</a></li>
+                                <li class="w-50"><a href="#">Wholesale</a></li>
+                                <li class="w-50"><a href="#">FAQ</a></li>
+                                <li class="w-50"><a href="#">Terms & Conditions</a></li>
                             </ul>
                         </div>
                     </div>
@@ -351,16 +370,19 @@
             /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
             function openNav() {
                 document.getElementById("mySidebar").style.width = "250px";
-                $(".overlay").fadeIn();
+                $(".overlay").fadeIn("fast");
             }
             /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
             function closeNav() {
                 document.getElementById("mySidebar").style.width = "0";
-                $(".overlay").fadeOut();
+                $(".overlay").fadeOut("fast");
             }
             $(".openbtn").click(openNav);
             $(".closebtn").click(closeNav);
-            $(".overlay").click(closeNav);
+            $(".overlay").click(() => {
+                closeNav();
+                $(".product-detail").fadeOut("fast")
+            });
             // dropdown menu stuff
             let $navbar_menu_list = $(".navbar-menu-list");
             let $navbar_menu_button = $(".dropdown-menu-button");
@@ -376,7 +398,7 @@
                 if ($navbar_menu_list[0].style.width !== window.getComputedStyle($navbar_menu_button[0]).width) {
                     $navbar_menu_list[0].style.width = window.getComputedStyle($navbar_menu_button[0]).width;
                 }
-                console.log("resize")
+                console.log("resizeDropDownMenu")
             }
 
             function navbar_menu_button_functionality() {
@@ -442,7 +464,6 @@
             } else {
                 console.log("desktop")
             }
-
             resizeContentPadding();
             window.addEventListener("resize", () => {
                 resizeContentPadding();
@@ -459,6 +480,7 @@
                     }
                 }
             });
+            window.dispatchEvent(new Event('resize'));
         }
         if (window.jQuery) {
             $ = window.jQuery;
@@ -476,6 +498,50 @@
             };
             document.getElementsByTagName("head")[0].appendChild(script);
         }
+        let infoObject = {
+            bing_pocket_knife_longboard_surfboard: `The Pocket Knife is a slimmer noserider with nice glide for smooth wave entry. A board built to fit comfortably in the pocket of a wave due to its slender shape.`,
+            cb_surf_surfboard: `The CB Surf Surfboard is a great board to transition from a soft top to a regular board.`,
+            eleventh_street_surfboards_the_thief_eps_surfboard: `The Thief is designed for speed in knee to chest high surf.`,
+            channel_islands_high_5_surfboard: `The Channel Islands High 5 Surfboard is fun and forgiving with some performance sprinkled in. *Futures Fin Box.`,
+            farina_handcrafted_5_8_fish_surfboard: `Farina Handcrafted Fish Surfboard By David Farina`,
+            farina_handcrafted_6_foot_squash_tail_surfboard: `My name is David Farina and I began shaping boards in my parent's garage in 1987. With over 4000 boards under my belt I've formulated a teaching method that allows people to properly create their own board in a professional environment without all the frustrations that comes with trying something for the first time. `,
+            firewire_flat_earth_lft_surfboard: `Introducing the No Flat Earth: a board built to shred ankle high to overhead surf.`,
+            firewire_the_gem_thunderbolt_black_surfboard: `aylor decided to call this model The Gem because of how valuable it is - a one board quiver for 9 foot plus board riders that can trim on the nose as easily as it can carve on rail.`,
+            harley_ingleby_mid_6_surfboard: `Harley Ingleby Mid 6 Surfboard`,
+            lost_hydra_c4_surfboard: `The HYDRA is the ultimate minuscule wave monster, melding more than 25 years of developing small wave fish and mini wave hybrids.`,
+            lost_rocket_redux_carbon_wrap_surfboard: `The Lost Rocket Redux Surfboard shape is taken from the original Rocket and is a hybrid, high performance board. Surf it in anything from small mushy beach breaks to pumping overhead swell.`,
+            lost_rocket_redux_wide_carbon_wrap_surfboard: `The Lost Rocket Redux Surfboard shape is taken from the original Rocket and is a hybrid, high performance board. Surf it in anything from small mushy beach breaks to pumping overhead swell. `,
+            lost_uber_driver_xl_carbon_wrap_surfboard: `The Lost UBER-XL surfboard is just as the name says - a scaled up version of the recently re-vamped UBER DRIVER-19. `,
+            mickey_munoz_super_glide_tuflite_surfboard: `The Super Glide longboard is designed to be stable, fast, and maneuverable.`,
+            pyzel_shadow_surfboard: `The Pyzel Shadow surfboard is designed to give you all the advantages a wider, forward outlined type of board but in a more streamlined package.`,
+            walden_mega_magic_tuflite_pc_surfboard: `The Mega Magic has become one of best selling Walden surfboard designs ever, it shares the design aspects of the Magic Model but with added volume.`,
+        }
+
+        function addProductViewFunctionality() {
+            for (let element of document.querySelectorAll(".product-item-a")) {
+                $(element).click((e) => {
+                    e.preventDefault();
+                    let elemImage = element.querySelector(".product-image>img")
+                    let imageClone = elemImage.cloneNode();
+                    imageClone.width = 300;
+                    imageClone.height = 300;
+                    let productDetailElement = document.querySelector(".product-detail");
+
+                    productDetailElement.querySelector(".product-detail-image").innerHTML = "";
+                    productDetailElement.querySelector(".product-detail-image").appendChild(imageClone)
+
+                    productDetailElement.querySelector(".product-detail-header").innerText = element.querySelector(".product-name").textContent;
+
+                    productDetailElement.querySelector(".product-detail-price").innerText = element.querySelector(".product-price").textContent;
+
+                    productDetailElement.querySelector(".product-detail-description").innerText = infoObject[elemImage.alt];
+
+                    $(".overlay").fadeIn("fast");
+                    $(".product-detail").fadeIn("fast");
+                })
+            }
+        }
+        addProductViewFunctionality()
     </script>
 </body>
 
