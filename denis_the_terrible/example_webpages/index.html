@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="eCommerce.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -303,10 +303,10 @@
     <footer class="footer mt-5 pt-5 pb-5">
         <div class="container w-100">
             <div class="row d-flex flex-wrap justify-content-around">
-                <div class="col col-xl-3 col-lg-3 col-md-8 col-sm-9 col-12 container">
+                <div class="col col-xl-3 col-lg-3 col-md-9 col-sm-9 col-10 container">
                     <div class="footer-column mb-5">
-                        <div class="footer-about">
-                            <h6 class="mb-3">About</h6>
+                        <div class="footer-column-content footer-about">
+                            <h6 class="mb-3 text-center footer-column-header">About</h6>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque porta.</p>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et lorem non ligula
                                 viverra tincidunt interdum sit amet turpis. In vehicula volutpat eleifend. Vestibulum
@@ -314,38 +314,148 @@
                         </div>
                     </div>
                 </div>
-                <div class="col col-xl-4 col-lg-4 col-md-8 col-sm-9 col-12 container">
+                <div class="col col-xl-3 col-lg-3 col-md-8 col-sm-8 col-9 container">
                     <div class="footer-column mb-5">
-                        <div class="footer-newsletter">
-                            <h6 class="mb-3">Newsletter</h6>
+                        <div class="footer-column-content footer-newsletter">
+                            <h6 class="mb-3 text-center footer-column-header">Newsletter</h6>
                             <p>In vehicula volutpat eleifend. Vestibulum ante ipsum primis in faucibus orci.</p>
                             <form action="" class="newsletter-form">
                                 <div class="d-flex flex-wrap">
-                                    <div class="col-10">
+                                    <div class="w-75 col-10">
                                         <input class="w-100 h-100" type="email">
                                     </div>
-                                    <div class="col-2">
-                                        <button class="btn btn-dark" type="submit">Submit</button>
+                                    <div class="col-2 w-25">
+                                        <button
+                                            class="btn w-100 h-100 btn-warning text-center d-flex justify-content-center"
+                                            type="submit"><small>Submit</small></button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div class="col col-xl-3 col-lg-3 col-md-8 col-sm-9 col-12 container">
+                <div class="col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-8 container">
                     <div class="footer-column mb-5">
-                        <div class="footer-menu">
-                            <h6 class="mb-3">Menu</h6>
-                            <ul class="footer-menu-ul d-flex flex-column flex-wrap">
-                                <li class="w-50"><a href="#">Shipping Policy</a></li>
-                                <li class="w-50"><a href="#">Rewards</a></li>
-                                <li class="w-50"><a href="#">Refer a Friend</a></li>
-                                <li class="w-50"><a href="#">Stocklist</a></li>
-                                <li class="w-50"><a href="#">Discounts</a></li>
-                                <li class="w-50"><a href="#">Wholesale</a></li>
-                                <li class="w-50"><a href="#">FAQ</a></li>
-                                <li class="w-50"><a href="#">Terms & Conditions</a></li>
+                        <div class="footer-column-content footer-menu">
+                            <h6 class="mb-3 text-center footer-column-header">Menu</h6>
+                            <ul class="footer-menu-ul d-flex flex-wrap justify-content-center align-items-end mt-2">
+                                <li class="mb-1"><a href="#">Shipping Policy</a></li>
+                                <li class="mb-1"><a href="#">Rewards</a></li>
+                                <li class="mb-1"><a href="#">Refer a Friend</a></li>
+                                <li class="mb-1"><a href="#">Stocklist</a></li>
+                                <li class="mb-1"><a href="#">Discounts</a></li>
+                                <li class="mb-1"><a href="#">Wholesale</a></li>
+                                <li class="mb-1"><a href="#">FAQ</a></li>
+                                <li class="mb-1"><a href="#">Terms & Conditions</a></li>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-xl-3 col-lg-3 col-md-9 col-sm-10 col-9 container">
+                    <div class="footer-column mb-5">
+                        <div class="footer-column-content condition-test-container">
+                            <div class="condition-test-wrapper">
+                                <div class="condition-test-div">
+                                    <div class="condition-test-header-wrapper">
+                                        <h6 class="mb-3 text-center footer-column-header condition-test-header">
+                                            AUDIENCE CONDITION TEST
+                                        </h6>
+                                    </div>
+                                    <div class="condition-test-ul-wrapper">
+                                        <ul
+                                            class="condition-test-ul d-flex flex-wrap justify-content-center align-items-end mt-2">
+                                            <li class="condition-test-li w-50">
+                                                <p
+                                                    class="condition-test-li-header mb-0 condition-test-li-header-browser">
+                                                    <small>Browser:
+                                                    </small></p>
+                                                <p class="condition-test-li-value condition-test-li-p-browser">
+                                                    <small>Unknown
+                                                    </small></p>
+                                            </li>
+                                            <li class="condition-test-li w-50">
+                                                <p class="condition-test-li-header mb-0 condition-test-li-header-age">
+                                                    <small>Age:
+                                                    </small></p>
+                                                <p class="condition-test-li-value condition-test-li-p-age">
+                                                    <small>Unknown
+                                                    </small></p>
+                                            </li>
+                                            <li class="condition-test-li w-50">
+                                                <p
+                                                    class="condition-test-li-header mb-0 condition-test-li-header-device">
+                                                    <small>Device:
+                                                    </small></p>
+                                                <p class="condition-test-li-value condition-test-li-p-device">
+                                                    <small>Unknown
+                                                    </small></p>
+                                            </li>
+                                            <li class="condition-test-li w-50">
+                                                <p
+                                                    class="condition-test-li-header mb-0 condition-test-li-header-gender">
+                                                    <small>Gender:
+                                                    </small></p>
+                                                <p class="condition-test-li-value condition-test-li-p-gender">
+                                                    <small>Unknown
+                                                    </small></p>
+                                            </li>
+                                            <li class="condition-test-li w-50">
+                                                <p
+                                                    class="condition-test-li-header mb-0 condition-test-li-header-location">
+                                                    <small>Location:
+                                                    </small></p>
+                                                <p class="condition-test-li-value condition-test-li-p-location">
+                                                    <small>Unknown
+                                                    </small></p>
+                                            </li>
+                                            <li class="condition-test-li w-50">
+                                                <p
+                                                    class="condition-test-li-header mb-0 condition-test-li-header-interests">
+                                                    <small>Interests:
+                                                    </small></p>
+                                                <p class="condition-test-li-value condition-test-li-p-interests">
+                                                    <small>Unknown
+                                                    </small></p>
+                                            </li>
+                                            <li class="condition-test-li w-50">
+                                                <p
+                                                    class="condition-test-li-header mb-0 condition-test-li-header-language">
+                                                    <small>Language:
+                                                    </small></p>
+                                                <p class="condition-test-li-value condition-test-li-p-language">
+                                                    <small>Unknown
+                                                    </small></p>
+                                            </li>
+                                            <li class="condition-test-li w-50">
+                                                <p class="condition-test-li-header mb-0 condition-test-li-header-os">
+                                                    <small>OS:
+                                                    </small></p>
+                                                <p class="condition-test-li-value condition-test-li-p-os">
+                                                    <small>Unknown
+                                                    </small></p>
+                                            </li>
+                                            <li class="condition-test-li w-50">
+                                                <p
+                                                    class="condition-test-li-header mb-0 condition-test-li-header-schedule">
+                                                    <small>Schedule:
+                                                    </small></p>
+                                                <p class="condition-test-li-value condition-test-li-p-schedule">
+                                                    <small>Unknown
+                                                    </small></p>
+                                            </li>
+                                            <li class="condition-test-li w-50">
+                                                <p
+                                                    class="condition-test-li-header mb-0 condition-test-li-header-traffic-source">
+                                                    <small>Traffic Source:
+                                                    </small></p>
+                                                <p class="condition-test-li-value condition-test-li-p-traffic-source">
+                                                    <small>Unknown
+                                                    </small></p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -378,7 +488,6 @@
         function activateEventListener_resizeContentPadding() {
             window.addEventListener("resize", loop_resizeContentPadding);
         }
-
 
         function jqueryFunctions() {
             /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
@@ -555,6 +664,282 @@
             }
         }
         addProductViewFunctionality()
+        const countryList = {
+            AD: "ca",
+            AE: "ar",
+            AF: "ps",
+            AG: "en",
+            AI: "en",
+            AL: "sq",
+            AM: "hy",
+            AO: "pt",
+            AR: "es",
+            AS: "en",
+            AT: "de",
+            AU: "en",
+            AW: "nl",
+            AX: "sv",
+            AZ: "az",
+            BA: "bs",
+            BB: "en",
+            BD: "bn",
+            BE: "fr",
+            BF: "fr",
+            BG: "bg",
+            BH: "ar",
+            BI: "rn",
+            BJ: "fr",
+            BL: "fr",
+            BM: "en",
+            BN: "ms",
+            BO: "es",
+            BQ: "nl",
+            BR: "pt",
+            BS: "en",
+            BT: "dz",
+            BV: "nb",
+            BW: "en",
+            BY: "ru",
+            BZ: "en",
+            CA: "en",
+            CC: "en",
+            CD: "fr",
+            CF: "fr",
+            CG: "fr",
+            CH: "de",
+            CI: "fr",
+            CK: "en",
+            CL: "es",
+            CM: "en",
+            CN: "zh",
+            CO: "es",
+            CR: "es",
+            CU: "es",
+            CV: "pt",
+            CW: "en",
+            CX: "en",
+            CY: "el",
+            CZ: "cs",
+            DE: "de",
+            DJ: "ar",
+            DK: "da",
+            DM: "en",
+            DO: "es",
+            DZ: "ar",
+            EC: "es",
+            EE: "et",
+            EG: "ar",
+            EH: "es",
+            ER: "en",
+            ES: "es",
+            ET: "am",
+            FI: "fi",
+            FJ: "en",
+            FK: "en",
+            FM: "en",
+            FO: "fo",
+            FR: "fr",
+            GA: "fr",
+            GB: "en",
+            GD: "en",
+            GE: "ka",
+            GF: "fr",
+            GG: "en",
+            GH: "en",
+            GI: "en",
+            GL: "kl",
+            GM: "en",
+            GN: "fr",
+            GP: "fr",
+            GQ: "fr",
+            GR: "el",
+            GS: "en",
+            GT: "es",
+            GU: "en",
+            GW: "pt",
+            GY: "en",
+            HK: "zh",
+            HM: "en",
+            HN: "es",
+            HR: "hr",
+            HT: "fr",
+            HU: "hu",
+            ID: "id",
+            IE: "en",
+            IL: "he",
+            IM: "en",
+            IN: "hi",
+            IO: "en",
+            IQ: "ar",
+            IR: "fa",
+            IS: "is",
+            IT: "it",
+            JE: "en",
+            JM: "en",
+            JO: "ar",
+            JP: "ja",
+            KE: "en",
+            KG: "ky",
+            KH: "km",
+            KI: "en",
+            KM: "ar",
+            KN: "en",
+            KP: "ko",
+            KR: "ko",
+            KW: "ar",
+            KY: "en",
+            KZ: "kk",
+            LA: "lo",
+            LB: "ar",
+            LC: "en",
+            LI: "de",
+            LK: "si",
+            LR: "en",
+            LS: "en",
+            LT: "lt",
+            LU: "de",
+            LV: "lv",
+            LY: "ar",
+            MA: "ar",
+            MC: "fr",
+            MD: "ro",
+            ME: "bs",
+            MF: "en",
+            MG: "fr",
+            MH: "en",
+            MK: "mk",
+            ML: "fr",
+            MM: "my",
+            MN: "mn",
+            MO: "pt",
+            MP: "en",
+            MQ: "fr",
+            MR: "ar",
+            MS: "en",
+            MT: "en",
+            MU: "en",
+            MV: "dv",
+            MW: "en",
+            MX: "es",
+            MY: "ms",
+            MZ: "pt",
+            NA: "en",
+            NC: "fr",
+            NE: "fr",
+            NF: "en",
+            NG: "en",
+            NI: "es",
+            NL: "nl",
+            NO: "nn",
+            NP: "ne",
+            NR: "en",
+            NU: "en",
+            NZ: "en",
+            OM: "ar",
+            PA: "es",
+            PE: "es",
+            PF: "fr",
+            PG: "en",
+            PH: "en",
+            PK: "en",
+            PL: "pl",
+            PM: "fr",
+            PN: "en",
+            PR: "es",
+            PS: "ar",
+            PT: "pt",
+            PW: "en",
+            PY: "es",
+            QA: "ar",
+            RE: "fr",
+            RO: "ro",
+            RS: "sr",
+            RU: "ru",
+            RW: "en",
+            SA: "ar",
+            SB: "en",
+            SC: "en",
+            SD: "ar",
+            SE: "sv",
+            SG: "en",
+            SH: "en",
+            SI: "sl",
+            SJ: "no",
+            SK: "sk",
+            SL: "en",
+            SM: "it",
+            SN: "fr",
+            SO: "ar",
+            SR: "nl",
+            SS: "en",
+            ST: "pt",
+            SV: "es",
+            SX: "en",
+            SY: "ar",
+            SZ: "en",
+            TC: "en",
+            TD: "ar",
+            TF: "fr",
+            TG: "fr",
+            TH: "th",
+            TJ: "tg",
+            TK: "en",
+            TL: "pt",
+            TM: "tk",
+            TN: "ar",
+            TO: "en",
+            TR: "tr",
+            TT: "en",
+            TV: "en",
+            TW: "zh",
+            TZ: "en",
+            UA: "uk",
+            UG: "en",
+            UM: "en",
+            US: "en",
+            UY: "es",
+            UZ: "uz",
+            VA: "it",
+            VC: "en",
+            VE: "es",
+            VG: "en",
+            VI: "en",
+            VN: "vi",
+            VU: "en",
+            WF: "fr",
+            WS: "en",
+            YE: "ar",
+            YT: "fr",
+            ZA: "en",
+            ZM: "en",
+            ZW: "en",
+        };
+        // inserting values into "audience condition test"
+        let calculated_data = twik_user_data["calculated_data"];
+        let twik_location = twik_user_data["location"];
+        
+        document.querySelector(".condition-test-li-p-browser:first-child").innerText = calculated_data['browser']?calculated_data['browser']:"Unknown";
+
+        document.querySelector(".condition-test-li-p-age:first-child").innerText = calculated_data['age']?calculated_data['age']:"Unknown";
+
+        document.querySelector(".condition-test-li-p-device:first-child").innerText = calculated_data['device']?calculated_data['device']:"Unknown";
+
+        document.querySelector(".condition-test-li-p-gender:first-child").innerText = calculated_data['gender']?calculated_data['gender']:"Unknown";
+
+        document.querySelector(".condition-test-li-p-location:first-child").innerText =
+            `${twik_location['city']?twik_location['city']:"Unknown"}, ${twik_location['country']?twik_location['country']:"Unknown"}`;
+
+        document.querySelector(".condition-test-li-p-interests:first-child").innerText =
+            `${calculated_data['interests']?calculated_data['interests'].join(", "):"Unknown"}`;
+
+        document.querySelector(".condition-test-li-p-language:first-child").innerText = twik_location['iso_code']?countryList[twik_location[
+            'iso_code']]:"Unknown";
+
+        document.querySelector(".condition-test-li-p-os:first-child").innerText = calculated_data['platform']?calculated_data['platform']:"Unknown";
+
+        document.querySelector(".condition-test-li-p-schedule:first-child").innerText ="Unknown";
+
+        document.querySelector(".condition-test-li-p-traffic-source:first-child").innerText ="Unknown";
     </script>
 </body>
 

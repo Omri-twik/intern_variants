@@ -81,14 +81,6 @@
     .sidebar a {font-size: 18px;}
   }
 
-  @media screen and (max-width: 980px) {
-
-    .footer-menu-ul {
-        max-height: 100px !important;
-        height: 100px !important;
-    }
-  }
-
 .navbar {
     position: fixed;
     top: 0px;
@@ -120,7 +112,7 @@
 
 .footer-menu-ul>li {
     list-style-type: none;
-    
+    min-width: 140px;
 }
 
 .footer-menu-ul>li>a {
@@ -140,13 +132,7 @@
     border-radius: 50%;
 }
 
-@media screen and (max-width: 990px) {
 
-    .footer-menu-ul {
-        max-height: 100px !important;
-        height: 100px !important;
-    }
-  }
 
 .storeLogo {
     width: 100%;
@@ -239,7 +225,6 @@
 
 .footer {
     background: #005471;
-    border: 1px solid orange;
 }
 
 .list-group-item {
@@ -280,4 +265,14 @@ display: block;
 
 .product-detail-price {
     text-align: right;
+}
+
+.condition-test-ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.condition-test-li-header {
+    font-weight: 900;
 }
