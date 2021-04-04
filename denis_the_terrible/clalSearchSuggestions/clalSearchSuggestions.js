@@ -1,4 +1,5 @@
 let suggestionListBackgroundColor = "rgba(255,255,255,0.95)";
+let current_list_index = -1;
 
 if (window.jQuery) {
   $ = window.jQuery;
@@ -64,34 +65,68 @@ function main_js() {
                 position: absolute;
                 display: flex;
               }
+
+              .tw_toggled {
+                font-weight: 900;
+              }
             </style>
             `
       );
     }
   }
 
-  function resizeSuggestionsUl(inputElement, searchDiv) {
-    let elRect = inputElement.parentNode.getBoundingClientRect();
-    if (window.getComputedStyle(searchDiv)["display"] !== "none") {
-      if (ul.style.top !== window.scrollY + elRect.bottom + 1 + "px") {
-        ul.style.top = window.scrollY + elRect.bottom + 1 + "px";
-      }
+  // function resizeSearchField(inputElement) {
+  //   let text;
+  //   getWidthOfText(text);
+  // }
 
-      if (ul.style.left !== window.scrollX + elRect.left + "px") {
-        ul.style.left = window.scrollX + elRect.left + "px";
-      }
+  function resizeSuggestionsUl(inputElement, searchDiv) {
+    if (
+      window.getComputedStyle(searchDiv)["display"] !== "none" &&
+      inputElement === document.activeElement
+    ) {
+      unhideSuggestionsUl();
+
+      let elRect = inputElement.parentNode.getBoundingClientRect();
 
       if (
-        ul.style.width !==
-        window.getComputedStyle(inputElement.parentNode).width
+        window.getComputedStyle(document.querySelector(".Header"))[
+          "position"
+        ] === "fixed"
       ) {
-        ul.style.width = window.getComputedStyle(inputElement.parentNode).width;
-      }
+        ul.style.position = "fixed";
+        if (ul.style.top !== elRect.bottom + "px") {
+          ul.style.top = elRect.bottom + "px";
+        }
 
-      if (document.querySelector("#stylesClal")) {
-        document.querySelector("#stylesClal").remove();
-        document.head.insertAdjacentHTML("beforeend", stylesClal);
+        if (ul.style.left !== elRect.left + "px") {
+          ul.style.left = elRect.left + "px";
+        }
+
+        if (ul.style.width !== window.getComputedStyle(inputElement).width) {
+          ul.style.width = window.getComputedStyle(inputElement).width;
+        }
+      } else {
+        ul.style.position = "absolute";
+        if (ul.style.top !== window.scrollY + elRect.bottom + 1 + "px") {
+          ul.style.top = window.scrollY + elRect.bottom + 1 + "px";
+        }
+
+        if (ul.style.left !== window.scrollX + elRect.left + "px") {
+          ul.style.left = window.scrollX + elRect.left + "px";
+        }
+
+        if (
+          ul.style.width !==
+          window.getComputedStyle(inputElement.parentNode).width
+        ) {
+          ul.style.width = window.getComputedStyle(
+            inputElement.parentNode
+          ).width;
+        }
       }
+    } else {
+      hideSuggestionsUl();
     }
   }
 
@@ -130,27 +165,102 @@ function main_js() {
     }
   }
 
-  document.querySelector(".SearchBarInput").addEventListener("keyup", (e) => {
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      document.querySelector(".doSearchLabel").click();
+  function toggle_options(current_list_index) {
+    document.querySelectorAll(".suggestions-list-clal>li").forEach((row) => {
+      row.classList.remove("tw_toggled");
+    });
+    if (current_list_index !== -1) {
+      document
+        .querySelector(".suggestions-list-clal")
+        .children[current_list_index].classList.add("tw_toggled");
     }
-  });
+  }
 
-  document.querySelector("#SearchBarInput").addEventListener("input", (e) => {
-    hideShowLabelOfSearchField(e.target);
-  });
+  function select_choice(index) {
+    document.querySelector("#suggestions-list-clal").children[index].click();
+  }
 
-  document.querySelector("#SearchBarInput").addEventListener("change", (e) => {
-    hideShowLabelOfSearchField(e.target);
-  });
+  function addListNavigationFunctionality(inputElement) {
+    inputElement.addEventListener("keydown", (e) => {
+      if (e.keyCode !== 13) {
+        unhideSuggestionsUl();
+      }
+      switch (e.keyCode) {
+        case 13:
+          e.preventDefault();
+          // enter key
+
+          let tw_toggled = false;
+          document.querySelectorAll(".suggestionsRowClal").forEach((row) => {
+            if (row.classList.contains("tw_toggled")) {
+              tw_toggled = true;
+            }
+          });
+          if (!tw_toggled) {
+            if (document.querySelector(".searchBtn")) {
+              document.querySelector(".searchBtn").click();
+            } else if (document.querySelector(".doSearchLabel")) {
+              document.querySelector(".doSearchLabel").click();
+            } else {
+              console.log("search btn not found");
+            }
+            break;
+          } else if (current_list_index == -1) {
+            select_choice(0);
+          } else {
+            select_choice(current_list_index);
+          }
+          document
+            .querySelectorAll(".suggestionsRowClal")
+            [current_list_index].classList.remove("tw_toggled");
+          current_list_index = 0;
+          break;
+
+        case 38:
+          // up arrow
+          current_list_index -= 1;
+          if (current_list_index < 0) {
+            current_list_index = suggestions.length - 1;
+          }
+          toggle_options(current_list_index);
+          break;
+
+        case 40:
+          // down arrow
+          current_list_index += 1;
+          if (current_list_index >= suggestions.length) {
+            // reset counter to 0 when value becomes larger than list size
+            current_list_index = 0;
+            // reset scroll to top of window
+          }
+          toggle_options(current_list_index);
+          break;
+
+        default:
+          // normal text input
+          current_list_index = -1;
+          toggle_options(current_list_index);
+      }
+    });
+  }
 
   function applySuggestionsRowsClal(inputElement_selector, searchDiv_selector) {
     let inputElement = document.querySelector(inputElement_selector);
     let searchDiv = document.querySelector(searchDiv_selector);
 
+    inputElement.autocomplete = "off";
+
     resizeSuggestionsUl(inputElement, searchDiv);
     setSuggestionRowsEventListeners(inputElement);
+    addListNavigationFunctionality(inputElement);
+
+    inputElement.addEventListener("input", (e) => {
+      hideShowLabelOfSearchField(e.target);
+    });
+    inputElement.addEventListener("change", (e) => {
+      hideShowLabelOfSearchField(e.target);
+    });
+
     inputElement.addEventListener("focus", () => {
       resizeSuggestionsUl(inputElement, searchDiv);
       unhideSuggestionsUl();
@@ -262,3 +372,36 @@ function main_js() {
     `.SearchBarSection.hide-desktop`
   );
 }
+
+document.head.insertAdjacentHTML(
+  "beforeend",
+  `
+  <style>
+    .SearchBarLeft {
+      width: 100% !important;
+    }
+  </style>
+`
+);
+
+// let originalInputDivWidth = window.getComputedStyle(
+//   document.querySelector(".SearchBarInputContianer")
+// )["width"];
+// let wrapperWidth = window.getComputedStyle(
+//   document.querySelector(".MenuHeaderItemListWrap")
+// )["width"];
+// document.querySelector(
+//   ".SearchBarInputContianer"
+// ).style.minWidth = originalInputDivWidth;
+// document.querySelector(".SearchBarInputContianer").style.maxWidth =
+//   parseInt(wrapperWidth.match(/\d+/)[0] * 0.8) + "px";
+
+// function getWidthOfText(txt, fontname, fontsize) {
+//   if (getWidthOfText.c === undefined) {
+//     getWidthOfText.c = document.createElement("canvas");
+//     getWidthOfText.ctx = getWidthOfText.c.getContext("2d");
+//   }
+//   var fontspec = fontsize + " " + fontname;
+//   if (getWidthOfText.ctx.font !== fontspec) getWidthOfText.ctx.font = fontspec;
+//   return getWidthOfText.ctx.measureText(txt).width;
+// }
