@@ -26,6 +26,17 @@ function main_js() {
     ul.appendChild(newRow);
   }
 
+  document.head.insertAdjacentHTML(
+    "beforeend",
+    `
+          <style>
+            #suggestions-list-clal {
+              display: none;
+            }
+          </style>
+      `
+  );
+
   document.body.insertAdjacentHTML(
     "beforeend",
     `
@@ -359,11 +370,11 @@ function main_js() {
   }
 
   applySuggestionsRowsClal(
-    `.SearchBarSection.hide-mobile-new-header > div > div > div > div.SearchBarTopSection > div > input#SearchBarInput`,
+    `.SearchBarSection.hide-mobile-new-header input#SearchBarInput`,
     `.SearchBarSection.hide-mobile-new-header`
   );
   applySuggestionsRowsClal(
-    `.SearchBarSection.hide-desktop > div > div.SearchBarTopSection > div > input#SearchBarInput`,
+    `.SearchBarSection.hide-desktop input#SearchBarInput`,
     `.SearchBarSection.hide-desktop`
   );
 }
