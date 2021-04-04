@@ -108,6 +108,8 @@ function main_js() {
         hideShowLabelOfSearchField(inputElement);
         hideSuggestionsUl();
 
+        inputElement.focus();
+
         row.parentNode.addEventListener("click", (e) => {
           try {
             e.stopEventPropagation();
