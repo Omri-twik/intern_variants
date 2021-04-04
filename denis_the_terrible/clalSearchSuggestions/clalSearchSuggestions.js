@@ -36,12 +36,12 @@ function main_js() {
   let ul = document.querySelector("#suggestions-list-clal");
 
   let suggestions = [
-    `איך מגישים תביעה?`,
-    `עדכון פרטים אישיים?`,
-    `פדיון ומשיכת כספים?`,
-    `הפקת אישור מס?`,
-    `דוח שנתי ורבעוני?`,
-    `איך מושכים כספי פיצויים?`,
+    `איך מגישים תביעה`,
+    `עדכון פרטים אישיים`,
+    `פדיון ומשיכת כספים`,
+    `הפקת אישור מס`,
+    `דוח שנתי ורבעוני`,
+    `איך מושכים כספי פיצויים`,
   ];
 
   suggestions.forEach((val) => {
@@ -106,6 +106,7 @@ function main_js() {
 
         // insert selection into search field and clear suggestions
         inputElement.value = e.target.textContent;
+        hideShowLabelOfSearchField(inputElement);
         hideSuggestionsUl();
 
         row.parentNode.addEventListener("click", (e) => {
@@ -118,6 +119,24 @@ function main_js() {
     }
     console.log("setSuggestionRowsEventListeners");
   }
+
+  function hideShowLabelOfSearchField(inputElement) {
+    if (inputElement.value.length > 0) {
+      document.querySelector(".SearchBarInputContianer > label").style.display =
+        "none";
+    } else {
+      document.querySelector(".SearchBarInputContianer > label").style.display =
+        "block";
+    }
+  }
+
+  document.querySelector("#SearchBarInput").addEventListener("input", (e) => {
+    hideShowLabelOfSearchField(e.target);
+  });
+
+  document.querySelector("#SearchBarInput").addEventListener("change", (e) => {
+    hideShowLabelOfSearchField(e.target);
+  });
 
   function applySuggestionsRowsClal(inputElement_selector, searchDiv_selector) {
     let inputElement = document.querySelector(inputElement_selector);
