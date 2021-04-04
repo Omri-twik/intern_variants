@@ -75,11 +75,6 @@ function main_js() {
     }
   }
 
-  // function resizeSearchField(inputElement) {
-  //   let text;
-  //   getWidthOfText(text);
-  // }
-
   function resizeSuggestionsUl(inputElement, searchDiv) {
     if (
       window.getComputedStyle(searchDiv)["display"] !== "none" &&
@@ -383,25 +378,3 @@ document.head.insertAdjacentHTML(
   </style>
 `
 );
-
-// let originalInputDivWidth = window.getComputedStyle(
-//   document.querySelector(".SearchBarInputContianer")
-// )["width"];
-// let wrapperWidth = window.getComputedStyle(
-//   document.querySelector(".MenuHeaderItemListWrap")
-// )["width"];
-// document.querySelector(
-//   ".SearchBarInputContianer"
-// ).style.minWidth = originalInputDivWidth;
-// document.querySelector(".SearchBarInputContianer").style.maxWidth =
-//   parseInt(wrapperWidth.match(/\d+/)[0] * 0.8) + "px";
-
-// function getWidthOfText(txt, fontname, fontsize) {
-//   if (getWidthOfText.c === undefined) {
-//     getWidthOfText.c = document.createElement("canvas");
-//     getWidthOfText.ctx = getWidthOfText.c.getContext("2d");
-//   }
-//   var fontspec = fontsize + " " + fontname;
-//   if (getWidthOfText.ctx.font !== fontspec) getWidthOfText.ctx.font = fontspec;
-//   return getWidthOfText.ctx.measureText(txt).width;
-// }
