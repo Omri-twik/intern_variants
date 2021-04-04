@@ -92,7 +92,6 @@ function main_js() {
         document.querySelector("#stylesClal").remove();
         document.head.insertAdjacentHTML("beforeend", stylesClal);
       }
-      console.log("resize");
     }
   }
 
@@ -117,7 +116,6 @@ function main_js() {
         $inputElement.trigger("input");
       });
     }
-    console.log("setSuggestionRowsEventListeners");
   }
 
   function hideShowLabelOfSearchField(inputElement) {
@@ -129,6 +127,13 @@ function main_js() {
         "block";
     }
   }
+
+  document.querySelector(".SearchBarInput").addEventListener("keyup", (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      document.querySelector(".doSearchLabel").click();
+    }
+  });
 
   document.querySelector("#SearchBarInput").addEventListener("input", (e) => {
     hideShowLabelOfSearchField(e.target);
@@ -222,7 +227,6 @@ function main_js() {
         break;
       }
     }
-    console.log("suggestionList_zIndex", suggestionList_zIndex);
     document.head.insertAdjacentHTML(
       "beforeend",
       `
