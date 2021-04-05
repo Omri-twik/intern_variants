@@ -159,7 +159,6 @@ function main_js() {
       }
       switch (e.keyCode) {
         case 13:
-          console.log("13");
           e.preventDefault();
           // enter key
 
@@ -211,7 +210,6 @@ function main_js() {
           break;
 
         default:
-          console.log("default");
           // normal text input
           setTimeout(() => {
             filterSuggestionsUL(inputElement.value);
