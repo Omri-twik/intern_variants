@@ -1,64 +1,30 @@
 let suggestionListBackgroundColor = "rgba(255,255,255,0.95)";
 let current_list_index = -1;
+let originalSuggestionRows = [];
+let extractedSuggestionRows = [];
 
-if (window.jQuery) {
-  $ = window.jQuery;
-  main_js();
-} else {
-  var script = document.createElement("SCRIPT");
-  script.src =
-    "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js";
-  script.type = "text/javascript";
-  // this is doc.ready
-  //-------------------
-  script.onload = function () {
-    var $ = window.jQuery;
-    main_js();
-  };
-  document.getElementsByTagName("head")[0].appendChild(script);
-}
+let suggestions = [
+  `איך מגישים תביעה`,
+  `עדכון פרטים אישיים`,
+  `פדיון ומשיכת כספים`,
+  `הפקת אישור מס`,
+  `דוח שנתי ורבעוני`,
+  `איך מושכים כספי פיצויים`,
+];
 
 function main_js() {
-  function appendRowToSuggestionsUl(value) {
-    let newRow = document.createElement("li");
-    newRow.classList.add("suggestionsRowClal");
-    newRow.innerHTML = value;
-    ul.appendChild(newRow);
+  // function definitions
+
+  function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+      parent.removeChild(parent.firstChild);
+    }
   }
 
-  document.head.insertAdjacentHTML(
-    "beforeend",
-    `
-          <style>
-            #suggestions-list-clal {
-              display: none;
-            }
-          </style>
-      `
-  );
-
-  document.body.insertAdjacentHTML(
-    "beforeend",
-    `
-          <ul class="suggestions-list-clal" id="suggestions-list-clal">
-          </ul>
-      `
-  );
-
-  let ul = document.querySelector("#suggestions-list-clal");
-
-  let suggestions = [
-    `איך מגישים תביעה`,
-    `עדכון פרטים אישיים`,
-    `פדיון ומשיכת כספים`,
-    `הפקת אישור מס`,
-    `דוח שנתי ורבעוני`,
-    `איך מושכים כספי פיצויים`,
-  ];
-
-  suggestions.forEach((val) => {
-    appendRowToSuggestionsUl(val);
-  });
+  function toNodes(html) {
+    return new DOMParser().parseFromString(html, "text/html").body
+      .childNodes[0];
+  }
 
   function hideSuggestionsUl() {
     if (document.querySelector(`#suggestions-list-clal-style`)) {
@@ -157,6 +123,10 @@ function main_js() {
           } catch {}
         });
         $inputElement.trigger("input");
+
+        if (/Mobi/i.test(window.navigator.userAgent)) {
+          document.querySelector("#searchBtn").click();
+        }
       });
     }
   }
@@ -183,11 +153,11 @@ function main_js() {
   }
 
   function select_choice(index) {
-    document.querySelector("#suggestions-list-clal").children[index].click();
+    ul.children[index].click();
   }
 
   function addListNavigationFunctionality(inputElement) {
-    inputElement.addEventListener("keydown", (e) => {
+    inputElement.addEventListener("keyup", (e) => {
       if (e.keyCode !== 13) {
         unhideSuggestionsUl();
       }
@@ -244,10 +214,75 @@ function main_js() {
 
         default:
           // normal text input
+          filterSuggestionsUL(inputElement.value);
           current_list_index = -1;
           toggle_options(current_list_index);
       }
     });
+  }
+
+  // fixing broken search icon functionality on mobile
+  function openSearchMobile() {
+    document.body.classList.add("bodyFixed");
+    document.querySelector(".Header").classList.add("HeaderHeightOpenPopup");
+    document
+      .querySelector(".SearchBarSection.hide-desktop")
+      .classList.remove("animatedElement");
+    document
+      .querySelector(".SearchBarSection.hide-desktop input#SearchBarInput")
+      .classList.add("inputFocus");
+    document
+      .querySelector(
+        `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
+      )
+      .classList.add("BgPopUp");
+    document
+      .querySelector(
+        `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
+      )
+      .addEventListener("click", closeSearchMobile);
+  }
+
+  function closeSearchMobile() {
+    document.body.classList.remove("bodyFixed");
+    document.querySelector(".Header").classList.remove("HeaderHeightOpenPopup");
+    document
+      .querySelector(".SearchBarSection.hide-desktop")
+      .classList.add("animatedElement");
+    document
+      .querySelector(
+        `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
+      )
+      .classList.remove("BgPopUp");
+    document.querySelector(
+      `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
+    ),
+      removeEventListener("click", closeSearchMobile);
+  }
+
+  function addOrRemoveSearchButtonFunctionalityMobile() {
+    if ($(window).width() < 769) {
+      document
+        .querySelector("#HaederSearchBar")
+        .addEventListener("click", openSearchMobile);
+    } else {
+      document
+        .querySelector("#HaederSearchBar")
+        .removeEventListener("click", openSearchMobile);
+    }
+  }
+  addOrRemoveSearchButtonFunctionalityMobile();
+  window.addEventListener("resize", addOrRemoveSearchButtonFunctionalityMobile);
+
+  function filterSuggestionsUL(textValue) {
+    removeAllChildNodes(ul);
+    for (let row of originalSuggestionRows) {
+      if (textValue.length === 0) {
+        ul.insertAdjacentElement("beforeend", row);
+      } else if (row.textContent.indexOf(textValue) !== -1) {
+        ul.insertAdjacentElement("beforeend", row);
+      }
+    }
   }
 
   function applySuggestionsRowsClal(inputElement_selector, searchDiv_selector) {
@@ -369,6 +404,87 @@ function main_js() {
     });
   }
 
+  // function activations
+  document.head.insertAdjacentHTML(
+    "beforeend",
+    `
+          <style>
+            #suggestions-list-clal {
+              display: none;
+            }
+          </style>
+      `
+  );
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `
+          <ul class="suggestions-list-clal" id="suggestions-list-clal">
+          </ul>
+      `
+  );
+
+  document.head.insertAdjacentHTML(
+    "beforeend",
+    `
+    <style>
+      .SearchBarLeft {
+        width: 100% !important;
+      }
+    </style>
+  `
+  );
+
+  let ul = document.querySelector("#suggestions-list-clal");
+
+  // fixing broken label on mobile search functionality
+  for (let searchDiv of document.querySelectorAll(".SearchBarInputContianer")) {
+    let input = searchDiv.querySelector("input");
+    let label = searchDiv.querySelector("label");
+    label.addEventListener("click", () => {
+      input.focus();
+    });
+  }
+
+  // function correctSearchIconVisibility() {
+  //   if (
+  //     window.getComputedStyle(
+  //       document.querySelector(".SearchBarSection.hide-mobile-new-header")
+  //     )["position"] === "static" &&
+  //     !document.querySelector("#twik-hide-search-icon")
+  //   ) {
+  //     document.head.insertAdjacentHTML(
+  //       "beforeend",
+  //       `
+  //       <style id="twik-hide-search-icon">
+  //         #HaederSearchBar.hide-desktop {
+  //           visibility: hidden !important;
+  //         }
+  //       </style>
+  //       `
+  //     );
+  //   } else if (
+  //     window.getComputedStyle(
+  //       document.querySelector(".SearchBarSection.hide-mobile-new-header")
+  //     )["position"] !== "static" &&
+  //     document.querySelector("#twik-hide-search-icon")
+  //   ) {
+  //     try {
+  //       document.querySelector("#twik-hide-search-icon").remove();
+  //     } catch {}
+  //   }
+  // }
+  // correctSearchIconVisibility();
+  // window.addEventListener("resize", correctSearchIconVisibility);
+
+  // inserting rows and storing them in an array
+  suggestions.forEach((val) => {
+    let elem = toNodes(`<li class="suggestionsRowClal">${val}</li>`);
+    ul.insertAdjacentElement("beforeend", elem);
+    originalSuggestionRows.push(elem);
+  });
+
+  // applying main suggestions functionality on two search fields
   applySuggestionsRowsClal(
     `.SearchBarSection.hide-mobile-new-header input#SearchBarInput`,
     `.SearchBarSection.hide-mobile-new-header`
@@ -379,13 +495,19 @@ function main_js() {
   );
 }
 
-document.head.insertAdjacentHTML(
-  "beforeend",
-  `
-  <style>
-    .SearchBarLeft {
-      width: 100% !important;
-    }
-  </style>
-`
-);
+if (window.jQuery) {
+  $ = window.jQuery;
+  main_js();
+} else {
+  var script = document.createElement("SCRIPT");
+  script.src =
+    "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js";
+  script.type = "text/javascript";
+  // this is doc.ready
+  //-------------------
+  script.onload = function () {
+    var $ = window.jQuery;
+    main_js();
+  };
+  document.getElementsByTagName("head")[0].appendChild(script);
+}
