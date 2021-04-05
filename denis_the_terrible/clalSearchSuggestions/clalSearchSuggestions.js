@@ -248,6 +248,8 @@ function main_js() {
         `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
       )
       .addEventListener("click", closeSearchMobile);
+    document.querySelectorAll(".SearchBarLeft.PopularLinksContianer");
+    // UNFINISHED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   }
 
   function closeSearchMobile() {
