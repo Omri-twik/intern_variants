@@ -272,7 +272,10 @@ function main_js() {
     }
   }
   addOrRemoveSearchButtonFunctionalityMobile();
-  window.addEventListener("resize", addOrRemoveSearchButtonFunctionalityMobile);
+  window.addEventListener("resize", () => {
+    closeSearchMobile();
+    addOrRemoveSearchButtonFunctionalityMobile();
+  });
 
   function filterSuggestionsUL(textValue) {
     removeAllChildNodes(ul);
