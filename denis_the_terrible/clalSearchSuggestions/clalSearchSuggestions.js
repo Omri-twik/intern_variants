@@ -123,10 +123,6 @@ function main_js() {
           } catch {}
         });
         $inputElement.trigger("input");
-
-        if (/Mobi/i.test(window.navigator.userAgent)) {
-          document.querySelector("#searchBtn").click();
-        }
       });
     }
   }
@@ -157,12 +153,13 @@ function main_js() {
   }
 
   function addListNavigationFunctionality(inputElement) {
-    inputElement.addEventListener("keyup", (e) => {
+    inputElement.addEventListener("keydown", (e) => {
       if (e.keyCode !== 13) {
         unhideSuggestionsUl();
       }
       switch (e.keyCode) {
         case 13:
+          console.log("13");
           e.preventDefault();
           // enter key
 
@@ -172,9 +169,10 @@ function main_js() {
               tw_toggled = true;
             }
           });
+
           if (!tw_toggled) {
-            if (document.querySelector(".searchBtn")) {
-              document.querySelector(".searchBtn").click();
+            if (document.querySelector("#searchBtn")) {
+              document.querySelector("#searchBtn").click();
             } else if (document.querySelector(".doSearchLabel")) {
               document.querySelector(".doSearchLabel").click();
             } else {
@@ -213,10 +211,13 @@ function main_js() {
           break;
 
         default:
+          console.log("default");
           // normal text input
-          filterSuggestionsUL(inputElement.value);
-          current_list_index = -1;
-          toggle_options(current_list_index);
+          setTimeout(() => {
+            filterSuggestionsUL(inputElement.value);
+            current_list_index = -1;
+            toggle_options(current_list_index);
+          }, 100);
       }
     });
   }
