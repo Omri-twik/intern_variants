@@ -123,6 +123,14 @@ function main_js() {
           } catch {}
         });
         $inputElement.trigger("input");
+
+        if (/Mobi/i.test(window.navigator.userAgent)) {
+          if (document.querySelector("#searchBtn")) {
+            document.querySelector("#searchBtn").click();
+          } else if (document.querySelector(".doSearchLabel")) {
+            document.querySelector(".doSearchLabel").click();
+          }
+        }
       });
     }
   }
