@@ -403,6 +403,8 @@ function main_js() {
     window.addEventListener("click", () => {
       if (window.getComputedStyle(ul)["display"] !== "none") {
         hideSuggestionsUl();
+        current_list_index = -1;
+        toggle_options(current_list_index);
       }
     });
   }
