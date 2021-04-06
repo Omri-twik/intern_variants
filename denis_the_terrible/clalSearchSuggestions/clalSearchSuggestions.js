@@ -248,8 +248,18 @@ function main_js() {
         `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
       )
       .addEventListener("click", closeSearchMobile);
-    document.querySelectorAll(".SearchBarLeft.PopularLinksContianer");
-    // UNFINISHED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    document.querySelectorAll(".SearchBarSection").forEach((el) => {
+      el.style.setProperty("min-height", "100px");
+      el.querySelector(".SearchBarLeft").style.setProperty(
+        "min-height",
+        "100px"
+      );
+      el.querySelector(".SearchBarLeft")
+        .querySelectorAll(".PopularLinksContianer")
+        .forEach((el2) => {
+          el2.style.setProperty("display", "none");
+        });
+    });
   }
 
   function closeSearchMobile() {
@@ -267,6 +277,15 @@ function main_js() {
       `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
     ),
       removeEventListener("click", closeSearchMobile);
+    document.querySelectorAll(".SearchBarSection").forEach((el) => {
+      el.style.removeProperty("min-height");
+      el.querySelector(".SearchBarLeft").style.removeProperty("min-height");
+      el.querySelector(".SearchBarLeft")
+        .querySelectorAll(".PopularLinksContianer")
+        .forEach((el2) => {
+          el2.style.removeProperty("display");
+        });
+    });
   }
 
   function addOrRemoveSearchButtonFunctionalityMobile() {
@@ -357,10 +376,18 @@ function main_js() {
             padding-top: 3px;
             padding-bottom: 3px;
             padding-right: ${
-              window.getComputedStyle(inputElement)["paddingRight"]
+              window
+                .getComputedStyle(inputElement)
+                ["paddingRight"].match(/\d+/)[0] > 5
+                ? window.getComputedStyle(inputElement)["paddingRight"]
+                : "5px"
             };
             padding-left: ${
-              window.getComputedStyle(inputElement)["paddingLeft"]
+              window
+                .getComputedStyle(inputElement)
+                ["paddingLeft"].match(/\d+/)[0] > 5
+                ? window.getComputedStyle(inputElement)["paddingLeft"]
+                : "5px"
             };
         </style>
         `
