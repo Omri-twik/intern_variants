@@ -230,62 +230,75 @@ function main_js() {
 
   // fixing broken search icon functionality on mobile
   function openSearchMobile() {
-    document.body.classList.add("bodyFixed");
-    document.querySelector(".Header").classList.add("HeaderHeightOpenPopup");
-    document
-      .querySelector(".SearchBarSection.hide-desktop")
-      .classList.remove("animatedElement");
-    document
-      .querySelector(".SearchBarSection.hide-desktop input#SearchBarInput")
-      .classList.add("inputFocus");
-    document
-      .querySelector(
-        `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
-      )
-      .classList.add("BgPopUp");
-    document
-      .querySelector(
-        `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
-      )
-      .addEventListener("click", closeSearchMobile);
-    document.querySelectorAll(".SearchBarSection").forEach((el) => {
-      el.style.setProperty("min-height", "100px");
-      el.querySelector(".SearchBarLeft").style.setProperty(
-        "min-height",
-        "100px"
-      );
-      el.querySelector(".SearchBarLeft")
-        .querySelectorAll(".PopularLinksContianer")
-        .forEach((el2) => {
-          el2.style.setProperty("display", "none");
-        });
+    try {
+      document.body.classList.add("bodyFixed");
+      document.querySelector(".Header").classList.add("HeaderHeightOpenPopup");
+      document
+        .querySelector(".SearchBarSection.hide-desktop")
+        .classList.remove("animatedElement");
+      document
+        .querySelector(".SearchBarSection.hide-desktop input#SearchBarInput")
+        .classList.add("inputFocus");
+      document
+        .querySelector(
+          `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
+        )
+        .classList.add("BgPopUp");
+      document
+        .querySelector(
+          `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
+        )
+        .addEventListener("click", closeSearchMobile);
+      document.querySelectorAll(".SearchBarSection").forEach((el) => {
+        el.style.setProperty("min-height", "100px");
+        el.querySelector(".SearchBarLeft").style.setProperty(
+          "min-height",
+          "100px"
+        );
+        el.querySelector(".SearchBarLeft")
+          .querySelectorAll(".PopularLinksContianer")
+          .forEach((el2) => {
+            el2.style.setProperty("display", "none");
+          });
+      });
+    } catch {}
+  }
+
+  function clearInputFields() {
+    document.querySelectorAll("#SearchBarInput").forEach((inp) => {
+      inp.value = "";
     });
   }
 
   function closeSearchMobile() {
-    document.body.classList.remove("bodyFixed");
-    document.querySelector(".Header").classList.remove("HeaderHeightOpenPopup");
-    document
-      .querySelector(".SearchBarSection.hide-desktop")
-      .classList.add("animatedElement");
-    document
-      .querySelector(
+    try {
+      document.body.classList.remove("bodyFixed");
+      document
+        .querySelector(".Header")
+        .classList.remove("HeaderHeightOpenPopup");
+      document
+        .querySelector(".SearchBarSection.hide-desktop")
+        .classList.add("animatedElement");
+      document
+        .querySelector(
+          `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
+        )
+        .classList.remove("BgPopUp");
+      document.querySelector(
         `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
-      )
-      .classList.remove("BgPopUp");
-    document.querySelector(
-      `[ng-class="{'BgPopUp' : showSearchPopup || searchData.displayContactUsSection || searchData.selectedInsurance >=0}"]`
-    ),
-      removeEventListener("click", closeSearchMobile);
-    document.querySelectorAll(".SearchBarSection").forEach((el) => {
-      el.style.removeProperty("min-height");
-      el.querySelector(".SearchBarLeft").style.removeProperty("min-height");
-      el.querySelector(".SearchBarLeft")
-        .querySelectorAll(".PopularLinksContianer")
-        .forEach((el2) => {
-          el2.style.removeProperty("display");
-        });
-    });
+      ),
+        removeEventListener("click", closeSearchMobile);
+      document.querySelectorAll(".SearchBarSection").forEach((el) => {
+        el.style.removeProperty("min-height");
+        el.querySelector(".SearchBarLeft").style.removeProperty("min-height");
+        el.querySelector(".SearchBarLeft")
+          .querySelectorAll(".PopularLinksContianer")
+          .forEach((el2) => {
+            el2.style.removeProperty("display");
+          });
+      });
+      clearInputFields();
+    } catch {}
   }
 
   function addOrRemoveSearchButtonFunctionalityMobile() {
@@ -299,11 +312,19 @@ function main_js() {
         .removeEventListener("click", openSearchMobile);
     }
   }
-  addOrRemoveSearchButtonFunctionalityMobile();
-  window.addEventListener("resize", () => {
-    closeSearchMobile();
+
+  // .SearchBarSection.hide-desktop
+  if (
+    window.getComputedStyle(
+      document.querySelector(".SearchBarSection.hide-desktop")
+    )["position"] === "static"
+  ) {
     addOrRemoveSearchButtonFunctionalityMobile();
-  });
+    window.addEventListener("resize", () => {
+      closeSearchMobile();
+      addOrRemoveSearchButtonFunctionalityMobile();
+    });
+  }
 
   function filterSuggestionsUL(textValue) {
     removeAllChildNodes(ul);
@@ -419,6 +440,12 @@ function main_js() {
         break;
       }
     }
+
+    // clearing search field on close
+    document.querySelectorAll(".SearchBarSection .CloseBtn").forEach((btn) => {
+      btn.addEventListener("click", clearInputFields);
+    });
+
     document.head.insertAdjacentHTML(
       "beforeend",
       `
@@ -486,37 +513,6 @@ function main_js() {
       input.focus();
     });
   }
-
-  // function correctSearchIconVisibility() {
-  //   if (
-  //     window.getComputedStyle(
-  //       document.querySelector(".SearchBarSection.hide-mobile-new-header")
-  //     )["position"] === "static" &&
-  //     !document.querySelector("#twik-hide-search-icon")
-  //   ) {
-  //     document.head.insertAdjacentHTML(
-  //       "beforeend",
-  //       `
-  //       <style id="twik-hide-search-icon">
-  //         #HaederSearchBar.hide-desktop {
-  //           visibility: hidden !important;
-  //         }
-  //       </style>
-  //       `
-  //     );
-  //   } else if (
-  //     window.getComputedStyle(
-  //       document.querySelector(".SearchBarSection.hide-mobile-new-header")
-  //     )["position"] !== "static" &&
-  //     document.querySelector("#twik-hide-search-icon")
-  //   ) {
-  //     try {
-  //       document.querySelector("#twik-hide-search-icon").remove();
-  //     } catch {}
-  //   }
-  // }
-  // correctSearchIconVisibility();
-  // window.addEventListener("resize", correctSearchIconVisibility);
 
   // inserting rows and storing them in an array
   suggestions.forEach((val) => {
