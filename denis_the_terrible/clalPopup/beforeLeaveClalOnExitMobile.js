@@ -4,7 +4,45 @@ var distanceScrolledUp = 0;
 var oldValue = 0;
 var newValue = 0;
 
-let clickRef = "tel:*2666";
+let clickRef = "tel:0723307629";
+
+let timeExit = () => {
+  return new Date();
+};
+
+if (
+  timeExit().getDay() >= 1 &&
+  timeExit().getDay() <= 5 &&
+  timeExit().getHours() >= 8 &&
+  timeExit().getHours() <= 17
+) {
+  let currentUrl = window.location.href;
+  if (currentUrl.match(/facebook_cpc/g)) {
+    clickRef = "tel:0723305853";
+  } else if (currentUrl.match(/facebook_rmkt/g)) {
+    clickRef = "tel:0723307251";
+  } else if (currentUrl.match(/search_generic/g)) {
+    clickRef = "tel:0723306335";
+  } else if (currentUrl.match(/search_brand/g)) {
+    clickRef = "tel:0723307344";
+  } else if (currentUrl.match(/search_competitors/g)) {
+    clickRef = "tel:0723308296";
+  } else if (currentUrl.match(/gdn/g) && !currentUrl.match(/gdn_/g)) {
+    clickRef = "tel:0723319183";
+  } else if (currentUrl.match(/gdn_rm/g)) {
+    clickRef = "tel:0723310482";
+  } else if (currentUrl.match(/gdn_smart/g)) {
+    clickRef = "tel:0723311628";
+  } else if (currentUrl.match(/gdn_gsp/g)) {
+    clickRef = "tel:0723310889";
+  } else if (currentUrl.match(/instagram_cpc/g)) {
+    clickRef = "tel:0723306745";
+  } else {
+    console.log("default");
+  }
+} else {
+  clickRef = "https://www.clalbit.co.il/metrazcontact/";
+}
 
 function resetDistanceScrolledUp() {
   distanceScrolledUp = 0;
