@@ -1,7 +1,6 @@
 let suggestionListBackgroundColor = "rgba(255,255,255,0.95)";
 let current_list_index = -1;
 let originalSuggestionRows = [];
-let extractedSuggestionRows = [];
 
 let suggestions = [
   `איך מגישים תביעה`,
@@ -201,7 +200,8 @@ function main_js() {
           // up arrow
           current_list_index -= 1;
           if (current_list_index < 0) {
-            current_list_index = document.querySelectorAll(".suggestionsRowClal").length - 1;
+            current_list_index =
+              document.querySelectorAll(".suggestionsRowClal").length - 1;
           }
           toggle_options(current_list_index);
           break;
@@ -209,7 +209,10 @@ function main_js() {
         case 40:
           // down arrow
           current_list_index += 1;
-          if (current_list_index >= document.querySelectorAll(".suggestionsRowClal").length) {
+          if (
+            current_list_index >=
+            document.querySelectorAll(".suggestionsRowClal").length
+          ) {
             // reset counter to 0 when value becomes larger than list size
             current_list_index = 0;
             // reset scroll to top of window
