@@ -633,8 +633,6 @@ function mainJS() {
   adjustPositioning();
   $(siteSearchBox).css({ display: "none" });
   setInterval(() => {
-    // the function loops through all elements and checks if the fixed elements collide with the search elements
-    // a potential improvement to this would be using a mutationObserver on the body and listening for ned elements added and adding them to an array with fixed elements. This way we will have only one initial loop, avoiding a full for loop every second.
     adjustPositioning();
   }, 1000);
   setTimeout(() => {
