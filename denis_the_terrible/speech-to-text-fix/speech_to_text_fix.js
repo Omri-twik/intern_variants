@@ -53,7 +53,6 @@ function mainJS() {
             micAvailable = true;
             // console.log("micAvailable", micAvailable);
             adjustPositioning();
-            document.querySelector(".dictate-btn").style.display = "flex";
             clearInterval(interval);
           }
         }
@@ -82,6 +81,7 @@ function mainJS() {
   function turnOffMicVisualization() {
     wavesurfer.microphone.stop();
   }
+
   function collideWithFixedElements(checkElements) {
     for (let el of document.querySelectorAll("*:not(footer)")) {
       for (let checkElem of checkElements) {
@@ -90,7 +90,8 @@ function mainJS() {
           let el_style = window.getComputedStyle(el);
           if (
             el_style["position"] === "fixed" &&
-            el_style["visibility"] !== "hidden"
+            el_style["visibility"] !== "hidden" &&
+            el_style["display"] !== "none"
           ) {
             let rect2 = el.getBoundingClientRect();
             if (
@@ -109,6 +110,7 @@ function mainJS() {
     }
     return false;
   }
+
   function positionSiteSearchBtnHorizontally() {
     if (collideWithFixedElements([siteSearchBtn, siteSearchBox])) {
       siteSearchBtn.style.left = startingLeftValue;
@@ -118,17 +120,10 @@ function mainJS() {
 
       for (let i = 0; i < repositioningAttempts; i++) {
         if (collideWithFixedElements([siteSearchBtn, siteSearchBox])) {
-          if (siteSearchBtn.style.display === "none") {
-            siteSearchBtn.style.left =
-              $(siteSearchBox).position().left + 10 + "px";
-            siteSearchBox.style.left =
-              $(siteSearchBox).position().left + 10 + "px";
-          } else if (siteSearchBox.style.display === "none") {
-            siteSearchBtn.style.left =
-              $(siteSearchBtn).position().left + 10 + "px";
-            siteSearchBox.style.left =
-              $(siteSearchBtn).position().left + 10 + "px";
-          }
+          siteSearchBtn.style.left =
+            $(siteSearchBtn).position().left + 10 + "px";
+          siteSearchBox.style.left =
+            $(siteSearchBox).position().left + 10 + "px";
         } else {
           siteSearchBtn.style.visibility = "visible";
           siteSearchBox.style.visibility = "visible";
@@ -156,24 +151,26 @@ function mainJS() {
 
       for (let i = 0; i < repositioningAttempts; i++) {
         if (collideWithFixedElements([siteSearchBtn, siteSearchBox])) {
-          if (siteSearchBtn.style.display === "none") {
-            siteSearchBtn.style.bottom =
-              window.innerHeight - $(siteSearchBox).position().top + 10 + "px";
-            siteSearchBox.style.bottom =
-              window.innerHeight - $(siteSearchBox).position().top + 10 + "px";
-          } else if (siteSearchBox.style.display === "none") {
-            siteSearchBtn.style.bottom =
-              window.innerHeight - $(siteSearchBtn).position().top + 10 + "px";
-            siteSearchBox.style.bottom =
-              window.innerHeight - $(siteSearchBtn).position().top + 10 + "px";
-          }
+          let rectBtn = siteSearchBtn.getBoundingClientRect();
+          let rectBox = siteSearchBox.getBoundingClientRect();
+          siteSearchBtn.style.bottom =
+            window.innerHeight -
+            $(siteSearchBtn).position().top -
+            rectBtn["height"] +
+            10 +
+            "px";
+          siteSearchBox.style.bottom =
+            window.innerHeight -
+            $(siteSearchBox).position().top -
+            rectBox["height"] +
+            10 +
+            "px";
         } else {
           siteSearchBtn.style.visibility = "visible";
           siteSearchBox.style.visibility = "visible";
           return false;
         }
       }
-      // console.log("positionSiteSearchBtnVertically fail");
       siteSearchBtn.style.visibility = "hidden";
       siteSearchBox.style.visibility = "hidden";
       failedVerticalPositioning = true;
@@ -186,17 +183,9 @@ function mainJS() {
   }
 
   function adjustPositioning() {
-    let failHorizontal;
-    let failVertical;
-    failHorizontal = positionSiteSearchBtnHorizontally();
-    // console.log("failHorizontal", failHorizontal);
-    if (failHorizontal) {
-      failVertical = positionSiteSearchBtnVertically();
-      // console.log("failVertical", failVertical);
-    }
-    if (failHorizontal && failVertical) {
-      siteSearchBox.style.visibility = "hidden";
-      siteSearchBtn.style.visibility = "hidden";
+    failVertical = positionSiteSearchBtnVertically();
+    if (failVertical) {
+      failHorizontal = positionSiteSearchBtnHorizontally();
     }
   }
   // #####################################################################################
@@ -215,7 +204,7 @@ function mainJS() {
     `   
         <div class="twik-site-search">
             <div class="dictate-btn-wrapper">
-                <button class="dictate-btn" id="tw-mic" style="display: none; visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
+                <button class="dictate-btn" id="tw-mic" style="visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
                   <img class="mic-icon" src="https://i.postimg.cc/vBWm42Nk/kisspng-microphone-computer-icons-podcast-microphone-icon-5b24974c6e0231-1999712615291246844506.png" alt="">
                     <div class="dictate-btn-text">
                       <div>Site</div>
@@ -223,7 +212,7 @@ function mainJS() {
                     </div>
                 </button>
             </div>
-            <div class="twik-site-search-mainBox" style="display: none; visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
+            <div class="twik-site-search-mainBox" style="visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
                 <div class="loader-container">
                     <div class="stop-listening-btn-div site-search-top-section">
                         <button class="stop-listening-btn">
@@ -438,19 +427,24 @@ function mainJS() {
       left: $(".dictate-btn").css("left"),
       bottom: $(".dictate-btn").css("bottom"),
     });
+    $(".twik-site-search-mainBox").css({ visibility: "visible" });
     $(".twik-site-search-mainBox").fadeIn("fast");
     $(".dictate-btn").css({ display: "none" });
+    $(".dictate-btn").css({ visibility: "hidden" });
     turnOnMicVisualization();
     recognition.start();
   });
 
   window.addEventListener("click", () => {
     if (
-      document.querySelector(".twik-site-search-mainBox").style.display ===
-      "block"
+      document.querySelector(".twik-site-search-mainBox").style.visibility ===
+      "visible"
     ) {
       $(".twik-site-search-mainBox").fadeOut("fast");
+      $(".twik-site-search-mainBox").css({ visibility: "hidden" });
+      $(".dictate-btn").css({ visibility: "visible" });
       $(".dictate-btn").fadeIn("fast");
+
       turnOffMicVisualization();
       try {
         recognition.stop();
@@ -482,6 +476,8 @@ function mainJS() {
 
   document.querySelector(".site-search-close").addEventListener("click", () => {
     $(".twik-site-search-mainBox").fadeOut("fast");
+    $(".twik-site-search-mainBox").css({ visibility: "hidden" });
+    $(".dictate-btn").css({ visibility: "visible" });
     $(".dictate-btn").fadeIn("fast");
     turnOffMicVisualization();
     try {
@@ -509,8 +505,8 @@ function mainJS() {
     if (key === "Enter") key = 13;
     if (
       key === 13 &&
-      document.querySelector(".twik-site-search-mainBox").style.display !==
-        "none"
+      document.querySelector(".twik-site-search-mainBox").style.visibility !==
+        "visible"
     ) {
       e.preventDefault();
       turnOffMicVisualization();
@@ -580,9 +576,14 @@ function mainJS() {
 
   addVolumeMeterFunctionality();
   adjustPositioning();
-  setInterval(() => {
+  let timePassed = 0;
+  let interval = setInterval(() => {
     // the function loops through all elements and checks if the fixed elements collide with the search elements
     // a potential improvement to this would be using a mutationObserver on the body and listening for ned elements added and adding them to an array with fixed elements. This way we will have only one initial loop, avoiding a full for loop every second.
     adjustPositioning();
+    timePassed += 1000;
+    if (timePassed >= 3000) {
+      clearInterval(interval);
+    }
   }, 1000);
 }
