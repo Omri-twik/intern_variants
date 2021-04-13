@@ -58,7 +58,6 @@ function mainJS() {
         if (typeof WaveSurfer.microphone !== "undefined") {
           if (typeof WaveSurfer.microphone.create !== "undefined") {
             micAvailable = true;
-            // console.log("micAvailable", micAvailable);
             adjustPositioning();
             clearInterval(interval);
           }
@@ -105,7 +104,6 @@ function mainJS() {
         for (let node of mutation.addedNodes) {
           if (window.getComputedStyle(node)["position"] === "fixed") {
             if (!fixedElements.includes(node)) {
-              // console.log("new fixed element");
               fixedElements.push(node);
             }
           }
@@ -136,53 +134,6 @@ function mainJS() {
           ) {
             let rect2 = fixed.getBoundingClientRect();
             if (startingPos) {
-              console.log(
-                "condition",
-                window.innerHeight -
-                  startingBottomValue -
-                  rect1["height"] -
-                  10 >
-                  rect2.bottom
-              );
-              console.log(
-                "first",
-                window.innerWidth -
-                  startingLeftValueNumber -
-                  rect1["width"] -
-                  10,
-                rect2.left,
-                window.innerWidth -
-                  startingLeftValueNumber -
-                  rect1["width"] -
-                  10 <
-                  rect2.left
-              );
-              console.log(
-                "second",
-                startingLeftValueNumber - 10,
-                rect2.right,
-                startingLeftValueNumber - 10 > rect2.right
-              );
-              console.log(
-                "third",
-                startingBottomValueNumber + 10,
-                rect2.top,
-                startingBottomValueNumber + 10 < rect2.top
-              );
-              console.log(
-                "fourth",
-                window.innerHeight -
-                  startingBottomValueNumber -
-                  rect1["height"] -
-                  10,
-                rect2.bottom,
-                window.innerHeight -
-                  startingBottomValueNumber -
-                  rect1["height"] -
-                  10 >
-                  rect2.bottom
-              );
-
               if (
                 !(
                   window.innerWidth -
@@ -257,7 +208,6 @@ function mainJS() {
           return false;
         }
       }
-      // console.log("positionSiteSearchBtnHorizontally fail");
       siteSearchBtn.style.visibility = "hidden";
       siteSearchBox.style.visibility = "hidden";
       return true;
@@ -275,10 +225,6 @@ function mainJS() {
 
       let rectBtn = siteSearchBtn.getBoundingClientRect();
       let rectBox = siteSearchBox.getBoundingClientRect();
-      // console.log(
-      //   "$(siteSearchBox).position().top",
-      //   $(siteSearchBox).position().top
-      // );
 
       let originalBottom;
       let newBottom;
@@ -322,9 +268,6 @@ function mainJS() {
         $(siteSearchBox).css({ bottom: originalBottom });
         siteSearchBtn.style.visibility = "visible";
         siteSearchBox.style.visibility = "visible";
-        // console.log("originalBottom", originalBottom);
-        // console.log("newBottom", newBottom);
-        // console.log("animating");
         $(siteSearchBtn).animate({ bottom: newBottom });
         $(siteSearchBox).animate({ bottom: newBottom });
         return false;
@@ -343,7 +286,6 @@ function mainJS() {
   function adjustPositioning(force = false) {
     if (force) {
       if (!collideWithFixedElements([siteSearchBtn, siteSearchBox], true)) {
-        // console.log("animation");
         if (siteSearchBtn.style.left !== startingLeftValue) {
           $(siteSearchBtn).animate({ left: startingLeftValue });
         }
@@ -783,7 +725,6 @@ function mainJS() {
   setInterval(() => {
     timer += 1000;
     if (timer % 5000 === 0) {
-      // console.log("hard");
       adjustPositioning(true);
     } else {
       adjustPositioning();
