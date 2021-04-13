@@ -634,15 +634,18 @@ function mainJS() {
 
   $(siteSearchBtn)
     .mouseenter(() => {
-      $(siteSearchBtn).animate({ opacity: "1" });
-      $(".dictate-btn-text").animate({
-        width: buttonTextWidth,
-        padding: "3px",
-      });
+      $(siteSearchBtn).animate({ opacity: "1" }, "fast");
+      $(".dictate-btn-text").animate(
+        {
+          width: buttonTextWidth,
+          padding: "3px",
+        },
+        "fast"
+      );
     })
     .mouseleave(() => {
-      $(siteSearchBtn).animate({ opacity: "0.5" });
-      $(".dictate-btn-text").animate({ width: "0px", padding: "0px" });
+      $(siteSearchBtn).animate({ opacity: "0.5" }, "fast");
+      $(".dictate-btn-text").animate({ width: "0px", padding: "0px" }, "fast");
     });
 
   window.addEventListener("keyup", function (e) {
