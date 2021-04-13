@@ -16,6 +16,9 @@ let observer;
 let buttonTextWidth;
 let buttonHeight;
 
+let startingLeftValueNumber = startingLeftValue.match(/\d+/)[0];
+let startingBottomValueNumber = startingBottomValue.match(/\d+/)[0];
+
 if (window.jQuery) {
   $ = window.jQuery;
   mainJS();
@@ -133,14 +136,64 @@ function mainJS() {
           ) {
             let rect2 = fixed.getBoundingClientRect();
             if (startingPos) {
+              console.log(
+                "condition",
+                window.innerHeight -
+                  startingBottomValue -
+                  rect1["height"] -
+                  10 >
+                  rect2.bottom
+              );
+              console.log(
+                "first",
+                window.innerWidth -
+                  startingLeftValueNumber -
+                  rect1["width"] -
+                  10,
+                rect2.left,
+                window.innerWidth -
+                  startingLeftValueNumber -
+                  rect1["width"] -
+                  10 <
+                  rect2.left
+              );
+              console.log(
+                "second",
+                startingLeftValueNumber - 10,
+                rect2.right,
+                startingLeftValueNumber - 10 > rect2.right
+              );
+              console.log(
+                "third",
+                startingBottomValueNumber + 10,
+                rect2.top,
+                startingBottomValueNumber + 10 < rect2.top
+              );
+              console.log(
+                "fourth",
+                window.innerHeight -
+                  startingBottomValueNumber -
+                  rect1["height"] -
+                  10,
+                rect2.bottom,
+                window.innerHeight -
+                  startingBottomValueNumber -
+                  rect1["height"] -
+                  10 >
+                  rect2.bottom
+              );
+
               if (
                 !(
-                  window.innerWidth - startingLeftValue - rect1["width"] - 10 <
+                  window.innerWidth -
+                    startingLeftValueNumber -
+                    rect1["width"] -
+                    10 <
                     rect2.left ||
-                  startingLeftValue - 10 > rect2.right ||
-                  startingBottomValue + 10 < rect2.top ||
+                  startingLeftValueNumber - 10 > rect2.right ||
+                  startingBottomValueNumber + 10 < rect2.top ||
                   window.innerHeight -
-                    startingBottomValue -
+                    startingBottomValueNumber -
                     rect1["height"] -
                     10 >
                     rect2.bottom
