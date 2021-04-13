@@ -218,7 +218,13 @@ function mainJS() {
     }
   }
 
-  function adjustPositioning() {
+  function adjustPositioning(force = false) {
+    if (force) {
+      siteSearchBtn.style.left = startingLeftValue;
+      siteSearchBox.style.left = startingLeftValue;
+      siteSearchBtn.style.bottom = startingBottomValue;
+      siteSearchBox.style.bottom = startingBottomValue;
+    }
     failVertical = positionSiteSearchBtnVertically();
     if (failVertical) {
       failHorizontal = positionSiteSearchBtnHorizontally();
@@ -241,7 +247,7 @@ function mainJS() {
         <div class="twik-site-search">
             <div class="dictate-btn-wrapper">
                 <button class="dictate-btn" id="tw-mic" style="visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
-                  <img class="mic-icon" src="https://i.postimg.cc/bwN52Ztm/kisspng-microphone-computer-icons-podcast-microphone-icon-5b24974c6e0231-1999712615291246844506.png" alt="">
+                  <img class="mic-icon" src="https://raw.githubusercontent.com/DrorBarnea-twik/intern_variants/master/denis_the_terrible/speech-to-text-fix/mic-icon.png" alt="">
                     <div class="dictate-btn-text">
                       <div>Site</div>
                       <div>Search</div>
@@ -330,6 +336,7 @@ function mainJS() {
 }
 .twik-site-search {
   font-family: ${fontFamily};
+  direction: ltr;
 }
   .twik-site-search-mainBox {
   z-index: 9999999999999999999999999999;
@@ -341,7 +348,7 @@ function mainJS() {
   }
 
   .dictate-btn-text {
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -352,6 +359,7 @@ function mainJS() {
   }
 
   button.dictate-btn {
+  opacity: 0.4;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -362,8 +370,7 @@ function mainJS() {
   border: 0px;
   position: fixed;
   border-radius: 7px;
-  min-width: 48px;
-  min-height: 40px;
+  min-height: 50px;
   box-shadow: 0px 0px 2px #000000;
   }
 
@@ -539,6 +546,16 @@ function mainJS() {
     e.stopPropagation();
   });
 
+  $(siteSearchBtn)
+    .mouseenter(() => {
+      $(siteSearchBtn).css({ opacity: "1" });
+      $(".dictate-btn-text").css({ display: "flex" });
+    })
+    .mouseleave(() => {
+      $(siteSearchBtn).css({ opacity: "0.5" });
+      $(".dictate-btn-text").css({ display: "none" });
+    });
+
   window.addEventListener("keyup", function (e) {
     let key = e.key || e.keyCode;
     if (key === "Enter") key = 13;
@@ -625,9 +642,11 @@ function mainJS() {
   }, 1000);
   setTimeout(() => {
     fixedElements = getFixedElements();
+    adjustPositioning(true);
   }, 3000);
   setTimeout(() => {
     fixedElements = getFixedElements();
+    adjustPositioning(true);
   }, 10000);
   addVolumeMeterFunctionality();
 }
