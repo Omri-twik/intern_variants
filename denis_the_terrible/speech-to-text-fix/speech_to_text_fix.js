@@ -11,6 +11,8 @@ var SpeechRecognitionGrammarList;
 var error = true;
 let siteSearchBtn;
 let siteSearchBox;
+let fixedElements = [];
+let observer;
 
 if (window.jQuery) {
   $ = window.jQuery;
@@ -82,24 +84,58 @@ function mainJS() {
     wavesurfer.microphone.stop();
   }
 
-  function collideWithFixedElements(checkElements) {
+  function getFixedElements() {
+    let array = [];
     for (let el of document.querySelectorAll("*:not(footer)")) {
+      if (window.getComputedStyle(el)["position"] === "fixed") {
+        array.push(el);
+      }
+    }
+    return array;
+  }
+
+  function listenForMoreFixedElements() {
+    observer = new MutationObserver((mutations) => {
+      for (let mutation of mutations) {
+        for (let node of mutation.addedNodes) {
+          if (window.getComputedStyle(node)["position"] === "fixed") {
+            if (!fixedElements.includes(node)) {
+              console.log("new fixed element");
+              fixedElements.push(node);
+            }
+          }
+        }
+      }
+    });
+    observer.observe(document.querySelector("body"), {
+      childList: true,
+      subtree: true,
+    });
+  }
+
+  function collideWithFixedElements(checkElements) {
+    for (let fixed of fixedElements) {
       for (let checkElem of checkElements) {
         let rect1 = checkElem.getBoundingClientRect();
-        if (!checkElements.includes(el) && checkElem.style.display !== "none") {
-          let el_style = window.getComputedStyle(el);
+        if (
+          !checkElements.includes(fixed) &&
+          checkElem.style.display !== "none"
+        ) {
+          let fixed_style = window.getComputedStyle(fixed);
           if (
-            el_style["position"] === "fixed" &&
-            el_style["visibility"] !== "hidden" &&
-            el_style["display"] !== "none"
+            fixed_style["position"] === "fixed" &&
+            fixed_style["visibility"] !== "hidden" &&
+            fixed_style["display"] !== "none" &&
+            fixed.getBoundingClientRect()["width"] > 0 &&
+            fixed.getBoundingClientRect()["height"] > 0
           ) {
-            let rect2 = el.getBoundingClientRect();
+            let rect2 = fixed.getBoundingClientRect();
             if (
               !(
                 rect1.right + 10 < rect2.left ||
                 rect1.left - 10 > rect2.right ||
                 rect1.bottom + 10 < rect2.top ||
-                rect1.top - 10 > rect2.bottom
+                rect1.top + 10 > rect2.bottom
               )
             ) {
               return true;
@@ -205,7 +241,7 @@ function mainJS() {
         <div class="twik-site-search">
             <div class="dictate-btn-wrapper">
                 <button class="dictate-btn" id="tw-mic" style="visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
-                  <img class="mic-icon" src="https://i.postimg.cc/vBWm42Nk/kisspng-microphone-computer-icons-podcast-microphone-icon-5b24974c6e0231-1999712615291246844506.png" alt="">
+                  <img class="mic-icon" src="https://i.postimg.cc/bwN52Ztm/kisspng-microphone-computer-icons-podcast-microphone-icon-5b24974c6e0231-1999712615291246844506.png" alt="">
                     <div class="dictate-btn-text">
                       <div>Site</div>
                       <div>Search</div>
@@ -341,7 +377,8 @@ function mainJS() {
   }
 
   .twik-site-search-mainBox {
-  display: none;
+  display: block;
+  visibility: hidden;
   z-index: 100;
   background-color: white;
   position: fixed;
@@ -412,6 +449,8 @@ function mainJS() {
 
   siteSearchBtn = document.querySelector(".dictate-btn");
   siteSearchBox = document.querySelector(".twik-site-search-mainBox");
+  fixedElements = getFixedElements();
+  listenForMoreFixedElements();
 
   // *********************************************************************
   // setting event listeners
@@ -423,14 +462,14 @@ function mainJS() {
     }
     $(".loader-container").css({ display: "flex" });
     $(".twik-results-container").css({ display: "none" });
-    $(".twik-site-search-mainBox").css({
-      left: $(".dictate-btn").css("left"),
-      bottom: $(".dictate-btn").css("bottom"),
+    $(siteSearchBox).css({
+      left: $(siteSearchBtn).css("left"),
+      bottom: $(siteSearchBtn).css("bottom"),
     });
-    $(".twik-site-search-mainBox").css({ visibility: "visible" });
-    $(".twik-site-search-mainBox").fadeIn("fast");
-    $(".dictate-btn").css({ display: "none" });
-    $(".dictate-btn").css({ visibility: "hidden" });
+    $(siteSearchBox).css({ visibility: "visible" });
+    $(siteSearchBox).fadeIn("fast");
+    $(siteSearchBtn).css({ display: "none" });
+    $(siteSearchBtn).css({ visibility: "hidden" });
     turnOnMicVisualization();
     recognition.start();
   });
@@ -440,10 +479,10 @@ function mainJS() {
       document.querySelector(".twik-site-search-mainBox").style.visibility ===
       "visible"
     ) {
-      $(".twik-site-search-mainBox").fadeOut("fast");
-      $(".twik-site-search-mainBox").css({ visibility: "hidden" });
-      $(".dictate-btn").css({ visibility: "visible" });
-      $(".dictate-btn").fadeIn("fast");
+      $(siteSearchBox).fadeOut("fast");
+      $(siteSearchBox).css({ visibility: "hidden" });
+      $(siteSearchBtn).css({ visibility: "visible" });
+      $(siteSearchBtn).fadeIn("fast");
 
       turnOffMicVisualization();
       try {
@@ -475,10 +514,10 @@ function mainJS() {
     });
 
   document.querySelector(".site-search-close").addEventListener("click", () => {
-    $(".twik-site-search-mainBox").fadeOut("fast");
-    $(".twik-site-search-mainBox").css({ visibility: "hidden" });
-    $(".dictate-btn").css({ visibility: "visible" });
-    $(".dictate-btn").fadeIn("fast");
+    $(siteSearchBox).fadeOut("fast");
+    $(siteSearchBox).css({ visibility: "hidden" });
+    $(siteSearchBtn).css({ visibility: "visible" });
+    $(siteSearchBtn).fadeIn("fast");
     turnOffMicVisualization();
     try {
       recognition.stop();
@@ -505,7 +544,7 @@ function mainJS() {
     if (key === "Enter") key = 13;
     if (
       key === 13 &&
-      document.querySelector(".twik-site-search-mainBox").style.visibility !==
+      document.querySelector(".twik-site-search-mainBox").style.visibility ===
         "visible"
     ) {
       e.preventDefault();
@@ -574,16 +613,21 @@ function mainJS() {
   // adding meter functionality and positioning elements and making them visible
   // *************************************************************
 
-  addVolumeMeterFunctionality();
   adjustPositioning();
-  let timePassed = 0;
-  let interval = setInterval(() => {
+  $(siteSearchBox).css({ display: "none" });
+  setInterval(() => {
     // the function loops through all elements and checks if the fixed elements collide with the search elements
     // a potential improvement to this would be using a mutationObserver on the body and listening for ned elements added and adding them to an array with fixed elements. This way we will have only one initial loop, avoiding a full for loop every second.
     adjustPositioning();
-    timePassed += 1000;
-    if (timePassed >= 3000) {
-      clearInterval(interval);
-    }
   }, 1000);
+  setTimeout(() => {
+    fixedElements = getFixedElements();
+  }, 1000);
+  setTimeout(() => {
+    fixedElements = getFixedElements();
+  }, 3000);
+  setTimeout(() => {
+    fixedElements = getFixedElements();
+  }, 10000);
+  addVolumeMeterFunctionality();
 }
