@@ -102,7 +102,7 @@ function mainJS() {
         for (let node of mutation.addedNodes) {
           if (window.getComputedStyle(node)["position"] === "fixed") {
             if (!fixedElements.includes(node)) {
-              console.log("new fixed element");
+              // console.log("new fixed element");
               fixedElements.push(node);
             }
           }
@@ -222,10 +222,10 @@ function mainJS() {
 
       let rectBtn = siteSearchBtn.getBoundingClientRect();
       let rectBox = siteSearchBox.getBoundingClientRect();
-      console.log(
-        "$(siteSearchBox).position().top",
-        $(siteSearchBox).position().top
-      );
+      // console.log(
+      //   "$(siteSearchBox).position().top",
+      //   $(siteSearchBox).position().top
+      // );
 
       let originalBottom;
       let newBottom;
@@ -269,9 +269,9 @@ function mainJS() {
         $(siteSearchBox).css({ bottom: originalBottom });
         siteSearchBtn.style.visibility = "visible";
         siteSearchBox.style.visibility = "visible";
-        console.log("originalBottom", originalBottom);
-        console.log("newBottom", newBottom);
-        console.log("animating");
+        // console.log("originalBottom", originalBottom);
+        // console.log("newBottom", newBottom);
+        // console.log("animating");
         $(siteSearchBtn).animate({ bottom: newBottom });
         $(siteSearchBox).animate({ bottom: newBottom });
         return false;
@@ -290,7 +290,7 @@ function mainJS() {
   function adjustPositioning(force = false) {
     if (force) {
       if (!collideWithFixedElements([siteSearchBtn, siteSearchBox], true)) {
-        console.log("animation");
+        // console.log("animation");
         if (siteSearchBtn.style.left !== startingLeftValue) {
           $(siteSearchBtn).animate({ left: startingLeftValue });
         }
@@ -730,7 +730,7 @@ function mainJS() {
   setInterval(() => {
     timer += 1000;
     if (timer % 5000 === 0) {
-      console.log("hard");
+      // console.log("hard");
       adjustPositioning(true);
     } else {
       adjustPositioning();
