@@ -197,52 +197,52 @@ function mainJS() {
     return false;
   }
 
-  function positionSiteSearchBtnHorizontally() {
-    if (collideWithFixedElements([siteSearchBtn, siteSearchBox])) {
-      siteSearchBtn.style.visibility = "hidden";
-      siteSearchBox.style.visibility = "hidden";
+  // function positionSiteSearchBtnHorizontally() {
+  //   if (collideWithFixedElements([siteSearchBtn, siteSearchBox])) {
+  //     siteSearchBtn.style.visibility = "hidden";
+  //     siteSearchBox.style.visibility = "hidden";
 
-      let originalLeft;
-      let newLeft;
+  //     let originalLeft;
+  //     let newLeft;
 
-      if (siteSearchBtn.style.display !== "none") {
-        originalLeft = $(siteSearchBtn).position().left;
-      } else if (siteSearchBox.style.display !== "none") {
-        originalLeft = $(siteSearchBox).position().left;
-      }
+  //     if (siteSearchBtn.style.display !== "none") {
+  //       originalLeft = $(siteSearchBtn).position().left;
+  //     } else if (siteSearchBox.style.display !== "none") {
+  //       originalLeft = $(siteSearchBox).position().left;
+  //     }
 
-      siteSearchBtn.style.left = startingLeftValue;
-      siteSearchBox.style.left = startingLeftValue;
-      siteSearchBtn.style.bottom = startingBottomValue;
-      siteSearchBox.style.bottom = startingBottomValue;
+  //     siteSearchBtn.style.left = startingLeftValue;
+  //     siteSearchBox.style.left = startingLeftValue;
+  //     siteSearchBtn.style.bottom = startingBottomValue;
+  //     siteSearchBox.style.bottom = startingBottomValue;
 
-      for (let i = 0; i < repositioningAttempts; i++) {
-        if (collideWithFixedElements([siteSearchBtn, siteSearchBox])) {
-          siteSearchBtn.style.left =
-            $(siteSearchBtn).position().left + 10 + "px";
-          siteSearchBox.style.left =
-            $(siteSearchBox).position().left + 10 + "px";
-        }
-        newLeft = $(siteSearchBtn).position().left;
-        if (newLeft && newLeft !== originalLeft) {
-          $(siteSearchBtn).css({ left: originalLeft });
-          $(siteSearchBox).css({ left: originalLeft });
-          siteSearchBtn.style.visibility = "visible";
-          siteSearchBox.style.visibility = "visible";
-          $(siteSearchBtn).animate({ left: newLeft });
-          $(siteSearchBox).animate({ left: newLeft });
-          return false;
-        }
-      }
-      siteSearchBtn.style.visibility = "hidden";
-      siteSearchBox.style.visibility = "hidden";
-      return true;
-    } else {
-      siteSearchBtn.style.visibility = "visible";
-      siteSearchBox.style.visibility = "visible";
-      return false;
-    }
-  }
+  //     for (let i = 0; i < repositioningAttempts; i++) {
+  //       if (collideWithFixedElements([siteSearchBtn, siteSearchBox])) {
+  //         siteSearchBtn.style.left =
+  //           $(siteSearchBtn).position().left + 10 + "px";
+  //         siteSearchBox.style.left =
+  //           $(siteSearchBox).position().left + 10 + "px";
+  //       }
+  //       newLeft = $(siteSearchBtn).position().left;
+  //       if (newLeft && newLeft !== originalLeft) {
+  //         $(siteSearchBtn).css({ left: originalLeft });
+  //         $(siteSearchBox).css({ left: originalLeft });
+  //         siteSearchBtn.style.visibility = "visible";
+  //         siteSearchBox.style.visibility = "visible";
+  //         $(siteSearchBtn).animate({ left: newLeft });
+  //         $(siteSearchBox).animate({ left: newLeft });
+  //         return false;
+  //       }
+  //     }
+  //     siteSearchBtn.style.visibility = "hidden";
+  //     siteSearchBox.style.visibility = "hidden";
+  //     return true;
+  //   } else {
+  //     siteSearchBtn.style.visibility = "visible";
+  //     siteSearchBox.style.visibility = "visible";
+  //     return false;
+  //   }
+  // }
 
   function positionSiteSearchBtnVertically() {
     console.log("vertical");
@@ -269,8 +269,8 @@ function mainJS() {
           rectBox["height"];
       }
 
-      siteSearchBtn.style.left = startingLeftValue;
-      siteSearchBox.style.left = startingLeftValue;
+      // siteSearchBtn.style.left = startingLeftValue;
+      // siteSearchBox.style.left = startingLeftValue;
       siteSearchBtn.style.bottom = startingBottomValue;
       siteSearchBox.style.bottom = startingBottomValue;
 
@@ -310,27 +310,11 @@ function mainJS() {
     }
   }
 
-  function adjustPositioning(forceToStart = false) {
-    if (forceToStart) {
-      if (!collideWithFixedElements([siteSearchBtn, siteSearchBox], true)) {
-        if (siteSearchBtn.style.left !== startingLeftValue) {
-          $(siteSearchBtn).animate({ left: startingLeftValue });
-        }
-        if (siteSearchBox.style.left !== startingLeftValue) {
-          $(siteSearchBox).animate({ left: startingLeftValue });
-        }
-        if (siteSearchBtn.style.bottom !== startingBottomValue) {
-          $(siteSearchBtn).animate({ bottom: startingBottomValue });
-        }
-        if (siteSearchBox.style.bottom !== startingBottomValue) {
-          $(siteSearchBox).animate({ bottom: startingBottomValue });
-        }
-      }
-    }
+  function adjustPositioning() {
     failVertical = positionSiteSearchBtnVertically();
-    if (failVertical) {
-      failHorizontal = positionSiteSearchBtnHorizontally();
-    }
+    // if (failVertical) {
+    //   failHorizontal = positionSiteSearchBtnHorizontally();
+    // }
   }
   // #####################################################################################
   // start of code functionality
@@ -349,7 +333,7 @@ function mainJS() {
         <div class="twik-site-search">
           <div class="dictate-btn-wrapper">
             <button class="dictate-btn" id="tw-mic"
-              style="visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
+              style="visibility: hidden; bottom: ${startingBottomValue};">
               <img class="mic-icon"
                 src="https://raw.githubusercontent.com/DrorBarnea-twik/intern_variants/master/denis_the_terrible/speech-to-text-fix/mic-icon.png"
                 alt="mic-icon">
@@ -362,12 +346,12 @@ function mainJS() {
             </button>
           </div>
           <div class="twik-site-search-mainBox"
-            style="visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
-            <button class="site-search-close">
+            style="visibility: hidden; bottom: ${startingBottomValue};">
+            <div class="site-search-close">
               <img class="close-icon"
                 src="https://raw.githubusercontent.com/DrorBarnea-twik/intern_variants/master/denis_the_terrible/speech-to-text-fix/close-btn.png"
                 alt="close-icon">
-            </button>
+            </div>
             <div class="loader-container">
               <div class="stop-listening-btn-div site-search-top-section">
                 <button class="stop-listening-btn">
@@ -410,10 +394,23 @@ function mainJS() {
     `
 <style>
 
+.twik-site-search * {
+  font-size: 18px !important;
+}
+
 .twik-site-search button:focus {
   border: none;
   outline: none;
   background-color: transparent;
+}
+
+.twik-site-search button {
+  margin-bottom: 0px !important;
+  padding: 0px !important;
+  font-weight: 400 !important;
+  font-size: 18px !important;
+  text-transform: capitalize !important;
+  min-height:initial
 }
 
 .site-search-top-section {
@@ -425,22 +422,27 @@ function mainJS() {
   height: 20%;
   width: 100%;
   background-color: lightgrey;
+  align-items: center;
+
 }
 
 .site-search-top-section button {
   border: none;
   background-color: transparent;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .site-search-close {
   position: absolute;
-  top: 3px;
+  top: 0px;
   right: 3px;
+  cursor: pointer;
 }
 
-.site-search-close img {
-  width: 10px;
-  height: 10px;
+.site-search-close .close-icon {
+  width: 17px;
+  height: 17px;
 }
 
 .mic-icon {
@@ -479,6 +481,8 @@ function mainJS() {
 
   .dictate-btn {
     background-color: white;
+    left: ${startingLeftValue};
+    margin: 0px;
   }
 
   button.dictate-btn {
@@ -516,6 +520,7 @@ function mainJS() {
   height: 120px;
   box-shadow: 0px 0px 2px #000000;
   border-radius: 7px;
+  left: ${startingLeftValue};
   }
 
   .loader-container {
@@ -554,17 +559,7 @@ function mainJS() {
     width: auto;
   }
 
-  .twik-results-buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 20%;
-  width: 100%;
-  }
-  .twik-results-buttons button {
-    margin-left: 5px;
-    margin-right: 5px;
-  }
+
 
   .stop-listening-btn-div {
   display: flex;
@@ -577,6 +572,13 @@ function mainJS() {
   width: 180px;
   }
 
+  @media screen and (max-width: 500px) {
+    .twik-site-search-mainBox {
+      right: 50%;
+      transform: translateX(50%);
+    }
+  }
+
 </style>
 	`
   );
@@ -584,7 +586,7 @@ function mainJS() {
   siteSearchBtn = document.querySelector(".dictate-btn");
   siteSearchBox = document.querySelector(".twik-site-search-mainBox");
   fixedElements = getFixedElements();
-  listenForMoreFixedElements();
+  // listenForMoreFixedElements();
   buttonTextWidth = window.getComputedStyle(
     document.querySelector(".dictate-btn-text")
   )["width"];
@@ -686,17 +688,16 @@ function mainJS() {
       $(".dictate-btn-text").animate(
         {
           width: buttonTextWidth,
-          padding: "3px",
         },
         "fast"
       );
     })
     .mouseleave(() => {
       $(siteSearchBtn).animate({ opacity: "0.5" }, "fast");
-      $(".dictate-btn-text").animate({ width: "0px", padding: "0px" }, "fast");
+      $(".dictate-btn-text").animate({ width: "0px" }, "fast");
     });
 
-  window.addEventListener("keyup", function (e) {
+  window.addEventListener("keydown", function (e) {
     let key = e.key || e.keyCode;
     if (key === "Enter") key = 13;
     if (
@@ -777,23 +778,26 @@ function mainJS() {
 
   adjustPositioning();
   $(siteSearchBox).css({ display: "none" });
-  let timer = 0;
-  setInterval(() => {
-    timer += 1000;
-    if (timer % 5000 === 0) {
-      // adjustPositioning(true);
-    } else {
-      adjustPositioning();
-    }
+  // let timer = 0;
+  // setInterval(() => {
+  //   timer += 1000;
+  //   if (timer % 5000 === 0) {
+  //     // adjustPositioning(true);
+  //   } else {
+  //     adjustPositioning();
+  //   }
+  // }, 1000);
+  setTimeout(() => {
+    fixedElements = getFixedElements();
+    adjustPositioning();
   }, 1000);
   setTimeout(() => {
     fixedElements = getFixedElements();
-  }, 1000);
-  setTimeout(() => {
-    fixedElements = getFixedElements();
+    adjustPositioning();
   }, 3000);
   setTimeout(() => {
     fixedElements = getFixedElements();
+    adjustPositioning();
   }, 10000);
 
   addVolumeMeterFunctionality();
