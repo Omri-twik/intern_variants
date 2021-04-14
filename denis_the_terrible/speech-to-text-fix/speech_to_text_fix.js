@@ -15,6 +15,7 @@ let fixedElements = [];
 let observer;
 let buttonTextWidth;
 let buttonHeight;
+let test;
 
 let startingLeftValueNumber = startingLeftValue.match(/\d+/)[0];
 let startingBottomValueNumber = startingBottomValue.match(/\d+/)[0];
@@ -78,9 +79,6 @@ function mainJS() {
       height: 57,
       plugins: [WaveSurfer.microphone.create()],
     });
-    wavesurfer.microphone.on("deviceReady", function (stream) {});
-
-    wavesurfer.microphone.on("deviceError", function (code) {});
     wavesurfer.microphone.start();
   }
 
@@ -92,9 +90,30 @@ function mainJS() {
     let array = [];
     for (let el of document.querySelectorAll("*:not(footer)")) {
       if (window.getComputedStyle(el)["position"] === "fixed") {
-        array.push(el);
+        if (el === document.querySelector("#onesignal-bell-container")) {
+        }
+        if (
+          el.getBoundingClientRect()["width"] === 0 ||
+          el.getBoundingClientRect()["height"] === 0
+        ) {
+          console.log("cond true");
+          for (let child of el.querySelectorAll("*")) {
+            if (
+              child.getBoundingClientRect()["width"] !== 0 &&
+              child.getBoundingClientRect()["height"] !== 0
+            ) {
+              console.log("pushed child");
+              console.log("child", child);
+              array.push(child);
+            }
+          }
+        } else {
+          console.log("pushed");
+          array.push(el);
+        }
       }
     }
+    console.log("array.length", array.length);
     return array;
   }
 
@@ -102,11 +121,13 @@ function mainJS() {
     observer = new MutationObserver((mutations) => {
       for (let mutation of mutations) {
         for (let node of mutation.addedNodes) {
-          if (window.getComputedStyle(node)["position"] === "fixed") {
-            if (!fixedElements.includes(node)) {
-              fixedElements.push(node);
+          try {
+            if (window.getComputedStyle(node)["position"] === "fixed") {
+              if (!fixedElements.includes(node)) {
+                fixedElements.push(node);
+              }
             }
-          }
+          } catch {}
         }
       }
     });
@@ -125,6 +146,9 @@ function mainJS() {
           checkElem.style.display !== "none"
         ) {
           let fixed_style = window.getComputedStyle(fixed);
+          // if (fixed === document.querySelector("#onesignal-bell-launcher")) {
+          //   test = fixed_style;
+          // }
           if (
             fixed_style["position"] === "fixed" &&
             fixed_style["visibility"] !== "hidden" &&
@@ -150,6 +174,7 @@ function mainJS() {
                     rect2.bottom
                 )
               ) {
+                console.log("collision");
                 return true;
               }
             } else {
@@ -161,6 +186,7 @@ function mainJS() {
                   rect1.top + 10 > rect2.bottom
                 )
               ) {
+                console.log("collision");
                 return true;
               }
             }
@@ -219,7 +245,9 @@ function mainJS() {
   }
 
   function positionSiteSearchBtnVertically() {
+    console.log("vertical");
     if (collideWithFixedElements([siteSearchBtn, siteSearchBox])) {
+      console.log("collision");
       siteSearchBtn.style.visibility = "hidden";
       siteSearchBox.style.visibility = "hidden";
 
@@ -274,7 +302,6 @@ function mainJS() {
       }
       siteSearchBtn.style.visibility = "hidden";
       siteSearchBox.style.visibility = "hidden";
-      failedVerticalPositioning = true;
       return true;
     } else {
       siteSearchBtn.style.visibility = "visible";
@@ -283,8 +310,8 @@ function mainJS() {
     }
   }
 
-  function adjustPositioning(force = false) {
-    if (force) {
+  function adjustPositioning(forceToStart = false) {
+    if (forceToStart) {
       if (!collideWithFixedElements([siteSearchBtn, siteSearchBox], true)) {
         if (siteSearchBtn.style.left !== startingLeftValue) {
           $(siteSearchBtn).animate({ left: startingLeftValue });
@@ -684,6 +711,11 @@ function mainJS() {
 
   recognition.grammars = SpeechRecognitionGrammarList;
   recognition.interimResults = false;
+  if (document.getElementsByTagName("html")[0].getAttribute("lang")) {
+    recognition.lang = document
+      .getElementsByTagName("html")[0]
+      .getAttribute("lang");
+  }
 
   recognition.addEventListener("result", (e) => {
     // console.log("result");
@@ -728,7 +760,7 @@ function mainJS() {
   setInterval(() => {
     timer += 1000;
     if (timer % 5000 === 0) {
-      adjustPositioning(true);
+      // adjustPositioning(true);
     } else {
       adjustPositioning();
     }
@@ -742,5 +774,6 @@ function mainJS() {
   setTimeout(() => {
     fixedElements = getFixedElements();
   }, 10000);
+
   addVolumeMeterFunctionality();
 }
