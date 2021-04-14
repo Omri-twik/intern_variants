@@ -347,54 +347,60 @@ function mainJS() {
     "beforeend",
     `   
         <div class="twik-site-search">
-            <div class="dictate-btn-wrapper">
-                <button class="dictate-btn" id="tw-mic" style="visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
-                  <img class="mic-icon" src="https://raw.githubusercontent.com/DrorBarnea-twik/intern_variants/master/denis_the_terrible/speech-to-text-fix/mic-icon.png" alt="">
-                    <div class="dictate-btn-text">
-                      <div class="dictate-btn-text-inner-div">
-                        <div>Site</div>
-                        <div>Search</div>
-                      </div>
-                    </div>
+          <div class="dictate-btn-wrapper">
+            <button class="dictate-btn" id="tw-mic"
+              style="visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
+              <img class="mic-icon"
+                src="https://raw.githubusercontent.com/DrorBarnea-twik/intern_variants/master/denis_the_terrible/speech-to-text-fix/mic-icon.png"
+                alt="mic-icon">
+              <div class="dictate-btn-text">
+                <div class="dictate-btn-text-inner-div">
+                  <div>Site</div>
+                  <div>Search</div>
+                </div>
+              </div>
+            </button>
+          </div>
+          <div class="twik-site-search-mainBox"
+            style="visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
+            <button class="site-search-close">
+              <img class="close-icon"
+                src="https://raw.githubusercontent.com/DrorBarnea-twik/intern_variants/master/denis_the_terrible/speech-to-text-fix/close-btn.png"
+                alt="close-icon">
+            </button>
+            <div class="loader-container">
+              <div class="stop-listening-btn-div site-search-top-section">
+                <button class="stop-listening-btn">
+                  Stop
                 </button>
-            </div>
-            <div class="twik-site-search-mainBox" style="visibility: hidden; left: ${startingLeftValue}; bottom: ${startingBottomValue};">
-                <div class="loader-container">
-                    <div class="stop-listening-btn-div site-search-top-section">
-                        <button class="stop-listening-btn">
-                            Stop
-                        </button>
-                    </div>
-                    <div class="site-search-bottom-section">
-                      <div class="load-text">
-                          Say something...
-                      </div>
-                      <div class="load-animation">
-                      <!-- <div id="waveform"></div> -->
-                      <div id="waveform"></div>
-                      </div>
-                    </div>
+              </div>
+              <div class="site-search-bottom-section">
+                <div class="load-text">
+                  Say something...
                 </div>
-                <div class="twik-results-container">
-                    <div class="twik-results-buttons site-search-top-section">
-                        <button class="site-search-submit">
-                            Search
-                        </button>
-                        <button class="site-search-try-again">
-                            Try Again
-                        </button>
-                        <button class="site-search-close">
-                            Close
-                        </button>
-                    </div>
-                    <div class="results-text-container site-search-bottom-section">
-                        <div class="results-text">
-                          <span style='color: grey;'>Did you say anything?</span>
-                        </div>
-                      </div>
-                    </div>
+                <div class="load-animation">
+                  <!-- <div id="waveform"></div> -->
+                  <div id="waveform"></div>
                 </div>
+              </div>
             </div>
+            <div class="twik-results-container">
+              <div class="twik-results-buttons site-search-top-section">
+                <button class="site-search-submit">
+                  Search
+                </button>
+                <button class="site-search-try-again">
+                  Try Again
+                </button>
+              </div>
+              <div class="results-text-container site-search-bottom-section">
+                <div class="results-text">
+                  <span style='color: grey;'>Did you say anything?</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         </div>
         `
   );
@@ -424,6 +430,17 @@ function mainJS() {
 .site-search-top-section button {
   border: none;
   background-color: transparent;
+}
+
+.site-search-close {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+
+.site-search-close img {
+  width: 10px;
+  height: 10px;
 }
 
 .mic-icon {
@@ -540,9 +557,13 @@ function mainJS() {
   .twik-results-buttons {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   height: 20%;
   width: 100%;
+  }
+  .twik-results-buttons button {
+    margin-left: 5px;
+    margin-right: 5px;
   }
 
   .stop-listening-btn-div {
