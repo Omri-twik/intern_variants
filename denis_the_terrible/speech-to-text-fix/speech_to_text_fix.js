@@ -96,24 +96,24 @@ function mainJS() {
           el.getBoundingClientRect()["width"] === 0 ||
           el.getBoundingClientRect()["height"] === 0
         ) {
-          console.log("cond true");
+          // console.log("cond true");
           for (let child of el.querySelectorAll("*")) {
             if (
               child.getBoundingClientRect()["width"] !== 0 &&
               child.getBoundingClientRect()["height"] !== 0
             ) {
-              console.log("pushed child");
-              console.log("child", child);
+              // console.log("pushed child");
+              // console.log("child", child);
               array.push(child);
             }
           }
         } else {
-          console.log("pushed");
+          // console.log("pushed");
           array.push(el);
         }
       }
     }
-    console.log("array.length", array.length);
+    // console.log("array.length", array.length);
     return array;
   }
 
@@ -174,7 +174,7 @@ function mainJS() {
                     rect2.bottom
                 )
               ) {
-                console.log("collision");
+                // console.log("collision");
                 return true;
               }
             } else {
@@ -186,7 +186,7 @@ function mainJS() {
                   rect1.top + 10 > rect2.bottom
                 )
               ) {
-                console.log("collision");
+                // console.log("collision");
                 return true;
               }
             }
@@ -245,9 +245,9 @@ function mainJS() {
   // }
 
   function positionSiteSearchBtnVertically() {
-    console.log("vertical");
+    // console.log("vertical");
     if (collideWithFixedElements([siteSearchBtn, siteSearchBox])) {
-      console.log("collision");
+      // console.log("collision");
       siteSearchBtn.style.visibility = "hidden";
       siteSearchBox.style.visibility = "hidden";
 
@@ -347,11 +347,9 @@ function mainJS() {
           </div>
           <div class="twik-site-search-mainBox"
             style="visibility: hidden; bottom: ${startingBottomValue};">
-            <div class="site-search-close">
-              <img class="close-icon"
+              <img class="close-icon site-search-close"
                 src="https://raw.githubusercontent.com/DrorBarnea-twik/intern_variants/master/denis_the_terrible/speech-to-text-fix/close-btn.png"
                 alt="close-icon">
-            </div>
             <div class="loader-container">
               <div class="stop-listening-btn-div site-search-top-section">
                 <button class="stop-listening-btn">
@@ -429,18 +427,15 @@ function mainJS() {
 .site-search-top-section button {
   border: none;
   background-color: transparent;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
 .site-search-close {
   position: absolute;
-  top: 0px;
-  right: 3px;
+  top: 4px;
+  right: 4px;
   cursor: pointer;
-}
-
-.site-search-close .close-icon {
   width: 17px;
   height: 17px;
 }
@@ -448,6 +443,8 @@ function mainJS() {
 .mic-icon {
   width: 30px;
   height: 30px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .site-search-bottom-section {
@@ -574,8 +571,8 @@ function mainJS() {
 
   @media screen and (max-width: 500px) {
     .twik-site-search-mainBox {
-      right: 50%;
-      transform: translateX(50%);
+      left: 50% !important;
+      transform: translateX(-50%);
     }
   }
 
@@ -778,15 +775,6 @@ function mainJS() {
 
   adjustPositioning();
   $(siteSearchBox).css({ display: "none" });
-  // let timer = 0;
-  // setInterval(() => {
-  //   timer += 1000;
-  //   if (timer % 5000 === 0) {
-  //     // adjustPositioning(true);
-  //   } else {
-  //     adjustPositioning();
-  //   }
-  // }, 1000);
   setTimeout(() => {
     fixedElements = getFixedElements();
     adjustPositioning();
@@ -795,10 +783,10 @@ function mainJS() {
     fixedElements = getFixedElements();
     adjustPositioning();
   }, 3000);
-  setTimeout(() => {
-    fixedElements = getFixedElements();
-    adjustPositioning();
-  }, 10000);
+  // setTimeout(() => {
+  //   fixedElements = getFixedElements();
+  //   adjustPositioning();
+  // }, 10000);
 
   addVolumeMeterFunctionality();
 }
