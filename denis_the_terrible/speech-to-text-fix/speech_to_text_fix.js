@@ -16,6 +16,7 @@ let observer;
 let buttonTextWidth;
 let buttonHeight;
 let timeUntilFunctionality = 2000;
+let micShowedUp = false;
 
 let startingLeftValueNumber = startingLeftValue.match(/\d+/)[0];
 let startingBottomValueNumber = startingBottomValue.match(/\d+/)[0];
@@ -60,7 +61,6 @@ function mainJS() {
           if (typeof WaveSurfer.microphone !== "undefined") {
             if (typeof WaveSurfer.microphone.create !== "undefined") {
               micAvailable = true;
-              adjustPositioning();
               clearInterval(interval);
             }
           }
@@ -221,6 +221,7 @@ function mainJS() {
           siteSearchBox.style.visibility = "visible";
           $(siteSearchBtn).css({ display: "none" });
           $(siteSearchBtn).fadeIn();
+          micShowedUp = true;
           return false;
         }
         siteSearchBtn.style.visibility = "hidden";
@@ -232,6 +233,7 @@ function mainJS() {
         siteSearchBox.style.visibility = "visible";
         $(siteSearchBtn).css({ display: "none" });
         $(siteSearchBtn).fadeIn();
+        micShowedUp = true;
         return false;
       }
     }
@@ -705,5 +707,16 @@ function mainJS() {
     // *************************************************************
     $(siteSearchBox).css({ display: "none" });
     addVolumeMeterFunctionality();
+    let appearInterval = setInterval(() => {
+      // console.log("micAvailable", micAvailable);
+      if (micAvailable) {
+        adjustPositioning();
+        if (micShowedUp) {
+          // console.log("micShowedUp", micShowedUp);
+          clearInterval(appearInterval);
+          // console.log("cleared interval");
+        }
+      }
+    }, 500);
   }, timeUntilFunctionality);
 }
