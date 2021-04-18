@@ -15,7 +15,7 @@ let fixedElements = [];
 let observer;
 let buttonTextWidth;
 let buttonHeight;
-let timeUntilFunctionality = 3000;
+let timeUntilFunctionality = 2000;
 
 let startingLeftValueNumber = startingLeftValue.match(/\d+/)[0];
 let startingBottomValueNumber = startingBottomValue.match(/\d+/)[0];
@@ -612,7 +612,7 @@ function mainJS() {
 
     $(siteSearchBtn)
       .mouseenter(() => {
-        $(siteSearchBtn).animate({ opacity: "1", borderRadius: "7px"}, "fast");
+        $(siteSearchBtn).animate({ opacity: "1", borderRadius: "7px" }, "fast");
         $(".dictate-btn-text").animate(
           {
             width: buttonTextWidth,
@@ -621,7 +621,10 @@ function mainJS() {
         );
       })
       .mouseleave(() => {
-        $(siteSearchBtn).animate({ opacity: "0.5", borderRadius: "20px" }, "fast");
+        $(siteSearchBtn).animate(
+          { opacity: "0.5", borderRadius: "20px" },
+          "fast"
+        );
         $(".dictate-btn-text").animate({ width: "0px" }, "fast");
       });
 
