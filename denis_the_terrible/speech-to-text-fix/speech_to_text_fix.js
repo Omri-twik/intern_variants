@@ -420,7 +420,7 @@ function mainJS() {
     border-color: white;
     border: 0px;
     position: fixed;
-    border-radius: 7px;
+    border-radius: 20px;
     min-height: 50px;
     box-shadow: 0px 0px 2px #000000;
     }
@@ -612,7 +612,7 @@ function mainJS() {
 
     $(siteSearchBtn)
       .mouseenter(() => {
-        $(siteSearchBtn).animate({ opacity: "1" }, "fast");
+        $(siteSearchBtn).animate({ opacity: "1", borderRadius: "7px"}, "fast");
         $(".dictate-btn-text").animate(
           {
             width: buttonTextWidth,
@@ -621,7 +621,7 @@ function mainJS() {
         );
       })
       .mouseleave(() => {
-        $(siteSearchBtn).animate({ opacity: "0.5" }, "fast");
+        $(siteSearchBtn).animate({ opacity: "0.5", borderRadius: "20px" }, "fast");
         $(".dictate-btn-text").animate({ width: "0px" }, "fast");
       });
 
