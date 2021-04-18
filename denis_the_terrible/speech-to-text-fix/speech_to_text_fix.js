@@ -312,10 +312,11 @@ function mainJS() {
       `
   <style>
   
-  button {
+   .twik-site-search button {
     width: initial;
     height: initial;
     color: initial;
+    letter-spacing: initial;
   }
   
   .twik-site-search * {
