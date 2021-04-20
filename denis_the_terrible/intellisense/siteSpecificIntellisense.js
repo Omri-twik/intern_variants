@@ -459,16 +459,19 @@ function applySiteIntellisenseToInputElement() {
 
 function locateSearchInput() {
   let inputFields = document.querySelectorAll("input");
+  let secondary_candidate;
   inputFields.forEach((input) => {
     let inputStyle = window.getComputedStyle(input);
     let inputRect = input.getBoundingClientRect();
     let inputElemHTML = input.outerHTML.replace(input.innerHTML, "");
     if (inputElemHTML.toLowerCase().indexOf("search") != -1) {
+      secondary_candidate = input;
       if (
         inputStyle["display"] !== "none" &&
         inputStyle["visibility"] !== "hidden" &&
         inputStyle["opacity"] != 0
       ) {
+        secondary_candidate = input;
         if (inputRect.width * inputRect.height > 0) {
           inputElement = input;
           inputElement.autocomplete = "off";
@@ -477,6 +480,9 @@ function locateSearchInput() {
       }
     }
   });
+  if (!inputElement) {
+    inputElement = secondary_candidate;
+  }
 }
 
 locateSearchInput();
