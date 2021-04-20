@@ -64,6 +64,7 @@ document.head.insertAdjacentHTML(
       display: none; 
       flex-direction: column !important;
       flex-wrap: nowrap !important;
+      z-index: 999999999999999999;
     }
     .intellisenseSuggestionsRow {
       width: 100%;
@@ -100,7 +101,6 @@ function clearSuggestionsUl() {
 function hideSuggestionsUl() {
   if (document.querySelector(`#intellisense_style`)) {
     document.querySelector(`#intellisense_style`).remove();
-    console.log("hide");
   }
 }
 
@@ -177,9 +177,11 @@ function addListNavigationFunctionality(inputElement) {
         } else {
           select_choice(current_list_index);
         }
-        document
-          .querySelectorAll(".intellisenseSuggestionsRow")
-          [current_list_index].classList.remove("tw_toggled");
+        try {
+          document
+            .querySelectorAll(".intellisenseSuggestionsRow")
+            [current_list_index].classList.remove("tw_toggled");
+        } catch {}
         current_list_index = 0;
         break;
 
@@ -411,18 +413,6 @@ function applySiteIntellisenseToInputElement() {
     ul.classList.add("ulNotFixed");
   }
 
-  // apply z-index+1 on the ul
-  document.head.insertAdjacentHTML(
-    "beforeend",
-    `
-    <style>
-      .suggestions-list-intellisense {
-        z-index: ${suggestionList_zIndex};
-      }
-    </style>
-    `
-  );
-
   // carry over some style of the input field
   document.head.insertAdjacentHTML(
     "beforeend",
@@ -470,11 +460,21 @@ function applySiteIntellisenseToInputElement() {
 function locateSearchInput() {
   let inputFields = document.querySelectorAll("input");
   inputFields.forEach((input) => {
+    let inputStyle = window.getComputedStyle(input);
+    let inputRect = input.getBoundingClientRect();
     let inputElemHTML = input.outerHTML.replace(input.innerHTML, "");
     if (inputElemHTML.toLowerCase().indexOf("search") != -1) {
-      inputElement = input;
-      inputElement.autocomplete = "off";
-      return;
+      if (
+        inputStyle["display"] !== "none" &&
+        inputStyle["visibility"] !== "hidden" &&
+        inputStyle["opacity"] != 0
+      ) {
+        if (inputRect.width * inputRect.height > 0) {
+          inputElement = input;
+          inputElement.autocomplete = "off";
+          return;
+        }
+      }
     }
   });
 }
