@@ -1,3 +1,8 @@
+// ############################################################################
+// declaring variables
+// ############################################################################
+
+var doneTypingInterval = 100;
 var maxSuggestions = 5;
 let source_products = [];
 let products = [];
@@ -9,7 +14,10 @@ let productsFetched_bool = false;
 let ul;
 let inputElement;
 var typingTimer;
-var doneTypingInterval = 100;
+
+// ############################################################################
+// defining functions
+// ############################################################################
 
 async function fetchAllCollections() {
   collectionsFetched_bool = false;
@@ -50,39 +58,6 @@ async function fetchAllProducts() {
     fetchProductsForCollection(collection["handle"]);
   });
 }
-
-fetchAllProducts();
-
-document.head.insertAdjacentHTML(
-  "beforeend",
-  `
-  <style>
-    .suggestions-list-intellisense {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-      display: none; 
-      flex-direction: column !important;
-      flex-wrap: nowrap !important;
-      z-index: 999999999999999999;
-    }
-    .intellisenseSuggestionsRow {
-      width: 100%;
-      cursor: pointer;
-      padding: 5px;
-      border-bottom: 1px solid lightgrey;
-      margin-bottom: 0px;
-    }
-    .intellisenseHistorySuggestion {
-      font-weight: bold;
-    }
-
-    .tw_toggled {
-      font-weight: 900 !important;
-    }
-  </style>
-`
-);
 
 function appendRowToSuggestionsUl(value, classes = []) {
   let newRow = document.createElement("li");
@@ -297,31 +272,6 @@ function setSuggestionRowsEventListeners(ul) {
   }
 }
 
-// Function for getting JSONP.
-function jsonp(uri) {
-  return new Promise((resolve, reject) => {
-    var id = "_" + Math.round(10000 * Math.random());
-    var callbackName = "jsonp_callback_" + id;
-    window[callbackName] = function (data) {
-      delete window[callbackName];
-      var ele = document.getElementById(id);
-      ele.parentNode.removeChild(ele);
-      resolve(data);
-    };
-
-    var src = uri + "&callback=" + callbackName;
-    var script = document.createElement("script");
-    script.src = src;
-    script.id = id;
-    script.addEventListener("error", reject);
-    (
-      document.getElementsByTagName("head")[0] ||
-      document.body ||
-      document.documentElement
-    ).appendChild(script);
-  });
-}
-
 function displaySuggestionsOnInputElement(inputElem) {
   if (inputElem.value.length > 0) {
     let intellisenseSuggestions = source_products
@@ -375,37 +325,6 @@ function applySiteIntellisenseToInputElement() {
       break;
     }
   }
-
-  // make ul fixed if input is fixed, absolute if input is not fixed
-  if (inputElementIsFixed === true) {
-    var suggestionList_zIndex =
-      window.getComputedStyle(inputElementParent)["zIndex"] + 1;
-  } else {
-    var suggestionList_zIndex;
-    let inputElementParent = inputElement;
-    while (inputElementParent) {
-      if (inputElementParent.parentNode !== document) {
-        inputElementParent = inputElementParent.parentNode;
-        let zIndex = window.getComputedStyle(inputElementParent)["zIndex"];
-        if (zIndex !== "auto") {
-          suggestionList_zIndex = zIndex + 1;
-          break;
-        }
-      } else {
-        break;
-      }
-    }
-  }
-
-  document.body.insertAdjacentHTML(
-    "beforeend",
-    `
-        <ul class="suggestions-list-intellisense">
-        </ul>
-    `
-  );
-
-  ul = document.querySelector(".suggestions-list-intellisense");
 
   if (inputElementIsFixed) {
     ul.classList.add("ulFixed");
@@ -484,6 +403,53 @@ function locateSearchInput() {
     inputElement = secondary_candidate;
   }
 }
+
+// ############################################################################
+// activating functionality
+// ############################################################################
+
+fetchAllProducts();
+
+document.head.insertAdjacentHTML(
+  "beforeend",
+  `
+  <style>
+    .suggestions-list-intellisense {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: none; 
+      flex-direction: column !important;
+      flex-wrap: nowrap !important;
+      z-index: 999999999999999999;
+    }
+    .intellisenseSuggestionsRow {
+      width: 100%;
+      cursor: pointer;
+      padding: 5px;
+      border-bottom: 1px solid lightgrey;
+      margin-bottom: 0px;
+    }
+    .intellisenseHistorySuggestion {
+      font-weight: bold;
+    }
+
+    .tw_toggled {
+      font-weight: 900 !important;
+    }
+  </style>
+`
+);
+
+document.body.insertAdjacentHTML(
+  "beforeend",
+  `
+      <ul class="suggestions-list-intellisense">
+      </ul>
+  `
+);
+
+ul = document.querySelector(".suggestions-list-intellisense");
 
 locateSearchInput();
 
