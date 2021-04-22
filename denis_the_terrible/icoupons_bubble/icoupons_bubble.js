@@ -1,26 +1,8 @@
-// INSTRUCTIONS
-//
-// The following contact us banner and bubble are connected to Google Spreadsheets via "API Spreadsheets".
-//
-// It is necessary to acquire an API url and specify it below (e.g. "https://api.apispreadsheets.com/data/8369/")
-//
-// =========================================================================================================
-//
-// Select the fields in the contact forms that you want to be required
 let bubbleColor = "#00979d";
 let bubbleBackgroundColor = "white";
 let bubbleFieldTextColor = "black";
 let bubbleHeaderTextColor = "black";
-let bubbleSubmitButtonColor = "yellow";
-let bubbleSubmitButtonTextColor = "orange";
 let bubbleShadowColor = "black";
-let thankYouMessageTextColor = "pink";
-let thankYouMessageBackgroundColor = "brown";
-let bubbleMessageMaxHeight = 150;
-let checkmarkImageSrc =
-  "https://i.postimg.cc/1RMpXwyc/pngfind-com-kiss-mark-png-1695521.png";
-//
-//
 let showThankYou;
 let hideThankYou;
 let thankYouDiv;
@@ -28,10 +10,8 @@ let bubble;
 let form;
 let contactUsElem;
 let hideContactUs;
-
-// =========================================================================================================
-// START OF FUNCTIONALITY
-// =========================================================================================================
+let checkmarkImageSrc =
+  "https://i.postimg.cc/1RMpXwyc/pngfind-com-kiss-mark-png-1695521.png";
 
 function main_js() {
   preferred_font = window.getComputedStyle(document.body)["font-family"];
@@ -108,8 +88,6 @@ function main_js() {
         height: 50px;
         border: none !important;
         outline: none;
-        background: ${bubbleSubmitButtonColor};
-        color: ${bubbleSubmitButtonTextColor};
         cursor: pointer;
         font-family: ` +
       `${preferred_font}` +
@@ -223,8 +201,9 @@ function main_js() {
     }
 
 
-    .bubbleFormSubmit {
+    #bubbleFormSubmit {
         background-color: #00979d !important;
+        font-size: 16px !important;
     }
 
     #contact-us-form-div {
@@ -246,27 +225,24 @@ function main_js() {
         display: flex;
     }
 
+    input.contactUsField:placeholde {
+        font-size: 17px !important;
+    }
+
+    input.contactUsField:-webkit-autofill,
+    input.contactUsField:-webkit-autofill:hover, 
+    input.contactUsField:-webkit-autofill:focus,
+    input.contactUsField:autofill,
+    input.contactUsField:autofill:hover,
+    input.contactUsField:autofill:focus {
+        font-size: 17px !important;
+    }
+
     .messageBoxDiv {
         overflow-y: auto;
         cursor: default !important;
         margin-top: 7px;
-    }
-
-    #sdMessageBubbleDiv::-webkit-scrollbar {
-        cursor: pointer !important;
-        width: 12px;
-        background-color: ${bubbleBackgroundColor}; 
-    }
-    
-    #sdMessageBubbleDiv::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-        background-color: ${bubbleFieldTextColor};
-    }
-    
-    #sdMessageBubbleDiv:hover::-webkit-scrollbar-thumb {
-        cursor: pointer !important;
-    }    
+    }  
 
     .contact-right .select-box::after {
         background: transparent;
@@ -505,7 +481,7 @@ function main_js() {
                           <h3>צור קשר</h3>
                       </div>
                       <div class="inputBox">
-                          <input type="email" class="contactUsField chatBubbleContact" name="Email" id="sdEmailBubble"
+                          <input type="email" spellcheck="false" autocorrect="off" class="contactUsField chatBubbleContact" name="Email" id="sdEmailBubble"
                               class="input" placeholder="אמייל" required>
                       </div>
                       <input id="bubbleFormSubmit" type="submit" class="contactUsSubmit submitButtonBubble"
