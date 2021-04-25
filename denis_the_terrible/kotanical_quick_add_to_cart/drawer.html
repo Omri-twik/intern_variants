@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #twik-overlay {
+            position: fixed;
+            width: 100vh;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        #twik-sidebar-cart {
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            z-index: 1000;
+            right: -1000px;
+            background-color: white;
+            display: grid;
+            grid-template-rows: 70px 60px 1fr 110px;
+            /* grid-gap: 10px; */
+        }
+
+        .twik-cart-product {
+            display: flex;
+            flex-direction: row;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+
+        .twik-cart-image-wrapper {
+            position: relative;
+            height: 100%;
+            width: 25%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .twik-cart-image {
+            width: 100px;
+            height: 100px;
+            background-color: #5c5c5c;
+        }
+
+        .twik-cart-product-details {
+            display: flex;
+            flex-direction: column;
+            width: 65%;
+            padding-left: 30px;
+        }
+
+        .twik-cart-product-details div:not(:last-child) {
+            margin-bottom: 6px;
+        }
+
+        .twik-cart-price {
+            margin-bottom: 12px;
+        }
+
+        .twik-cart-close {
+            position: absolute;
+            right: 0px;
+            top: 50%;
+            transform: translate(-100%, -50%);
+        }
+
+        .twik-cart-product-list-wrapper {
+            overflow-y: auto;
+            overflow-x: none;
+        }
+
+        .twik-cart-checkout-btn-wrapper {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .twik-cart-product-quantity-container {
+            width: 100%;
+        }
+
+        .twik-cart-product-quantity-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .twik-remove-item {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+        }
+
+        .twik-cart-checkout-btn {
+            background-color: #5c5c5c;
+            width: 400px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .twik-cart-header-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .twik-cart-shipping-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .twik-cart-header-wrapper,
+        .twik-cart-shipping-wrapper,
+        .twik-cart-product-list-wrapper,
+        .twik-cart-checkout-btn-wrapper {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        .twik-cart-row:not(:last-child) {
+            border-bottom: 1px solid lightgrey;
+        }
+
+        .twik-cart-product-quantity-input {
+            text-align: center;
+        }
+
+        .twik-cart-product-quantity-input,
+        .twik-plus-one,
+        .twik-minus-one {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 20px;
+            border: none;
+        }
+
+        .twik-quantity-border-div {
+            border: 1px solid lightgrey;
+            display: inline-flex;
+            height: 30px;
+        }
+
+        .twik-cart-checkout-btn-a,
+        .twik-cart-checkout-btn-a:hover,
+        .twik-cart-checkout-btn-a:focus,
+        .twik-cart-checkout-btn-a:active {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .twik-quantity-border-div a,
+        .twik-quantity-border-div a:hover,
+        .twik-quantity-border-div a:focus,
+        .twik-quantity-border-div a:active {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="twik-sidebar-cart-wrapper">
+        <div id="twik-overlay">
+        </div>
+        <div id="twik-sidebar-cart">
+            <div class="twik-cart-row twik-cart-header-wrapper">
+                <div class="twik-cart-header">
+                    Cart
+                    <div class="twik-cart-close">
+                        Close
+                    </div>
+                </div>
+
+            </div>
+            <div class="twik-cart-row twik-cart-shipping-wrapper">
+                <div class="twik-cart-shipping">
+                    Shipping
+                </div>
+            </div>
+            <div class="twik-cart-row twik-cart-product-list-wrapper">
+                <div class="twik-cart-product-list">
+                    <div class="twik-cart-product">
+                        <div class="twik-cart-image-wrapper">
+                            <img src="" alt="" class="twik-cart-image">
+                        </div>
+                        <div class="twik-cart-product-details">
+                            <div class="twik-cart-details-header">header</div>
+                            <div class="twik-cart-details-subheader">subheader</div>
+                            <div class="twik-cart-price">price</div>
+                            <div class="twik-cart-product-quantity-container">
+                                <div class="twik-cart-product-quantity-wrapper">
+                                    <div class="twik-quantity-border-div">
+                                        <a class="twik-minus-one" href="">-</a>
+                                        <input class="twik-cart-product-quantity-input" type="text" value=0>
+                                        <a class="twik-plus-one" href="">+</a>
+                                    </div>
+                                    <a class="twik-remove-item" href="">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="twik-cart-row twik-cart-footer">
+                <div class="twik-cart-checkout-btn-wrapper">
+                    <a href="/checkout" role="button" class="twik-cart-checkout-btn-a">
+                        <div class="twik-cart-checkout-btn">
+                            <span class="twik-cart-checkout-text">CHECKOUT</span>
+                            <span style="font-size: 0.25em;">&#9725</span>
+                            <span class="twik-cart-subtotal">subtotal</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let sidebarCart = document.querySelector("#twik-sidebar-cart");
+        let overlay = document.querySelector("#twik-overlay");
+        let openCart;
+        let closeCart;
+        let openOverlay;
+        let closeOverlay;
+
+        function Get(url) {
+            console.log("GET start");
+            var Httpreq = new XMLHttpRequest();
+            async :true;
+            Httpreq.open("GET", url, false);
+            Httpreq.send(null);
+            console.log("GET end");
+            return Httpreq.responseText;
+        }
+
+        function mainJS() {
+            openCart = () => {
+                $(sidebarCart).animate({
+                    right: "0px"
+                })
+            }
+            closeCart = () => {
+                $(sidebarCart).animate({
+                    right: "-1000px"
+                })
+            }
+            openOverlay = () => {
+                $(overlay).fadeIn();
+            }
+            closeOverlay = () => {
+                $(overlay).fadeOut();
+            }
+            window.addEventListener("click", () => {
+                closeCart();
+                closeOverlay();
+            })
+            document.querySelector("#twik-sidebar-cart-wrapper").addEventListener("click", (e) => {
+                e.stopPropagation()
+            })
+            overlay.addEventListener("click", () => {
+                closeCart();
+                closeOverlay();
+            })
+            document.querySelector(".twik-cart-close").addEventListener("click", () => {
+                closeCart();
+                closeOverlay();
+            })
+            // temporary
+            openOverlay();
+            openCart();
+        }
+        if (window.jQuery) {
+            $ = window.jQuery;
+            mainJS();
+        } else {
+            var script = document.createElement("SCRIPT");
+            script.src =
+                "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js";
+            script.type = "text/javascript";
+            // this is doc.ready
+            //-------------------
+            script.onload = function() {
+                var $ = window.jQuery;
+                mainJS();
+            };
+            document.getElementsByTagName("head")[0].appendChild(script);
+        }
+    </script>
+</body>
+
+</html>
