@@ -84,6 +84,9 @@ let popupTextInterval = setInterval(() => {
     );
     let popup_text_clone = popup_text.cloneNode(true);
     popup_text_clone.innerText = `ממוצע השקעה: ${currencySign}${averageInvestment}`;
+    popup_text_clone.style.color = "rgb(100,100,100)";
+    popup_text_clone.style.fontSize = "18px";
+    popup_text_clone.style.marginTop = "8px";
     popup_text.insertAdjacentElement("afterend", popup_text_clone);
     clearInterval(popupTextInterval);
   }

@@ -1086,6 +1086,7 @@ let cartSTYLE = `
     }
 
     #twik-sidebar-cart {
+        box-shadow: grey 0px 0px 20px;
         position: fixed;
         height: 100vh;
         top: 0;
@@ -1099,6 +1100,7 @@ let cartSTYLE = `
 
     .twik-cart-empty {
         text-align: center;
+        height: 100%;
     }
 
     .twik-cart-product {
@@ -1112,7 +1114,7 @@ let cartSTYLE = `
     .twik-cart-image-wrapper {
         position: relative;
         height: 100%;
-        width: 25%;
+        width: 30%;
         overflow: hidden;
         display: flex;
         justify-content: center;
@@ -1122,17 +1124,16 @@ let cartSTYLE = `
     .twik-cart-image {
         width: 100px;
         height: 100px;
-        background-color: #5c5c5c;
     }
 
     .twik-cart-product-details {
         display: table-cell;
         flex-direction: column;
-        width: 65%;
+        width: 70%;
         padding-left: 30px;
     }
 
-    .twik-cart-product-details div:not(:last-child) {
+    .twik-cart-product-details>div:not(:last-child) {
         margin-bottom: 6px;
     }
 
@@ -1224,8 +1225,20 @@ let cartSTYLE = `
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 20px;
         border: none;
+    }
+
+    .twik-plus-one,
+    .twik-minus-one {
+    width: 20px;
+    }
+    
+    .twik-cart-product-quantity-input {
+        width: 25px;
+    }
+
+    .twik-plus-one, .twik-minus-one, .twik-remove-item {
+        cursor: pointer;
     }
 
     .twik-quantity-border-div {
@@ -1254,6 +1267,26 @@ let cartSTYLE = `
     .twik-sidebar-cart-wrapper a:active {
         text-decoration: none;
         color: inherit;
+    }
+
+    .twik-cart-product-quantity-span {
+        position: absolute;
+        left: -9999px;
+        display: inline-block;
+        visibility: hidden;
+        min-width: 25px;
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+    .twik-cart-product-quantity-input::-webkit-outer-spin-button,
+    .twik-cart-product-quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
+    /* Firefox */
+    .twik-cart-product-quantity-input[type=number] {
+    -moz-appearance: textfield;
     }
 </style>
 `;
@@ -1314,15 +1347,25 @@ let replaceCartButton;
 let refreshCart;
 let changeQuantity;
 let setQuantity;
+let setProductListeners;
+let typingTimer;
+let adjustSpanAndInput;
 
 function getRequest(url) {
-  console.log("GET start");
+  //   console.log("GET start");
   var Httpreq = new XMLHttpRequest();
   async: true;
   Httpreq.open("GET", url, false);
   Httpreq.send(null);
-  console.log("GET end");
+  //   console.log("GET end");
   return Httpreq.responseText;
+}
+
+function numberWithCommas(x) {
+  x = x.toString();
+  var pattern = /(-?\d+)(\d{3})/;
+  while (pattern.test(x)) x = x.replace(pattern, "$1,$2");
+  return x;
 }
 
 function mainJS() {
@@ -1341,14 +1384,17 @@ function mainJS() {
       right: "0px",
     });
   };
+
   closeCart = () => {
     $(sidebarCart).animate({
       right: "-1000px",
     });
   };
+
   openOverlay = () => {
     $(overlay).fadeIn();
   };
+
   closeOverlay = () => {
     $(overlay).fadeOut();
   };
@@ -1388,10 +1434,13 @@ function mainJS() {
   // setQuantity("31373037207636:a2f6a1e08d3b069a7077ab397d43ef2d", 2)
 
   changeQuantity = (key, change) => {
+    console.log("key", key);
+    console.log("change", change);
     let json = getCart();
     for (let item of json["items"]) {
       if (item["key"] === key) {
         let newQuantity = parseInt(item["quantity"]) + change;
+        console.log("newQuantity", newQuantity);
         fetch("/cart/change.js", {
           headers: {
             Accept: "application/json",
@@ -1423,9 +1472,12 @@ function mainJS() {
     let items = cartJSON["items"];
 
     for (let item of items) {
-      document.querySelector(".twik-cart-subtotal").innerHTML = `${symbol}${
-        total_price_CENTS / 100
-      }`;
+      document.querySelector(
+        ".twik-cart-subtotal"
+      ).innerHTML = `${symbol}${numberWithCommas(total_price_CENTS / 100)}`;
+
+      $(cartEmptyDiv).hide();
+      $(productList).show();
 
       productList.insertAdjacentHTML(
         "beforeend",
@@ -1447,35 +1499,54 @@ function mainJS() {
                 <div class="twik-cart-details-subheader">${
                   item["variant_title"] ? item["variant_title"] : ""
                 }</div>
-                <div class="twik-cart-price">${symbol}${
+                <div class="twik-cart-price">${symbol}${numberWithCommas(
           item["final_price"] / 100
-        }</div>
+        )}</div>
                 <div class="twik-cart-product-quantity-container">
                     <div class="twik-cart-product-quantity-wrapper">
                         <div class="twik-quantity-border-div">
-                            <a class="twik-minus-one" href="#" data-key="${
+                            <div class="twik-minus-one" data-key="${
                               item["key"]
-                            }">-</a>
-                            <input class="twik-cart-product-quantity-input" type="text" data-key="${
+                            }">-</div>
+                            <input class="twik-cart-product-quantity-input" type="number" data-key="${
                               item["key"]
                             }" value=${item["quantity"]}>
-                            <a class="twik-plus-one" href="#" data-key="${
+                            <span class="twik-cart-product-quantity-span"></span>
+                            <div class="twik-plus-one" data-key="${
                               item["key"]
-                            }">+</a>
+                            }">+</div>
                         </div>
-                        <a class="twik-remove-item" href="#" data-key="${
+                        <div class="twik-remove-item" data-key="${
                           item["key"]
-                        }">Remove</a>
+                        }">Remove</div>
                     </div>
                 </div>
             </div>
         </div>
         `
       );
-    }
 
-    $(cartEmptyDiv).hide();
-    $(productList).show();
+      let input = document.querySelectorAll(
+        ".twik-cart-product-quantity-input"
+      )[
+        document.querySelectorAll(".twik-cart-product-quantity-input").length -
+          1
+      ];
+      let span = document.querySelectorAll(".twik-cart-product-quantity-span")[
+        document.querySelectorAll(".twik-cart-product-quantity-span").length - 1
+      ];
+
+      span.innerHTML = input.value.replace(/\s/g, "&nbsp;");
+      adjustSpanAndInput(span, input);
+    }
+  };
+
+  adjustSpanAndInput = (span, input) => {
+    if (span.offsetWidth <= 60 && span.offsetWidth >= 25) {
+      input.style.width = span.offsetWidth + 5 + "px";
+    } else if (span.offsetWidth > 60) {
+      input.style.width = 65 + "px";
+    }
   };
 
   refreshCart = () => {
@@ -1483,7 +1554,9 @@ function mainJS() {
     populateProductList();
     if (document.querySelectorAll(".twik-cart-product").length === 0) {
       clearAndHideProductList();
+      return;
     }
+    setProductListeners();
   };
 
   replaceCartButton = () => {
@@ -1500,6 +1573,54 @@ function mainJS() {
     cloneCartButton.parentElement.addEventListener("click", (e) => {
       e.stopPropagation();
     });
+  };
+
+  setProductListeners = () => {
+    document.querySelectorAll(".twik-plus-one").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log("click");
+        console.log(
+          `btn.getAttribute("data-key")`,
+          btn.getAttribute("data-key")
+        );
+        changeQuantity(btn.getAttribute("data-key"), 1);
+      });
+    });
+
+    document.querySelectorAll(".twik-minus-one").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log("click");
+        changeQuantity(btn.getAttribute("data-key"), -1);
+      });
+    });
+
+    document.querySelectorAll(".twik-remove-item").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log("click");
+        setQuantity(btn.getAttribute("data-key"), 0);
+      });
+    });
+
+    document
+      .querySelectorAll(".twik-cart-product-quantity-input")
+      .forEach((input) => {
+        input.addEventListener("keydown", () => {
+          clearTimeout(typingTimer);
+          typingTimer = setTimeout(() => {
+            setQuantity(input.getAttribute("data-key"), parseInt(input.value));
+          }, 1000);
+        });
+        let span = input.parentElement.querySelector(
+          ".twik-cart-product-quantity-span"
+        );
+        input.addEventListener("input", () => {
+          span.innerHTML = input.value.replace(/\s/g, "&nbsp;");
+          adjustSpanAndInput(span, input);
+        });
+      });
   };
 
   window.addEventListener("click", () => {
@@ -1520,32 +1641,7 @@ function mainJS() {
     closeOverlay();
   });
 
-  document.querySelectorAll(".twik-plus-one").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      console.log("click");
-      console.log(`btn.getAttribute("data-key")`, btn.getAttribute("data-key"));
-      changeQuantity(btn.getAttribute("data-key"), 1);
-    });
-  });
-  document.querySelectorAll(".twik-minus-one").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      console.log("click");
-      changeQuantity(btn.getAttribute("data-key"), -1);
-    });
-  });
-
-  // ########################################################################################################3
-  // temporary
-  // ########################################################################################################3
-
-  refreshCart();
-  openOverlay();
-  openCart();
-
-  // ########################################################################################################3
-  // ########################################################################################################3
+  replaceCartButton();
 }
 if (window.jQuery) {
   $ = window.jQuery;
@@ -1566,3 +1662,16 @@ if (window.jQuery) {
 
 // add recommended products if the original has it
 // /search/suggest.json?q=a&resources[type]=product
+
+// fetch("/cart/add.js", {
+//     method: "POST",
+//     data: { id: `${variant_id}`, quantity: 1 },
+//   })
+//     .then((response) => {
+//       console.log("success");
+//     })
+//     .catch((error) => {
+//       console.log(`error: ${error}`);
+//     });
+//   refreshCart();
+//   openCart();
