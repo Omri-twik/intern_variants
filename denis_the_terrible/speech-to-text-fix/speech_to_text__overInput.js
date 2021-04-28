@@ -1,7 +1,11 @@
+// #####################################################################################
+// variable declaration
+// #####################################################################################
+
 var wavesurfer;
-var micAvailable = false;
+var micAvailable_bool = false;
 var recognition;
-var SpeechRecognitionGrammarList;
+let injectInvisibleDivForSearchElement;
 var error = true;
 let turnMicOn;
 let turnMicOff;
@@ -13,6 +17,14 @@ let displayMicIcon;
 let displayWaves;
 let input;
 let putMicIntoPlaceholder;
+var SpeechRecognitionGrammarList;
+let getStylesObjectForInvisibleDiv;
+var grammar = "#JSGF V1.0;";
+let setClickListenerOnInvisibleDiv;
+
+// #####################################################################################
+// adding jQuery
+// #####################################################################################
 
 if (window.jQuery) {
   $ = window.jQuery;
@@ -31,58 +43,55 @@ if (window.jQuery) {
   document.head.appendChild(script);
 }
 
+// ######################################################################################
+// adding helper functions from online
+// ######################################################################################
+function generateQuerySelector(element) {
+  if (element.tagName.toLowerCase() == "html") return "HTML";
+  let str = element.tagName;
+  str += element.id != "" ? "#" + element.id : "";
+  if (element.className) {
+    let classes = element.className.split(/\s/);
+    for (let i = 0; i < classes.length; i++) {
+      str += "." + classes[i];
+    }
+  }
+  return generateQuerySelector(element.parentNode) + " > " + str;
+}
+
+function generateRandomNumber(len) {
+  let maximum = 9;
+  let minimum = 0;
+  let num_str = "";
+  for (let i = 0; i < len; i++) {
+    num_str += `${
+      Math.floor(Math.random() * (maximum - minimum + 1)) + minimum
+    }`;
+  }
+  return num_str;
+}
+
+// start defining functions only after jQuery is available
 function mainJS() {
-  addWavesurferScripts = () => {
-    let script = document.createElement("SCRIPT");
-    script.src = "https://unpkg.com/wavesurfer.js";
-    document.head.appendChild(script);
-    let intervalTimeWaited = 0;
-    let interval = setInterval(() => {
-      if (intervalTimeWaited === 10000) {
-        clearInterval(interval);
-      }
-      intervalTimeWaited = intervalTimeWaited + 50;
-      if (typeof WaveSurfer !== "undefined") {
-        if (!document.querySelector("#micPluginScript")) {
-          let micPluginScript = document.createElement("SCRIPT");
-          micPluginScript.id = "micPluginScript";
-          micPluginScript.src =
-            "https://unpkg.com/wavesurfer.js@4.6.0/dist/plugin/wavesurfer.microphone.min.js";
-          document.head.appendChild(micPluginScript);
-        }
-        if (typeof WaveSurfer.microphone !== "undefined") {
-          if (typeof WaveSurfer.microphone.create !== "undefined") {
-            micAvailable = true;
-            clearInterval(interval);
-          }
-        }
-      }
-    }, 50);
-  };
+  // #####################################################################################
+  // defining functions
+  // #####################################################################################
 
   turnMicOn = () => {
-    // document.querySelector("#waveform").innerHTML = "";
-    // wavesurfer = WaveSurfer.create({
-    //   container: "#waveform",
-    //   waveColor: "black",
-    //   interact: false,
-    //   cursorWidth: 0,
-    //   fillParent: true,
-    //   minPxPerSec: 10,
-    //   height: 30,
-    //   plugins: [WaveSurfer.microphone.create()],
-    // });
-    // wavesurfer.microphone.start();
     recognition.start();
+    try {
+      recognition.start();
+    } catch {
+      console.error("recognition.start failed");
+    }
   };
 
   turnMicOff = () => {
-    // try {
-    //   wavesurfer.microphone.stop();
-    // } catch {}
     try {
       recognition.stop();
-    } catch {}
+    } catch {
+      console.error("recognition.stop failed");
+    }
   };
 
   getSearchInputs = () => {
@@ -95,39 +104,98 @@ function mainJS() {
     });
   };
 
-  putMicIntoPlaceholder = (inputElement) => {
+  putMicIntoPlaceholder = (uniqueID_str) => {
+    let inputElement = document.querySelector(
+      `input[twikid="${uniqueID_str}"]`
+    );
     inputElement.placeholder = `&#xf130;` + inputElement.placeholder;
     inputElement.style.fontFamily = "FontAwesome";
   };
 
-  positionDivOverMicCharacter = (div, inputElement) => {
-    // to do
-    div.parentElement.addEventListener("click", (e) => {
-      e.stopPropagation();
+  setClickListenerOnInvisibleDiv = (uniqueID_str) => {
+    let twikInvisibleDiv = document.querySelector(
+      `div[class="twik-invisible-div"][twikid="${uniqueID_str}"]`
+    );
+    twikInvisibleDiv.addEventListener("click", () => {
+      turnMicOn();
+      sessionStorage.setItem("active_twikid", uniqueID_str);
     });
   };
 
-  // #####################################################################################
-  // start of code functionality
-  // #####################################################################################
+  assignUniqueIDtoInput = (inputElement) => {
+    let uniqueID_str = generateRandomNumber(10);
+    inputElement.setAttribute("twikid", uniqueID_str);
+    console.log("assignUniqueIDtoInput");
+  };
 
-  document.body.insertAdjacentHTML(
-    "beforeend",
-    `   
-      <div class="twik-site-search">
-        <div class="dictate-btn-wrapper" style="display: block;">
-          <button class="dictate-btn" id="tw-mic">
-            <img class="mic-icon"
-              src="https://raw.githubusercontent.com/DrorBarnea-twik/intern_variants/master/denis_the_terrible/speech-to-text-fix/mic-icon.png"
-              alt="mic-icon">
-          </button>
-        </div>
-        <div class="waveform-wrapper" style="display: none;">
-          <div id="waveform"></div>
+  injectInvisibleDivForSearchElement = (uniqueID_str) => {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      `
+      <div class="twik-invisible-div-wrapper">
+        <div class="twik-invisible-div" twikid="${uniqueID_str}">
         </div>
       </div>
     `
-  );
+    );
+
+    let twikInvisibleDiv = document.querySelector(
+      `div[class="twik-invisible-div"][twikid="${uniqueID_str}"]`
+    );
+    twikInvisibleDiv.parentElement.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+
+    console.log("injectInvisibleDivForSearchElement");
+  };
+
+  getStylesObjectForInvisibleDiv = (uniqueID_str) => {
+    let styles_obj;
+    let inputElement = document.querySelector(
+      `input[twikid="${uniqueID_str}"]`
+    );
+    let inputElement_boundingRect = inputElement.getboundingClientRect();
+
+    styles_obj["width"] = `${parseInt(inputElement_boundingRect.width)}px`;
+    styles_obj["height"] = `${parseInt(inputElement_boundingRect.height)}px`;
+    styles_obj["right"] = `${parseInt(inputElement_boundingRect.right)}px`;
+    styles_obj["top"] = `${parseInt(inputElement_boundingRect.top)}px`;
+    console.log("getStylesObjectForInvisibleDiv");
+    return styles_obj;
+  };
+
+  injectStyleForInvisibleDiv = (uniqueID_str, styles_obj) => {
+    // remove previous style element
+    if (document.querySelector(`style[twikid="${uniqueID_str}"]`)) {
+      document.querySelector(`style[twikid="${uniqueID_str}"]`).remove();
+    }
+
+    let style_str = "";
+    Object.keys(styles_obj).map((key) => {
+      style_str += `${key}: ${styles_obj[key]};`;
+    });
+
+    document.head.insertAdjacentHTML(
+      "beforeend",
+      `
+      <style twikid="${uniqueID_str}">
+        div[class="twik-invisible-div"][twikid="${uniqueID_str}"] {
+          ${style_str}
+        }
+      </style>
+    `
+    );
+  };
+
+  positionDivOverMicCharacter = (uniqueID_str) => {
+    let styles_obj = getStylesObjectForInvisibleDiv(uniqueID_str);
+    injectStyleForInvisibleDiv(uniqueID_str, styles_obj);
+    console.log("positionDivOverMicCharacter");
+  };
+
+  // #####################################################################################
+  // injecting main HTML and CSS
+  // #####################################################################################
 
   document.head.insertAdjacentHTML(
     "beforeend",
@@ -154,6 +222,14 @@ function mainJS() {
       height: 30px;
     }
 
+    .twik-invisible-div-wrapper {
+      position: fixed;
+    }
+
+    .twik-invisible-div {
+
+    }
+
   </style>
     `
   );
@@ -165,47 +241,19 @@ function mainJS() {
   `
   );
 
-  let input = getSearchInput()[0];
-
-  // *********************************************************************
+  // #####################################################################################
   // setting event listeners
-  // *********************************************************************
+  // #####################################################################################
 
-  document.querySelector(".mic-icon").addEventListener("click", (e) => {
-    e.preventDefault();
-    console.log("click");
-    navigator.permissions
-      .query({ name: "microphone" })
-      .then(function (permissionStatus) {
-        if (permissionStatus.state === "granted") {
-          micAvailable = true;
-        } else if (permissionStatus.state === "prompt") {
-          navigator.mediaDevices.getUserMedia({ audio: true });
-          micAvailable = true;
-        }
-      });
-    if (micAvailable) {
-      displayWaves();
-      turnMicOn();
-    }
+  window.addEventListener("resize", () => {
+    document.querySelectorAll("input[twikid=*]").map((inputElement) => {
+      let uniqueID_str = inputElement.getAttribute("twikid");
+      positionDivOverMicCharacter(uniqueID_str);
+    });
   });
 
   document.querySelector(".twik-site-search").addEventListener("click", (e) => {
     e.stopPropagation();
-  });
-
-  window.addEventListener("keydown", function (e) {
-    let key = e.key || e.keyCode;
-    if (key === "Enter") key = 13;
-    if (
-      key === 13 &&
-      document.querySelector(".twik-site-search-mainBox").style.visibility ===
-        "visible"
-    ) {
-      e.preventDefault();
-      turnMicOff();
-      document.querySelector(".site-search-submit").click();
-    }
   });
 
   // ##############################################################
@@ -225,7 +273,6 @@ function mainJS() {
     SpeechRecognitionGrammarList = new webkitSpeechGrammarList();
   }
 
-  var grammar = "#JSGF V1.0;";
   SpeechRecognitionGrammarList.addFromString(grammar, 1);
 
   recognition.grammars = SpeechRecognitionGrammarList;
@@ -237,25 +284,36 @@ function mainJS() {
   }
 
   recognition.addEventListener("result", (e) => {
-    input.value = e.results[e.results.length - 1][0].transcript;
-    displayMicIcon();
     turnMicOff();
+    let uniqueID_str = sessionStorage.getItem("active_twikid");
+    let inputElement = document.querySelector(
+      `input[twikid="${uniqueID_str}"]`
+    );
+    inputElement.value = e.results[e.results.length - 1][0].transcript;
+    console.log("result");
   });
 
   recognition.addEventListener("speechend", (e) => {
-    displayMicIcon();
     turnMicOff();
+    console.log("speechend");
   });
 
   recognition.addEventListener("error", (e) => {
-    displayMicIcon();
     turnMicOff();
+    console.log("error");
   });
 
-  // *************************************************************
-  // adding meter functionality and positioning elements and making them visible
-  // *************************************************************
-  addWavesurferScripts();
-  putMicIntoPlaceholder();
-  positionMicOverInput();
+  // #####################################################################################
+  // activating major functionality
+  // #####################################################################################
+
+  let searchInput_element = getSearchInput()[0];
+
+  assignUniqueIDtoInput(searchInput_element);
+  putMicIntoPlaceholder(searchInput_element.getAttribute("twikid"));
+  injectInvisibleDivForSearchElement(
+    searchInput_element.getAttribute("twikid")
+  );
+  positionDivOverMicCharacter(searchInput_element.getAttribute("twikid"));
+  setClickListenerOnInvisibleDiv(searchInput_element.getAttribute("twikid"));
 }
